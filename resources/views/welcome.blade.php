@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<html lang="id" class="scroll-smooth overflow-x-hidden w-full max-w-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +13,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Font Family: Plus Jakarta Sans for Hero -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- 6. Alpine.js for Background Slider -->
+    <!-- 6. Alpine.js for Background Slider & Collapse -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         body { font-family: 'Poppins', sans-serif; }
@@ -23,236 +24,10 @@
         }
     </style>
 </head>
-<body class="bg-slate-900 text-white antialiased overflow-x-hidden selection:bg-blue-600 selection:text-white">
+<body class="bg-slate-900 text-white antialiased overflow-x-hidden w-full max-w-full selection:bg-blue-600 selection:text-white">
 
     <!-- 4. Glassmorphism Navbar (Fixed to top to overlay Hero) -->
-    <header class="fixed top-0 z-50 w-full transition-all duration-300" 
-            x-data="{ mobileMenuOpen: false, scrolled: false }" 
-            @scroll.window="scrolled = (window.pageYOffset > 20)"
-            :class="scrolled ? 'bg-white shadow-md border-b border-gray-200' : 'bg-white/10 backdrop-blur-md border-b border-white/20'">
-        <nav class="w-full flex items-center justify-between px-4 lg:px-8 py-3 relative z-50">
-                
-                <!-- 3. Logo Text -->
-                <div class="flex items-center shrink-0 space-x-3">
-                    <a href="#" class="flex items-center gap-3 shrink-0 group">
-                        <img src="{{ asset('tutwurihandayani.png') }}" alt="Logo BPMP" class="h-10 w-10 md:h-12 md:w-12 transition-transform duration-300 group-hover:scale-105 drop-shadow-md">
-                        <div class="flex flex-col">
-                            <span class="font-bold text-lg md:text-xl leading-tight tracking-tight whitespace-nowrap">
-                                <span class="text-blue-600">Kemen</span><span class="text-orange-500">dikdasmen</span>
-                            </span>
-                            <span class="text-[11px] md:text-[12px] font-medium whitespace-nowrap" :class="scrolled ? 'text-gray-800' : 'text-gray-300'">BPMP Provinsi Sulawesi Tenggara</span>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Desktop Menu -->
-                <div class="hidden lg:flex items-center space-x-4 xl:space-x-6 text-sm font-medium" x-data="{ openMenu: null }">
-                    <!-- 1. Profil -->
-                    <div class="relative group" @mouseenter="openMenu = 'profil'" @mouseleave="openMenu = null">
-                        <button class="px-1.5 lg:px-2 py-2 text-[11.5px] lg:text-[12.5px] font-medium whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
-                            <svg class="w-4 h-4 transition-colors" :class="scrolled ? 'text-blue-600 group-hover:text-blue-800' : 'text-blue-300 group-hover:text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                            Profil
-                            <svg class="w-3.5 h-3.5 opacity-70 transition-transform duration-200" :class="openMenu === 'profil' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </button>
-                        <div x-show="openMenu === 'profil'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-2" class="absolute left-0 mt-2 bg-white shadow-xl border border-gray-100 rounded-xl p-1.5 w-max min-w-[240px] text-gray-800 z-50">
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Profil Lembaga</a>
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Struktur Organisasi</a>
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Profil Pegawai</a>
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Visi Misi</a>
-                        </div>
-                    </div>
-                    
-                    <!-- 2. Program -->
-                    <div class="relative group" @mouseenter="openMenu = 'program'" @mouseleave="openMenu = null">
-                        <button class="px-1.5 lg:px-2 py-2 text-[11.5px] lg:text-[12.5px] font-medium whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
-                            <svg class="w-4 h-4 transition-colors" :class="scrolled ? 'text-blue-600 group-hover:text-blue-800' : 'text-blue-300 group-hover:text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
-                            Program
-                            <svg class="w-3.5 h-3.5 opacity-70 transition-transform duration-200" :class="openMenu === 'program' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </button>
-                        <div x-show="openMenu === 'program'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-2" class="absolute left-0 mt-2 bg-white shadow-xl border border-gray-100 rounded-xl p-1.5 w-max min-w-[240px] text-gray-800 z-50">
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Program Prioritas</a>
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Rapor Pendidikan</a>
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">PBD</a>
-                        </div>
-                    </div>
-                    
-                    <!-- 3. ULT -->
-                    <div class="relative group" @mouseenter="openMenu = 'ult'" @mouseleave="openMenu = null">
-                        <button class="px-1.5 lg:px-2 py-2 text-[11.5px] lg:text-[12.5px] font-medium whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
-                            <svg class="w-4 h-4 transition-colors" :class="scrolled ? 'text-blue-600 group-hover:text-blue-800' : 'text-blue-300 group-hover:text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                            ULT
-                            <svg class="w-3.5 h-3.5 opacity-70 transition-transform duration-200" :class="openMenu === 'ult' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </button>
-                        <div x-show="openMenu === 'ult'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-2" class="absolute left-0 mt-2 bg-white shadow-xl border border-gray-100 rounded-xl p-1.5 w-max min-w-[240px] text-gray-800 z-50">
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Unit Layanan Terpadu</a>
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Hasil SKM</a>
-                        </div>
-                    </div>
-                    
-                    <!-- 4. Publikasi -->
-                    <div class="relative group" @mouseenter="openMenu = 'publikasi'" @mouseleave="openMenu = null">
-                        <button class="px-1.5 lg:px-2 py-2 text-[11.5px] lg:text-[12.5px] font-medium whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
-                            <svg class="w-4 h-4 transition-colors" :class="scrolled ? 'text-blue-600 group-hover:text-blue-800' : 'text-blue-300 group-hover:text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15"></path></svg>
-                            Publikasi
-                            <svg class="w-3.5 h-3.5 opacity-70 transition-transform duration-200" :class="openMenu === 'publikasi' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </button>
-                        <div x-show="openMenu === 'publikasi'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-2" class="absolute left-0 mt-2 bg-white shadow-xl border border-gray-100 rounded-xl p-1.5 w-max min-w-[240px] text-gray-800 z-50">
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">SINONGGI</a>
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Profil Mutu Pendidikan</a>
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Regulasi dan Peraturan</a>
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Kisah Inspiratif</a>
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">JURNAL</a>
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Majalah</a>
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Artikel</a>
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Berita</a>
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Goes to School</a>
-                        </div>
-                    </div>
-                    
-                    <!-- 5. SAKIP -->
-                    <div class="relative group" @mouseenter="openMenu = 'sakip'" @mouseleave="openMenu = null">
-                        <button class="px-1.5 lg:px-2 py-2 text-[11.5px] lg:text-[12.5px] font-medium whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
-                            <svg class="w-4 h-4 transition-colors" :class="scrolled ? 'text-blue-600 group-hover:text-blue-800' : 'text-blue-300 group-hover:text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                            SAKIP
-                            <svg class="w-3.5 h-3.5 opacity-70 transition-transform duration-200" :class="openMenu === 'sakip' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </button>
-                        <div x-show="openMenu === 'sakip'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-2" class="absolute left-0 mt-2 bg-white shadow-xl border border-gray-100 rounded-xl p-1.5 w-max min-w-[240px] text-gray-800 z-50">
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">RENSTRA</a>
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Perjanjian Kinerja</a>
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">LAKIN</a>
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">LHE</a>
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">LK</a>
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">DIPA 2026</a>
-                        </div>
-                    </div>
-                    
-                    <!-- 6. Link Terkait (Nested Flyout) -->
-                    <div class="relative group" @mouseenter="openMenu = 'link'" @mouseleave="openMenu = null">
-                        <button class="px-1.5 lg:px-2 py-2 text-[11.5px] lg:text-[12.5px] font-medium whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
-                            <svg class="w-4 h-4 transition-colors" :class="scrolled ? 'text-blue-600 group-hover:text-blue-800' : 'text-blue-300 group-hover:text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
-                            Link Terkait
-                            <svg class="w-3.5 h-3.5 opacity-70 transition-transform duration-200" :class="openMenu === 'link' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </button>
-                        <div x-show="openMenu === 'link'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-2" class="absolute left-0 mt-2 bg-white shadow-xl border border-gray-100 rounded-xl p-1.5 w-max min-w-[240px] text-gray-800 z-50">
-                            <!-- Nested: Layanan Kepegawaian -->
-                            <div class="relative w-full block" x-data="{ subOpen: false }" @mouseenter="subOpen = true" @mouseleave="subOpen = false">
-                                <button class="w-full text-left flex justify-between items-center px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">
-                                    Layanan Kepegawaian
-                                    <svg class="w-3.5 h-3.5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                                </button>
-                                <div style="left: 100%;" x-show="subOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-x-2" x-transition:enter-end="opacity-100 translate-x-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-x-0" x-transition:leave-end="opacity-0 -translate-x-2" class="absolute top-0 ml-1 z-50 bg-white shadow-xl border border-gray-100 rounded-lg min-w-[240px] py-2 w-max text-gray-800">
-                                    <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">e-skp</a>
-                                    <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">e-kehadiran</a>
-                                    <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Portal Kemdikdasmen</a>
-                                </div>
-                            </div>
-                            <!-- Nested: Layanan Data Dan Informasi -->
-                            <div class="relative w-full block" x-data="{ subOpen: false }" @mouseenter="subOpen = true" @mouseleave="subOpen = false">
-                                <button class="w-full text-left flex justify-between items-center px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">
-                                    Layanan Data Dan Informasi
-                                    <svg class="w-3.5 h-3.5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                                </button>
-                                <div style="left: 100%;" x-show="subOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-x-2" x-transition:enter-end="opacity-100 translate-x-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-x-0" x-transition:leave-end="opacity-0 -translate-x-2" class="absolute top-0 ml-1 z-50 bg-white shadow-xl border border-gray-100 rounded-lg min-w-[240px] py-2 w-max text-gray-800">
-                                    <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Data Profil Sekolah</a>
-                                    <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Raport Pendidikan</a>
-                                    <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">PMP</a>
-                                    <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">DAPODIK</a>
-                                    <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">BOS</a>
-                                    <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Rumah Pendidikan</a>
-                                    <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">SIBI</a>
-                                    <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Data Referensi</a>
-                                    <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">PUSPEKA</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- 7. PPID -->
-                    <div class="relative group" @mouseenter="openMenu = 'ppid'" @mouseleave="openMenu = null">
-                        <button class="px-1.5 lg:px-2 py-2 text-[11.5px] lg:text-[12.5px] font-medium whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
-                            <svg class="w-4 h-4 transition-colors" :class="scrolled ? 'text-blue-600 group-hover:text-blue-800' : 'text-blue-300 group-hover:text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            PPID
-                            <svg class="w-3.5 h-3.5 opacity-70 transition-transform duration-200" :class="openMenu === 'ppid' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </button>
-                        <div x-show="openMenu === 'ppid'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-2" class="absolute left-0 mt-2 bg-white shadow-xl border border-gray-100 rounded-xl p-1.5 w-max min-w-[240px] text-gray-800 z-50">
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Profil PPID</a>
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Daftar Informasi Publik</a>
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Transparansi Publik</a>
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">e-PPID</a>
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Laporan PPID 2025</a>
-                        </div>
-                    </div>
-                    
-                    <!-- 8. ZI WBK -->
-                    <div class="relative group" @mouseenter="openMenu = 'ziwbk'" @mouseleave="openMenu = null">
-                        <button class="px-1.5 lg:px-2 py-2 text-[11.5px] lg:text-[12.5px] font-medium whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
-                            <svg class="w-4 h-4 transition-colors" :class="scrolled ? 'text-blue-600 group-hover:text-blue-800' : 'text-blue-300 group-hover:text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path></svg>
-                            ZI WBK
-                            <svg class="w-3.5 h-3.5 opacity-70 transition-transform duration-200" :class="openMenu === 'ziwbk' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </button>
-                        <div x-show="openMenu === 'ziwbk'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-2" class="absolute left-0 lg:right-0 mt-2 bg-white shadow-xl border border-gray-100 rounded-xl p-1.5 w-max min-w-[240px] text-gray-800 z-50">
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Standar Pelayanan</a>
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Maklumat Pelayanan</a>
-                            <!-- Nested: Area Pemenuhan -->
-                            <div class="relative w-full block" x-data="{ subOpen: false }" @mouseenter="subOpen = true" @mouseleave="subOpen = false">
-                                <button class="w-full text-left flex justify-between items-center px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">
-                                    Area Pemenuhan
-                                    <svg class="w-3.5 h-3.5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                                </button>
-                                <div style="left: 100%;" x-show="subOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-x-2" x-transition:enter-end="opacity-100 translate-x-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-x-0" x-transition:leave-end="opacity-0 -translate-x-2" class="absolute top-0 ml-1 z-50 bg-white shadow-xl border border-gray-100 rounded-lg min-w-[240px] py-2 w-max text-gray-800">
-                                    <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Manajemen Perubahan</a>
-                                    <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Penataan Tata Laksana</a>
-                                    <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Penataan Sistem Manajemen SDM</a>
-                                    <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Penguatan Akuntabilitas</a>
-                                    <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Penguatan Pengawasan</a>
-                                    <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Peningkatan Kualitas Layanan Publik</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- 9. Pengaduan -->
-                    <div class="relative group" @mouseenter="openMenu = 'pengaduan'" @mouseleave="openMenu = null">
-                        <button class="px-1.5 lg:px-2 py-2 text-[11.5px] lg:text-[12.5px] font-medium whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
-                            <svg class="w-4 h-4 transition-colors" :class="scrolled ? 'text-blue-600 group-hover:text-blue-800' : 'text-blue-300 group-hover:text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
-                            Pengaduan
-                            <svg class="w-3.5 h-3.5 opacity-70 transition-transform duration-200" :class="openMenu === 'pengaduan' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </button>
-                        <div x-show="openMenu === 'pengaduan'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-2" class="absolute right-0 mt-2 bg-white shadow-xl border border-gray-100 rounded-xl p-1.5 w-max min-w-[240px] text-gray-800 z-50">
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">SPMB</a>
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">SP4N Lapor</a>
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Lapor Gratifikasi</a>
-                            <a href="#" class="block px-4 py-2.5 text-[13px] md:text-sm text-gray-700 font-medium hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap">Whistle Blowing System</a>
-                        </div>
-                    </div>
-                    
-                    <!-- 10. Hubungi Kami -->
-                    <div class="relative group">
-                        <a href="#hubungi" class="px-1.5 lg:px-2 py-2 text-[11.5px] lg:text-[12.5px] font-medium whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
-                            <svg class="w-4 h-4 transition-colors" :class="scrolled ? 'text-blue-600 group-hover:text-blue-800' : 'text-blue-300 group-hover:text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                            Hubungi Kami
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Interactive Search Input -->
-                <div class="flex items-center shrink-0 space-x-3">
-                    <div class="hidden lg:flex items-center shrink-0">
-                        <div class="relative group">
-                            <input type="search" placeholder="Pencarian..." class="border text-[12px] md:text-[13px] rounded-full pl-9 pr-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-transparent transition-all duration-300 w-32 focus:w-48" :class="scrolled ? 'bg-gray-100 text-gray-800 border-gray-200 placeholder-gray-500' : 'bg-white/10 border-white/20 text-white placeholder-gray-300 backdrop-blur-sm'">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg class="h-3.5 w-3.5 transition-colors" :class="scrolled ? 'text-gray-500 group-focus-within:text-blue-600' : 'text-gray-300 group-focus-within:text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Mobile Menu Button -->
-                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="xl:hidden p-2 rounded-lg transition-colors" :class="scrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                    </button>
-                </div>
-            </nav>
-    </header>
+    <x-navbar />
 
     <!-- 6. Background Slider & 5. Hero Section Text -->
     <section class="relative min-h-[90vh] flex flex-col justify-between overflow-hidden pt-24 pb-0" style="font-family: 'Plus Jakarta Sans', sans-serif;"
@@ -295,8 +70,8 @@
                 
                 <!-- Headline -->
                 <h1 class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-white tracking-tight leading-tight font-['Plus_Jakarta_Sans'] mb-4 pb-2">
-                    Balai Penjaminan Mutu Pendidikan
-                    <span class="block text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-300 via-blue-400 to-cyan-300 mt-3 drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] pb-3 leading-normal">
+                    BALAI PENJAMINAN MUTU PENDIDIKAN
+                    <span class="block text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)] mt-3 pb-3 leading-normal">
                         Provinsi Sulawesi Tenggara
                     </span>
                 </h1>
@@ -318,21 +93,7 @@
                     </a>
                 </div>
                 
-                <!-- Social Media Glass Pills -->
-                <div class="flex flex-wrap items-center gap-3 pt-6">
-                    <a href="https://www.instagram.com/bpmpsultra/" target="_blank" rel="noopener noreferrer" class="group flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 hover:bg-white/15 backdrop-blur-md border border-white/10 hover:border-white/30 text-slate-200 hover:text-white text-sm font-medium transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-xl hover:shadow-pink-500/20">
-                        <svg class="w-4 h-4 text-pink-400 group-hover:text-pink-300 transition-colors" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-                        @bpmpsultra
-                    </a>
-                    <a href="https://www.tiktok.com/@bpmp.sulawesitenggara" target="_blank" rel="noopener noreferrer" class="group flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 hover:bg-white/15 backdrop-blur-md border border-white/10 hover:border-white/30 text-slate-200 hover:text-white text-sm font-medium transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-xl hover:shadow-cyan-500/20">
-                        <svg class="w-4 h-4 text-cyan-400 group-hover:text-cyan-300 transition-colors" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.28 6.28 0 005.4 15.6a6.28 6.28 0 0012.06 3.05 6.29 6.29 0 002.13-4.69V10.6a8.2 8.2 0 003.81 1.13V8.28a5 5 0 01-3.81-1.59z"/></svg>
-                        @bpmp.sulawesitenggara
-                    </a>
-                    <a href="https://www.youtube.com/@bpmpsultra" target="_blank" rel="noopener noreferrer" class="group flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 hover:bg-white/15 backdrop-blur-md border border-white/10 hover:border-white/30 text-slate-200 hover:text-white text-sm font-medium transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-xl hover:shadow-red-500/20">
-                        <svg class="w-4 h-4 text-red-500 group-hover:text-red-400 transition-colors" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                        BPMP Sultra Official
-                    </a>
-                </div>
+
             </div>
 
             <!-- Right Column -->
@@ -351,24 +112,62 @@
             </div>
         </div>
 
-        <!-- Floating Glassmorphism Stats Bar (Refined for Airiness) -->
-        <div class="relative z-20 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 sm:mb-12">
-            <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl py-5 px-6 shadow-[0_8px_32px_rgba(0,0,0,0.25)]">
+        <!-- Floating Glassmorphism Stats Bar -->
+        <div class="relative z-20 w-full max-w-6xl mx-auto px-4 mb-10 sm:mb-12">
+            <div class="w-full rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl py-6 px-4">
                 <div class="grid grid-cols-3 divide-x divide-white/20 text-center text-white">
                     <div class="px-2 flex flex-col items-center justify-center">
-                        <div class="text-2xl sm:text-4xl font-extrabold font-['Plus_Jakarta_Sans'] drop-shadow-md">17</div>
-                        <div class="text-[10px] sm:text-sm text-sky-200 font-semibold tracking-widest mt-1 uppercase text-center">Kabupaten / Kota</div>
+                        <div class="text-3xl lg:text-4xl font-extrabold tracking-tight drop-shadow-md">17</div>
+                        <div class="text-xs lg:text-sm font-medium tracking-wider text-slate-200 mt-1 uppercase">Kabupaten / Kota</div>
                     </div>
                     <div class="px-2 flex flex-col items-center justify-center">
-                        <div class="text-2xl sm:text-4xl font-extrabold font-['Plus_Jakarta_Sans'] drop-shadow-md">8+</div>
-                        <div class="text-[10px] sm:text-sm text-sky-200 font-semibold tracking-widest mt-1 uppercase text-center">Layanan Prioritas</div>
+                        <div class="text-3xl lg:text-4xl font-extrabold tracking-tight drop-shadow-md">8+</div>
+                        <div class="text-xs lg:text-sm font-medium tracking-wider text-slate-200 mt-1 uppercase">Layanan Prioritas</div>
                     </div>
                     <div class="px-2 flex flex-col items-center justify-center">
-                        <div class="text-2xl sm:text-4xl font-extrabold font-['Plus_Jakarta_Sans'] drop-shadow-md">100%</div>
-                        <div class="text-[10px] sm:text-sm text-sky-200 font-semibold tracking-widest mt-1 uppercase text-center">Akses Digital</div>
+                        <div class="text-3xl lg:text-4xl font-extrabold tracking-tight drop-shadow-md">100%</div>
+                        <div class="text-xs lg:text-sm font-medium tracking-wider text-slate-200 mt-1 uppercase">Akses Digital</div>
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- SECTION: Logo Showcase / Partner Banner (Marquee) -->
+    <section class="bg-white dark:bg-[#070d1e] py-10 md:py-14 border-y border-slate-100 dark:border-slate-800/60 relative w-full overflow-hidden z-10">
+        
+        <style>
+            @keyframes marquee-continuous {
+                0% { transform: translateX(0); }
+                100% { transform: translateX(-33.333333%); }
+            }
+            .animate-marquee-continuous {
+                display: flex;
+                width: max-content;
+                animation: marquee-continuous 30s linear infinite !important;
+                pointer-events: none; /* Prevents pause or cursor interference */
+            }
+        </style>
+
+        <!-- Left Gradient Mask -->
+        <div class="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white dark:from-[#070d1e] to-transparent z-20"></div>
+        
+        <!-- Right Gradient Mask -->
+        <div class="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-white dark:from-[#070d1e] to-transparent z-20"></div>
+
+        <div class="animate-marquee-continuous items-center gap-16 md:gap-24 px-8">
+            <!-- Set 1 -->
+            @foreach(['bangga.png', 'rumahpendidikan.png', 'sehat.png', 'berahlak.png', 'ramah.png', 'pendidikan.png'] as $logo)
+                <img src="{{ asset('slidelogo/' . $logo) }}" alt="Logo" class="h-10 sm:h-12 md:h-20 lg:h-24 w-auto object-contain shrink-0">
+            @endforeach
+            <!-- Set 2 (Duplicate for continuous loop) -->
+            @foreach(['bangga.png', 'rumahpendidikan.png', 'sehat.png', 'berahlak.png', 'ramah.png', 'pendidikan.png'] as $logo)
+                <img src="{{ asset('slidelogo/' . $logo) }}" alt="Logo" class="h-10 sm:h-12 md:h-20 lg:h-24 w-auto object-contain shrink-0">
+            @endforeach
+            <!-- Set 3 (Buffer) -->
+            @foreach(['bangga.png', 'rumahpendidikan.png', 'sehat.png', 'berahlak.png', 'ramah.png', 'pendidikan.png'] as $logo)
+                <img src="{{ asset('slidelogo/' . $logo) }}" alt="Logo" class="h-10 sm:h-12 md:h-20 lg:h-24 w-auto object-contain shrink-0">
+            @endforeach
         </div>
     </section>
 
@@ -447,29 +246,41 @@
             </div>
 
             <!-- Profil Pimpinan -->
-            <div class="pt-12 border-t border-gray-100">
-                <div class="text-center mb-10">
-                    <h2 class="text-2xl md:text-3xl font-bold text-gray-900">Profil Pimpinan</h2>
-                    <p class="text-gray-500 mt-2">Pimpinan Balai Penjaminan Mutu Pendidikan Provinsi Sulawesi Tenggara yang berkomitmen melayani sepenuh hati</p>
+            <div class="pt-6">
+                <!-- Divider -->
+                <div class="w-[100vw] relative left-1/2 -translate-x-1/2 border-t border-blue-500/20 dark:border-blue-400/20 my-10"></div>
+                
+                <!-- Section Header -->
+                <div class="text-center mb-12">
+                    <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-100 text-blue-700 font-bold tracking-wider text-xs uppercase mb-3 border border-blue-200 shadow-sm">
+                        Struktur Organisasi
+                    </span>
+                    <h2 class="font-display text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
+                        Profil Pimpinan <span class="text-blue-600">BPMP Sultra</span>
+                    </h2>
+                    <div class="w-20 h-1.5 bg-blue-600 mx-auto rounded-full mb-4"></div>
+                    <p class="text-gray-500 max-w-2xl mx-auto leading-relaxed">
+                        Mengenal jajaran kepemimpinan yang berdedikasi mengawal penjaminan dan peningkatan mutu pendidikan di Sulawesi Tenggara.
+                    </p>
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
                     
                     <!-- Kartu 1 -->
-                    <div class="w-full max-w-[300px] mx-auto bg-white rounded-[2rem] shadow-lg border border-gray-100 overflow-hidden flex flex-col">
+                    <div class="w-full max-w-[300px] mx-auto bg-white rounded-[2rem] shadow-[0_8px_30px_rgba(0,0,0,0.08)] border border-gray-100 overflow-hidden flex flex-col transition-transform duration-300 hover:-translate-y-2">
                         <img src="https://ui-avatars.com/api/?name=JP&background=1e3a8a&color=fff&size=500" alt="Kepala BPMP" class="w-full h-80 object-cover rounded-t-[2rem] bg-blue-900">
                         <div class="p-6 text-center bg-white">
                             <h3 class="text-base font-bold text-gray-900">Junaiddin Pagala, S.T., M.T.</h3>
-                            <p class="text-sm uppercase text-blue-600 font-semibold mt-1">KEPALA BPMP PROVINSI SULAWESI TENGGARA</p>
+                            <p class="text-xs uppercase text-blue-600 font-bold mt-1 tracking-wider">KEPALA BPMP PROVINSI SULAWESI TENGGARA</p>
                         </div>
                     </div>
 
                     <!-- Kartu 2 -->
-                    <div class="w-full max-w-[300px] mx-auto bg-white rounded-[2rem] shadow-lg border border-gray-100 overflow-hidden flex flex-col">
-                        <img src="https://ui-avatars.com/api/?name=KU&background=1e3a8a&color=fff&size=500" alt="Kasubbag Umum" class="w-full h-80 object-cover rounded-t-[2rem] bg-blue-900">
+                    <div class="w-full max-w-[300px] mx-auto bg-white rounded-[2rem] shadow-[0_8px_30px_rgba(0,0,0,0.08)] border border-gray-100 overflow-hidden flex flex-col transition-transform duration-300 hover:-translate-y-2">
+                        <img src="https://ui-avatars.com/api/?name=RM&background=1e3a8a&color=fff&size=500" alt="Kasubbag Umum" class="w-full h-80 object-cover rounded-t-[2rem] bg-blue-900">
                         <div class="p-6 text-center bg-white">
-                            <h3 class="text-base font-bold text-gray-900">Nama Kasubbag Umum, S.Pd., M.Si.</h3>
-                            <p class="text-sm uppercase text-blue-600 font-semibold mt-1">KASUBBAG UMUM BPMP SULTRA</p>
+                            <h3 class="text-base font-bold text-gray-900">Rika Ernita Mekuo, S.Si., M.Si.</h3>
+                            <p class="text-xs uppercase text-blue-600 font-bold mt-1 tracking-wider">KASUBBAG UMUM BPMP SULTRA</p>
                         </div>
                     </div>
                     
@@ -490,7 +301,7 @@
 
     <!-- 4. Layanan & Aplikasi Internal (The Icon Grid) -->
     <section id="layanan" class="pt-32 pb-20 bg-slate-50 relative z-10">
-        <div class="container mx-auto px-4">
+        <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
                 <span class="text-blue-600 font-bold tracking-wider text-sm uppercase mb-2 block">Akses Cepat</span>
                 <h2 class="font-display text-3xl md:text-4xl font-extrabold text-blue-900 mb-4">Layanan & Aplikasi <span class="text-blue-600">Internal</span></h2>
@@ -610,22 +421,33 @@
     </section>
 
     <!-- 5. Agenda & Multimedia (Split Section) -->
-    <section class="py-20 bg-white">
-        <div class="container mx-auto px-4">
+    <section class="py-20 bg-white relative border-t border-gray-200">
+        <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Centered Header -->
+            <div class="text-center mb-16">
+                <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-100 text-blue-700 font-bold tracking-wider text-xs uppercase mb-3 border border-blue-200 shadow-sm">
+                    Informasi Terpadu
+                </span>
+                <h2 class="font-display text-3xl md:text-4xl font-extrabold text-blue-900 mb-4">
+                    Jadwal Kegiatan & <span class="text-blue-600">Media Edukasi</span>
+                </h2>
+                <div class="w-20 h-1.5 bg-blue-600 mx-auto rounded-full"></div>
+            </div>
+
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
-                <!-- Left: Calendar Widget -->
-                <div>
-                    <div class="mb-10">
-                        <span class="text-blue-600 font-bold tracking-wider text-sm uppercase mb-2 block">Jadwal & Kegiatan</span>
-                        <h2 class="font-display text-3xl font-extrabold text-blue-900">Agenda BPMP Sultra</h2>
+                <!-- Left: Calendar Widget (Interactive Alpine.js) -->
+                <div x-data="calendarData()">
+                    <div class="mb-8">
+                        <span class="text-blue-600 font-bold tracking-wider text-sm uppercase mb-1 block">Jadwal & Kegiatan</span>
+                        <h3 class="font-display text-2xl font-extrabold text-blue-900">Agenda BPMP Sultra</h3>
                     </div>
                     
-                    <div class="bg-white rounded-3xl p-6 md:p-8 border border-gray-100 shadow-xl shadow-gray-200/50 relative overflow-hidden">
+                    <div class="bg-white rounded-3xl p-6 md:p-8 border border-gray-100 shadow-lg shadow-gray-200/50 relative overflow-hidden">
                         <!-- Header Calendar -->
                         <div class="flex justify-between items-center mb-6 pb-6 border-b border-gray-100 relative z-10">
-                            <button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-50 text-gray-500 border border-gray-200 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button>
-                            <h3 class="font-display text-xl font-bold text-blue-900">September 2026</h3>
-                            <button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-50 text-gray-500 border border-gray-200 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></button>
+                            <button @click="prevMonth" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-blue-50 text-gray-500 hover:text-blue-600 border border-gray-200 hover:border-blue-200 transition-all shadow-sm"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button>
+                            <h4 class="font-display text-xl font-bold text-blue-900" x-text="monthNames[month] + ' ' + year"></h4>
+                            <button @click="nextMonth" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-blue-50 text-gray-500 hover:text-blue-600 border border-gray-200 hover:border-blue-200 transition-all shadow-sm"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></button>
                         </div>
                         
                         <!-- Grid Calendar -->
@@ -634,88 +456,68 @@
                                 <div>Min</div><div>Sen</div><div>Sel</div><div>Rab</div><div>Kam</div><div>Jum</div><div>Sab</div>
                             </div>
                             <div class="grid grid-cols-7 gap-2 text-center text-sm font-medium">
-                                <div class="py-2 text-gray-300">30</div><div class="py-2 text-gray-300">31</div>
-                                <div class="py-2 text-gray-600 hover:bg-blue-50 rounded-lg cursor-pointer transition-colors">1</div>
-                                <div class="py-2 text-gray-600 hover:bg-blue-50 rounded-lg cursor-pointer transition-colors">2</div>
-                                <div class="py-2 text-gray-600 hover:bg-blue-50 rounded-lg cursor-pointer transition-colors">3</div>
-                                <div class="py-2 bg-blue-600 text-white rounded-lg shadow-md shadow-blue-600/30 cursor-pointer transform scale-110">4</div>
-                                <div class="py-2 text-gray-600 hover:bg-blue-50 rounded-lg cursor-pointer transition-colors">5</div>
-                                <!-- Mock rows -->
-                                <div class="py-2 text-gray-600 hover:bg-blue-50 rounded-lg cursor-pointer transition-colors">6</div>
-                                <div class="py-2 text-gray-600 hover:bg-blue-50 rounded-lg cursor-pointer transition-colors">7</div>
-                                <div class="py-2 text-gray-600 hover:bg-blue-50 rounded-lg cursor-pointer transition-colors">8</div>
-                                <div class="py-2 text-gray-600 hover:bg-blue-50 rounded-lg cursor-pointer transition-colors">9</div>
-                                <div class="py-2 text-blue-600 border border-blue-200 bg-blue-50 rounded-lg cursor-pointer font-bold">10</div>
-                                <div class="py-2 text-gray-600 hover:bg-blue-50 rounded-lg cursor-pointer transition-colors">11</div>
-                                <div class="py-2 text-gray-600 hover:bg-blue-50 rounded-lg cursor-pointer transition-colors">12</div>
+                                <template x-for="blank in blankDays">
+                                    <div class="py-2 text-gray-300"></div>
+                                </template>
+                                <template x-for="day in daysInMonth">
+                                    <div @click="selectDate(day)" 
+                                         class="py-2 rounded-lg cursor-pointer transition-all relative flex flex-col items-center justify-center"
+                                         :class="{
+                                             'bg-blue-600 text-white font-bold shadow-md shadow-blue-500/30 scale-110': isSelected(day),
+                                             'text-blue-600 bg-blue-50 border border-blue-200 font-bold': isToday(day) && !isSelected(day),
+                                             'text-gray-700 hover:bg-gray-100': !isSelected(day) && !isToday(day)
+                                         }">
+                                        <span x-text="day"></span>
+                                        <div x-show="hasEvent(day)" class="w-1.5 h-1.5 rounded-full mt-0.5"
+                                             :class="isSelected(day) ? 'bg-white' : 'bg-blue-500'"></div>
+                                    </div>
+                                </template>
                             </div>
                         </div>
                         
                         <!-- Events List -->
-                        <div class="space-y-4 relative z-10">
-                            <div class="flex gap-4 p-5 rounded-2xl bg-blue-50 border border-blue-100 items-center transition-all hover:shadow-md">
-                                <div class="flex flex-col items-center justify-center min-w-[50px] bg-white p-2 rounded-xl shadow-sm">
-                                    <span class="text-[10px] font-bold text-blue-500 uppercase">Sep</span>
-                                    <span class="text-xl font-extrabold text-blue-800 leading-none">04</span>
+                        <div class="space-y-4 relative z-10 min-h-[160px]">
+                            <template x-if="currentEvents.length === 0">
+                                <div class="text-center py-8 text-gray-400 text-sm font-medium border-2 border-dashed border-gray-100 rounded-2xl">
+                                    Tidak ada jadwal pada tanggal ini.
                                 </div>
-                                <div>
-                                    <h4 class="font-bold text-gray-800 text-sm mb-1">Pendampingan Perencanaan Berbasis Data</h4>
-                                    <p class="text-xs text-gray-500 font-medium flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> 08.00 - Selesai</p>
+                            </template>
+                            <template x-for="event in currentEvents" :key="event.title">
+                                <div class="flex gap-4 p-5 rounded-2xl border items-center transition-all shadow-sm"
+                                     :class="event.type === 'primary' ? 'bg-blue-50 border-blue-100' : 'bg-white border-gray-100'">
+                                    <div class="flex flex-col items-center justify-center min-w-[55px] bg-white p-2 rounded-xl shadow-sm border border-gray-100">
+                                        <span class="text-[10px] font-bold uppercase" :class="event.type === 'primary' ? 'text-blue-500' : 'text-gray-400'" x-text="monthNames[month].substring(0,3)"></span>
+                                        <span class="text-xl font-extrabold leading-none" :class="event.type === 'primary' ? 'text-blue-800' : 'text-gray-700'" x-text="selectedDate.toString().padStart(2, '0')"></span>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h5 class="font-bold text-gray-800 text-sm mb-1.5 leading-snug" x-text="event.title"></h5>
+                                        <p class="text-xs text-gray-500 font-medium flex items-center gap-1.5">
+                                            <svg class="w-3.5 h-3.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                            <span x-text="event.time"></span>
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="flex gap-4 p-5 rounded-2xl bg-white border border-gray-100 shadow-sm items-center hover:shadow-md transition-all">
-                                <div class="flex flex-col items-center justify-center min-w-[50px] bg-gray-50 p-2 rounded-xl border border-gray-100">
-                                    <span class="text-[10px] font-bold text-gray-400 uppercase">Sep</span>
-                                    <span class="text-xl font-extrabold text-gray-700 leading-none">10</span>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-gray-800 text-sm mb-1">Evaluasi SAKIP Internal Tahap II</h4>
-                                    <p class="text-xs text-gray-500 font-medium flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> 09.00 - 15.00</p>
-                                </div>
-                            </div>
+                            </template>
                         </div>
                     </div>
                 </div>
 
                 <!-- Right: Multimedia -->
-                <div>
-                    <div class="mb-10">
-                        <span class="text-blue-600 font-bold tracking-wider text-sm uppercase mb-2 block">Galeri & Media</span>
-                        <h2 class="font-display text-3xl font-extrabold text-blue-900">Multimedia</h2>
+                <div class="h-full flex flex-col">
+                    <div class="mb-8 shrink-0">
+                        <span class="text-blue-600 font-bold tracking-wider text-sm uppercase mb-1 block">Galeri & Media</span>
+                        <h3 class="font-display text-2xl font-extrabold text-blue-900">Multimedia</h3>
                     </div>
                     
-                    <div class="flex flex-col gap-6">
+                    <div class="flex flex-col gap-6 flex-1">
                         <!-- YouTube Embed -->
-                        <div class="bg-white rounded-3xl p-5 border border-gray-100 shadow-xl shadow-gray-200/50">
-                            <h3 class="font-display font-bold text-gray-800 mb-4 ml-1 flex items-center gap-2">
+                        <div class="bg-white rounded-3xl p-5 border border-gray-100 shadow-lg shadow-gray-200/50 flex flex-col h-full flex-1">
+                            <h4 class="font-display font-bold text-gray-800 mb-4 ml-1 flex items-center gap-2 shrink-0">
                                 <svg class="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path></svg>
                                 Profil BPMP Sultra
-                            </h3>
-                            <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-gray-100 group cursor-pointer shadow-inner">
-                                <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Video Cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                                <div class="absolute inset-0 bg-black/20 flex items-center justify-center">
-                                    <div class="w-16 h-16 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-lg group-hover:bg-red-600 group-hover:text-white transition-colors duration-300 text-red-600">
-                                        <svg class="w-8 h-8 ml-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Instagram Grid 2x2 -->
-                        <div class="bg-white rounded-3xl p-5 border border-gray-100 shadow-xl shadow-gray-200/50">
-                            <h3 class="font-display font-bold text-gray-800 mb-4 ml-1 flex items-center gap-2">
-                                <svg class="w-5 h-5 text-pink-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"></path></svg>
-                                Instagram Feed
-                            </h3>
-                            <div class="grid grid-cols-2 gap-4">
-                                <a href="#" class="block aspect-square rounded-2xl overflow-hidden relative group shadow-sm">
-                                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="IG 1" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                                    <div class="absolute inset-0 bg-blue-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white"><svg class="w-8 h-8 drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg></div>
-                                </a>
-                                <a href="#" class="block aspect-square rounded-2xl overflow-hidden relative group shadow-sm">
-                                    <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="IG 2" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                                    <div class="absolute inset-0 bg-blue-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white"><svg class="w-8 h-8 drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg></div>
-                                </a>
+                            </h4>
+                            <div class="relative w-full rounded-2xl overflow-hidden bg-gray-100 shadow-inner border border-gray-200/60 flex-1 min-h-[300px]">
+                                <iframe class="absolute top-0 left-0 w-full h-full" src="https://www.youtube-nocookie.com/embed/_TX6E1t9AnY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                             </div>
                         </div>
                     </div>
@@ -724,93 +526,686 @@
         </div>
     </section>
 
-    <!-- 6. Berita & Publikasi (Crisp Cards) -->
-    <section id="berita" class="py-24 bg-gray-50 relative" x-data="{ tab: 'berita' }">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <span class="text-blue-600 font-bold tracking-wider text-sm uppercase mb-2 block">Pusat Informasi</span>
-                <h2 class="font-display text-3xl md:text-4xl font-extrabold text-blue-900 mb-4">Berita & <span class="text-blue-600">Publikasi</span></h2>
-                <div class="w-20 h-1.5 bg-blue-600 mx-auto rounded-full mb-10"></div>
+    <!-- Edge-to-Edge Divider -->
+    <div class="w-full bg-white flex flex-col">
+        <div class="w-full border-t border-slate-200/80 dark:border-slate-800 my-8"></div>
+    </div>
 
-                <!-- Alpine Tabs - 5 categories -->
-                <div class="inline-flex flex-wrap justify-center bg-white/70 backdrop-blur-md p-1.5 rounded-full border border-gray-200/80 shadow-sm gap-1">
-                    <button @click="tab = 'berita'" :class="tab === 'berita' ? 'bg-blue-600 text-white shadow-md' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50/80'" class="px-5 py-2 rounded-full text-sm font-bold transition-all">Berita Terkini</button>
-                    <button @click="tab = 'artikel'" :class="tab === 'artikel' ? 'bg-blue-600 text-white shadow-md' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50/80'" class="px-5 py-2 rounded-full text-sm font-bold transition-all">Artikel</button>
-                    <button @click="tab = 'program'" :class="tab === 'program' ? 'bg-blue-600 text-white shadow-md' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50/80'" class="px-5 py-2 rounded-full text-sm font-bold transition-all">Program Prioritas</button>
-                    <button @click="tab = 'pengumuman'" :class="tab === 'pengumuman' ? 'bg-blue-600 text-white shadow-md' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50/80'" class="px-5 py-2 rounded-full text-sm font-bold transition-all">Pengumuman</button>
-                    <button @click="tab = 'dokumentasi'" :class="tab === 'dokumentasi' ? 'bg-blue-600 text-white shadow-md' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50/80'" class="px-5 py-2 rounded-full text-sm font-bold transition-all">Dokumentasi</button>
+    <!-- Alpine.js Calendar Data Script -->
+    <script>
+        function calendarData() {
+            const today = new Date();
+            // Default current month and year based on today
+            return {
+                todayDate: today.getDate(),
+                todayMonth: today.getMonth(),
+                todayYear: today.getFullYear(),
+                month: today.getMonth(),
+                year: today.getFullYear(),
+                selectedDate: today.getDate(),
+                monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
+                // Example Events Data
+                events: [
+                    { day: today.getDate(), month: today.getMonth(), year: today.getFullYear(), title: 'Rapat Koordinasi Mingguan', time: '09.00 - 11.00', type: 'primary' },
+                    { day: 10, month: 8, year: 2026, title: 'Evaluasi SAKIP Internal Tahap II', time: '09.00 - 15.00', type: 'secondary' },
+                    { day: 4, month: 8, year: 2026, title: 'Pendampingan Perencanaan Berbasis Data', time: '08.00 - Selesai', type: 'primary' },
+                    { day: 15, month: today.getMonth(), year: today.getFullYear(), title: 'Webinar Implementasi Kurikulum Merdeka', time: '13.00 - 15.30', type: 'secondary' },
+                    { day: 22, month: today.getMonth(), year: today.getFullYear(), title: 'Monitoring Dana BOS Daerah', time: '08.00 - Selesai', type: 'primary' },
+                ],
+                get daysInMonth() {
+                    return new Date(this.year, this.month + 1, 0).getDate();
+                },
+                get blankDays() {
+                    return Array.from({ length: new Date(this.year, this.month, 1).getDay() });
+                },
+                prevMonth() {
+                    if (this.month === 0) {
+                        this.month = 11;
+                        this.year--;
+                    } else {
+                        this.month--;
+                    }
+                    this.selectedDate = 1; // Reset selection to 1st of month
+                },
+                nextMonth() {
+                    if (this.month === 11) {
+                        this.month = 0;
+                        this.year++;
+                    } else {
+                        this.month++;
+                    }
+                    this.selectedDate = 1; // Reset selection to 1st of month
+                },
+                selectDate(day) {
+                    this.selectedDate = day;
+                },
+                isSelected(day) {
+                    return this.selectedDate === day;
+                },
+                isToday(day) {
+                    return day === this.todayDate && this.month === this.todayMonth && this.year === this.todayYear;
+                },
+                hasEvent(day) {
+                    return this.events.some(e => e.day === day && e.month === this.month && e.year === this.year);
+                },
+                get currentEvents() {
+                    return this.events.filter(e => e.day === this.selectedDate && e.month === this.month && e.year === this.year);
+                }
+            }
+        }
+    </script>
+
+
+    <!-- 6. Berita & Publikasi (Split Layout) -->
+    <section id="berita" class="py-24 bg-white relative">
+        <div class="container mx-auto px-4 max-w-7xl">
+            <!-- Section Header -->
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12">
+                <div>
+                    <h2 class="font-display text-3xl md:text-4xl font-extrabold text-blue-900 mb-4">Kabar Terbaru <span class="text-blue-600">dari Kami</span></h2>
+                    <div class="w-20 h-1.5 bg-blue-600 rounded-full"></div>
+                </div>
+                <p class="text-sm text-slate-500 max-w-md text-right hidden sm:block">
+                    Artikel dan berita atau informasi terbaru terkait kegiatan dan program BPMP Sulawesi Tenggara
+                </p>
+            </div>
+
+            <!-- Split Layout Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+                
+                <!-- Left: Large Featured Auto-Slide (Alpine.js) -->
+                <div class="lg:col-span-7 xl:col-span-7 h-full"
+                     x-data="{
+                        active: 0,
+                        timer: null,
+                        slides: [
+                            {
+                                tag: 'BERITA TERKINI',
+                                tagColor: 'bg-blue-600',
+                                image: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                                title: 'Sosialisasi Rapor Pendidikan 2026 di Kabupaten Konawe',
+                                excerpt: 'BPMP Sultra menyelenggarakan kegiatan sosialisasi pemanfaatan Rapor Pendidikan untuk perencanaan berbasis data di tingkat daerah.',
+                                link: '/berita/1'
+                            },
+                            {
+                                tag: 'VIDEO',
+                                tagColor: 'bg-purple-600',
+                                image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                                title: 'Pendampingan Implementasi Kurikulum Merdeka',
+                                excerpt: 'Tim fasilitator BPMP Provinsi Sulawesi Tenggara melakukan pendampingan intensif bagi sekolah-sekolah sasaran IKM di kepulauan.',
+                                link: '/berita/2'
+                            },
+                            {
+                                tag: 'DOKUMENTASI',
+                                tagColor: 'bg-amber-500',
+                                image: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                                title: 'Kunjungan Kerja Tim Pusat ke BPMP Sultra',
+                                excerpt: 'Menerima kunjungan tim dari kementerian pusat dalam rangka monitoring dan evaluasi penjaminan mutu pendidikan di Sultra.',
+                                link: '/berita/3'
+                            }
+                        ],
+                        startTimer() {
+                            this.timer = setInterval(() => {
+                                this.next();
+                            }, 5000);
+                        },
+                        stopTimer() {
+                            clearInterval(this.timer);
+                        },
+                        next() {
+                            this.active = (this.active === this.slides.length - 1) ? 0 : this.active + 1;
+                        },
+                        prev() {
+                            this.active = (this.active === 0) ? this.slides.length - 1 : this.active - 1;
+                        }
+                     }"
+                     x-init="startTimer()"
+                     @mouseenter="stopTimer()"
+                     @mouseleave="startTimer()"
+                >
+                    <div class="h-full h-[340px] sm:h-[400px] lg:h-full lg:min-h-[440px] relative rounded-3xl overflow-hidden group shadow-md bg-gray-900">
+                        <!-- Slides -->
+                        <template x-for="(slide, index) in slides" :key="index">
+                            <div x-show="active === index"
+                                 x-transition:enter="transition ease-out duration-700"
+                                 x-transition:enter-start="opacity-0 scale-105"
+                                 x-transition:enter-end="opacity-100 scale-100"
+                                 x-transition:leave="transition ease-in duration-500 absolute inset-0"
+                                 x-transition:leave-start="opacity-100"
+                                 x-transition:leave-end="opacity-0"
+                                 class="absolute inset-0 w-full h-full"
+                            >
+                                <img :src="slide.image" :alt="slide.title" class="w-full h-full object-cover">
+                                <!-- Gradient Overlay -->
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+                                
+                                <!-- Content Overlay -->
+                                <div class="absolute inset-0 p-6 md:p-8 flex flex-col justify-between z-10">
+                                    <!-- Top Tag -->
+                                    <div class="self-start">
+                                        <span :class="slide.tagColor" class="text-white text-xs font-extrabold px-3 py-1.5 rounded-full shadow-sm uppercase tracking-wide" x-text="slide.tag"></span>
+                                    </div>
+                                    
+                                    <!-- Bottom Content -->
+                                    <div class="mt-auto pr-16">
+                                        <h3 class="text-lg sm:text-xl lg:text-2xl font-bold text-white mb-1 sm:mb-2 line-clamp-2" x-text="slide.title"></h3>
+                                        <p class="text-xs sm:text-sm text-slate-200 line-clamp-2 mb-4" x-text="slide.excerpt"></p>
+                                        <a :href="slide.link" class="text-sm font-semibold text-white/90 hover:text-white flex items-center gap-1.5 transition-colors">
+                                            Baca Selengkapnya
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+
+                        <!-- Slide Controls (Bottom-Right) -->
+                        <div class="absolute bottom-6 md:bottom-8 right-6 md:right-8 flex flex-col items-end gap-4 z-20">
+                            <!-- Arrows -->
+                            <div class="flex gap-2">
+                                <button @click="prev()" class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md hover:bg-white/40 border border-white/30 text-white flex items-center justify-center transition-colors shadow-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                                </button>
+                                <button @click="next()" class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md hover:bg-white/40 border border-white/30 text-white flex items-center justify-center transition-colors shadow-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                </button>
+                            </div>
+                            <!-- Dots -->
+                            <div class="flex gap-1.5">
+                                <template x-for="(slide, index) in slides" :key="index">
+                                    <button @click="active = index" :class="active === index ? 'bg-white w-4' : 'bg-white/50 hover:bg-white/80 w-2.5'" class="h-2.5 rounded-full transition-all duration-300"></button>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Stacked List Cards -->
+                <div class="lg:col-span-5 xl:col-span-5 flex flex-col justify-between gap-4">
+                    
+                    <!-- Card 1 -->
+                    <a href="/berita/4" class="flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-[#0f1b38] border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-blue-500/40 transition-all group flex-1">
+                        <img src="https://images.unsplash.com/photo-1571260899304-4250701120f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Thumbnail" class="w-24 h-20 sm:w-28 sm:h-24 lg:w-32 rounded-xl object-cover shrink-0 group-hover:scale-105 transition-transform duration-300 shadow-sm">
+                        <div class="flex flex-col justify-center h-full">
+                            <span class="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1">PENGUMUMAN</span>
+                            <h3 class="text-sm sm:text-base font-semibold text-slate-800 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 line-clamp-2 transition-colors mb-2">Pendaftaran Bimtek Pengelolaan Kinerja Berbasis Digital</h3>
+                            <div class="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 mt-auto">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                05 Oktober 2026
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Card 2 -->
+                    <a href="/berita/5" class="flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-[#0f1b38] border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-blue-500/40 transition-all group flex-1">
+                        <img src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Thumbnail" class="w-24 h-20 sm:w-28 sm:h-24 lg:w-32 rounded-xl object-cover shrink-0 group-hover:scale-105 transition-transform duration-300 shadow-sm">
+                        <div class="flex flex-col justify-center h-full">
+                            <span class="text-[10px] font-bold text-teal-600 dark:text-teal-400 uppercase tracking-wider mb-1">ARTIKEL</span>
+                            <h3 class="text-sm sm:text-base font-semibold text-slate-800 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 line-clamp-2 transition-colors mb-2">Tips Sukses Akreditasi Sekolah Standar Baru 2026</h3>
+                            <div class="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 mt-auto">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                01 Oktober 2026
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Card 3 -->
+                    <a href="/berita/6" class="flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-[#0f1b38] border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-blue-500/40 transition-all group flex-1">
+                        <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Thumbnail" class="w-24 h-20 sm:w-28 sm:h-24 lg:w-32 rounded-xl object-cover shrink-0 group-hover:scale-105 transition-transform duration-300 shadow-sm">
+                        <div class="flex flex-col justify-center h-full">
+                            <span class="text-[10px] font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider mb-1">PENDIDIKAN</span>
+                            <h3 class="text-sm sm:text-base font-semibold text-slate-800 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 line-clamp-2 transition-colors mb-2">Optimalisasi Pemanfaatan Platform Merdeka Mengajar (PMM)</h3>
+                            <div class="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 mt-auto">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                25 September 2026
+                            </div>
+                        </div>
+                    </a>
                 </div>
             </div>
 
-            <!-- Tab Content -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Card 1 -->
-                <article class="bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-lg shadow-gray-200/50 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 flex flex-col group">
-                    <div class="relative h-60 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="News Image" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                        <div class="absolute top-4 left-4 bg-blue-600 text-white text-xs font-extrabold px-3 py-1.5 rounded-full shadow-sm uppercase tracking-wide" x-text="tab === 'berita' ? 'Berita Terkini' : tab === 'artikel' ? 'Artikel' : tab === 'program' ? 'Program' : tab === 'pengumuman' ? 'Pengumuman' : 'Dokumentasi'"></div>
-                        <div class="absolute top-4 right-4 bg-white/95 backdrop-blur text-blue-700 text-xs font-extrabold px-3 py-1.5 rounded-full shadow-sm">Terbaru</div>
-                    </div>
-                    <div class="p-8 flex flex-col flex-grow">
-                        <div class="flex items-center gap-2 text-sm text-gray-500 font-bold mb-3">
-                            <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                            20 September 2026
-                        </div>
-                        <h3 class="font-display text-xl font-bold text-blue-900 mb-4 group-hover:text-blue-600 transition-colors line-clamp-2" x-text="tab === 'berita' ? 'Sosialisasi Rapor Pendidikan 2026 di Kabupaten Konawe' : 'Panduan Implementasi Kebijakan Baru'"></h3>
-                        <p class="text-gray-600 text-sm leading-relaxed mb-8 line-clamp-3">BPMP Sultra menyelenggarakan kegiatan sosialisasi pemanfaatan Rapor Pendidikan untuk perencanaan berbasis data di tingkat daerah guna meningkatkan mutu pembelajaran secara menyeluruh.</p>
-                        <div class="mt-auto pt-5 border-t border-gray-100">
-                            <a href="/berita/1" class="inline-flex items-center gap-2 text-blue-600 font-bold text-sm hover:text-blue-800 group-hover:translate-x-1 transition-transform">Baca &rarr;</a>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- Card 2 -->
-                <article class="bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-lg shadow-gray-200/50 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 flex flex-col group">
-                    <div class="relative h-60 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="News Image" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                        <div class="absolute top-4 left-4 bg-emerald-600 text-white text-xs font-extrabold px-3 py-1.5 rounded-full shadow-sm uppercase tracking-wide">Program Prioritas</div>
-                    </div>
-                    <div class="p-8 flex flex-col flex-grow">
-                        <div class="flex items-center gap-2 text-sm text-gray-500 font-bold mb-3">
-                            <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                            15 September 2026
-                        </div>
-                        <h3 class="font-display text-xl font-bold text-blue-900 mb-4 group-hover:text-blue-600 transition-colors line-clamp-2">Pendampingan Implementasi Kurikulum Merdeka</h3>
-                        <p class="text-gray-600 text-sm leading-relaxed mb-8 line-clamp-3">Tim fasilitator BPMP Provinsi Sulawesi Tenggara melakukan pendampingan intensif bagi sekolah-sekolah sasaran IKM di wilayah kepulauan terluar.</p>
-                        <div class="mt-auto pt-5 border-t border-gray-100">
-                            <a href="/berita/2" class="inline-flex items-center gap-2 text-blue-600 font-bold text-sm hover:text-blue-800 group-hover:translate-x-1 transition-transform">Baca &rarr;</a>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- Card 3 -->
-                <article class="bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-lg shadow-gray-200/50 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 flex flex-col group hidden lg:flex">
-                    <div class="relative h-60 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="News Image" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                        <div class="absolute top-4 left-4 bg-amber-500 text-white text-xs font-extrabold px-3 py-1.5 rounded-full shadow-sm uppercase tracking-wide">Dokumentasi</div>
-                    </div>
-                    <div class="p-8 flex flex-col flex-grow">
-                        <div class="flex items-center gap-2 text-sm text-gray-500 font-bold mb-3">
-                            <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                            10 September 2026
-                        </div>
-                        <h3 class="font-display text-xl font-bold text-blue-900 mb-4 group-hover:text-blue-600 transition-colors line-clamp-2">Kunjungan Kerja Tim Pusat ke BPMP Sultra</h3>
-                        <p class="text-gray-600 text-sm leading-relaxed mb-8 line-clamp-3">Menerima kunjungan tim dari kementerian pusat dalam rangka monitoring dan evaluasi penjaminan mutu pendidikan di Sulawesi Tenggara.</p>
-                        <div class="mt-auto pt-5 border-t border-gray-100">
-                            <a href="/berita/3" class="inline-flex items-center gap-2 text-blue-600 font-bold text-sm hover:text-blue-800 group-hover:translate-x-1 transition-transform">Baca &rarr;</a>
-                        </div>
-                    </div>
-                </article>
-            </div>
-
-            <div class="mt-16 text-center">
-                <a href="/berita" class="inline-flex items-center gap-2 px-8 py-3.5 bg-white text-blue-700 font-bold border-2 border-blue-100 hover:border-blue-700 hover:bg-blue-50 rounded-full transition-all shadow-sm">
-                    Lihat Semua Berita &rarr;
+            <!-- Bottom CTA Button -->
+            <div class="mt-12">
+                <a href="/berita" class="inline-flex items-center justify-center gap-2 px-8 py-3 bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-semibold hover:bg-blue-600 hover:text-white rounded-full shadow-sm transition-all mx-auto w-max flex mx-auto">
+                    Lihat Lebih Banyak &rarr;
                 </a>
             </div>
         </div>
     </section>
 
+    <!-- 6.5 Survei Kepuasan Masyarakat -->
+    <section class="py-24 bg-slate-50 relative border-t border-slate-100 font-sans">
+        <div class="container mx-auto px-4 max-w-7xl">
+            
+            <!-- Section Header -->
+            <div class="mb-10 text-center md:text-left flex flex-col md:flex-row justify-between items-center md:items-end gap-6">
+                <div>
+                    <div class="flex items-center justify-center md:justify-start gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-xl bg-orange-100 text-orange-500 flex items-center justify-center shrink-0">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                        </div>
+                        <h2 class="font-display text-3xl md:text-4xl font-extrabold text-blue-900">Survei Kepuasan Masyarakat</h2>
+                    </div>
+                    <div class="w-20 h-1.5 bg-orange-500 rounded-full mx-auto md:mx-0 mb-4"></div>
+                    <p class="text-slate-600 text-base">Indeks Kepuasan Masyarakat (IKM) BPMP Provinsi Sulawesi Tenggara</p>
+                </div>
+                
+                <!-- Pills Filter -->
+                <div class="flex items-center gap-2 bg-white p-1.5 rounded-full border border-slate-200 shadow-sm">
+                    <button class="px-6 py-2.5 rounded-full text-sm font-bold bg-blue-600 text-white shadow-sm transition-all">2026</button>
+                    <button class="px-6 py-2.5 rounded-full text-sm font-bold text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition-all">2025</button>
+                    <button class="px-6 py-2.5 rounded-full text-sm font-bold text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition-all">2024</button>
+                </div>
+            </div>
+
+            <!-- Main Content Container -->
+            <div class="bg-white rounded-[2rem] shadow-xl border border-slate-100 overflow-hidden">
+                
+                <!-- Blue Banner Hero Card -->
+                <div class="bg-blue-600 px-6 py-8 md:px-12 md:py-10 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
+                    <!-- Background Decor -->
+                    <div class="absolute -right-20 -top-20 w-64 h-64 bg-blue-500 rounded-full opacity-50 blur-3xl"></div>
+                    
+                    <div class="flex flex-col md:flex-row items-center gap-6 relative z-10 w-full">
+                        <!-- Frosted Emoticon -->
+                        <div class="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center shrink-0 shadow-lg">
+                            <svg class="w-12 h-12 md:w-14 md:h-14 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        
+                        <!-- Score Info -->
+                        <div class="text-center md:text-left flex-1">
+                            <h3 class="text-blue-100 font-bold tracking-wider text-xs md:text-sm uppercase mb-2">NILAI IKM — TRIWULAN 1 TAHUN 2026</h3>
+                            <div class="flex items-center justify-center md:justify-start gap-4">
+                                <span class="text-5xl md:text-6xl font-extrabold text-white">79,17</span>
+                                <span class="bg-emerald-400 text-emerald-950 font-extrabold px-4 py-1.5 rounded-full text-sm shadow-sm tracking-widest">BAIK</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Right Text -->
+                        <div class="text-center md:text-right md:max-w-[200px]">
+                            <p class="text-white/80 text-xs font-semibold leading-relaxed">Kementerian Pendidikan Dasar & Menengah</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grid Indikator -->
+                <div class="p-6 md:p-10 bg-slate-50/50">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        
+                        <!-- Card 1 -->
+                        <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Unsur 1</p>
+                                <h4 class="font-bold text-slate-800 text-sm mb-1">Persyaratan</h4>
+                                <p class="text-blue-600 font-extrabold text-lg">3.20</p>
+                            </div>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Unsur 2</p>
+                                <h4 class="font-bold text-slate-800 text-sm mb-1">Prosedur</h4>
+                                <p class="text-blue-600 font-extrabold text-lg">3.18</p>
+                            </div>
+                        </div>
+
+                        <!-- Card 3 -->
+                        <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Unsur 3</p>
+                                <h4 class="font-bold text-slate-800 text-sm mb-1">Waktu Pelayanan</h4>
+                                <p class="text-blue-600 font-extrabold text-lg">3.15</p>
+                            </div>
+                        </div>
+
+                        <!-- Card 4 -->
+                        <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Unsur 4</p>
+                                <h4 class="font-bold text-slate-800 text-sm mb-1">Biaya / Tarif</h4>
+                                <p class="text-blue-600 font-extrabold text-lg">4.00</p>
+                            </div>
+                        </div>
+
+                        <!-- Card 5 -->
+                        <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Unsur 5</p>
+                                <h4 class="font-bold text-slate-800 text-sm mb-1">Produk Pelayanan</h4>
+                                <p class="text-blue-600 font-extrabold text-lg">3.22</p>
+                            </div>
+                        </div>
+
+                        <!-- Card 6 (Highlight) -->
+                        <div class="bg-emerald-50/50 rounded-2xl p-5 border border-emerald-200 shadow-sm hover:shadow-md transition-shadow flex items-center gap-4 relative overflow-hidden group">
+                            <div class="absolute top-0 right-0 w-1.5 h-full bg-emerald-500 rounded-r-2xl"></div>
+                            <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            </div>
+                            <div>
+                                <p class="text-xs text-emerald-600 font-bold uppercase tracking-wider mb-1">Unsur 6</p>
+                                <h4 class="font-bold text-slate-800 text-sm mb-1">Kompetensi</h4>
+                                <p class="text-emerald-600 font-extrabold text-lg">3.30</p>
+                            </div>
+                        </div>
+
+                        <!-- Card 7 -->
+                        <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Unsur 7</p>
+                                <h4 class="font-bold text-slate-800 text-sm mb-1">Perilaku</h4>
+                                <p class="text-blue-600 font-extrabold text-lg">3.25</p>
+                            </div>
+                        </div>
+
+                        <!-- Card 8 (Highlight) -->
+                        <div class="bg-emerald-50/50 rounded-2xl p-5 border border-emerald-200 shadow-sm hover:shadow-md transition-shadow flex items-center gap-4 relative overflow-hidden group">
+                            <div class="absolute top-0 right-0 w-1.5 h-full bg-emerald-500 rounded-r-2xl"></div>
+                            <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path></svg>
+                            </div>
+                            <div>
+                                <p class="text-xs text-emerald-600 font-bold uppercase tracking-wider mb-1">Unsur 8</p>
+                                <h4 class="font-bold text-slate-800 text-sm mb-1">Pengaduan</h4>
+                                <p class="text-emerald-600 font-extrabold text-lg">3.28</p>
+                            </div>
+                        </div>
+
+                        <!-- Card 9 -->
+                        <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Unsur 9</p>
+                                <h4 class="font-bold text-slate-800 text-sm mb-1">Sarana & Prasarana</h4>
+                                <p class="text-blue-600 font-extrabold text-lg">3.15</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Media Sosial Section -->
+    <section class="py-24 bg-slate-50 relative border-t border-gray-100" x-data="{ platform: 'instagram' }">
+        <script src="https://elfsightcdn.com/platform.js" async></script>
+        <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Section Header (Centered) -->
+            <div class="text-center mb-12 flex flex-col items-center">
+                <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-pink-100 text-pink-600 font-bold tracking-wider text-xs uppercase mb-4 border border-pink-200 shadow-sm">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"></path></svg>
+                    MEDIA SOSIAL
+                </span>
+                <h2 class="font-display text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Terhubung dengan Kami</h2>
+                <div class="w-20 h-1.5 bg-pink-500 rounded-full mb-6"></div>
+                <p class="text-gray-500 max-w-2xl mx-auto leading-relaxed text-sm md:text-base">
+                    Ikuti akun media sosial BPMP Provinsi Sulawesi Tenggara dan dapatkan informasi terbaru, kegiatan, serta konten edukatif menarik.
+                </p>
+            </div>
+
+            <!-- Platform Tabs (Toggle Buttons) -->
+            <div class="flex justify-center mb-10">
+                <div class="inline-flex bg-white p-1.5 rounded-full shadow-sm border border-gray-100 gap-1 overflow-x-auto max-w-full">
+                    <button @click="platform = 'instagram'" :class="platform === 'instagram' ? 'bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 text-white shadow-md' : 'text-gray-600 hover:bg-gray-50'" class="flex items-center gap-2 px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-300 whitespace-nowrap">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"></path></svg>
+                        Instagram
+                    </button>
+                    <button @click="platform = 'tiktok'" :class="platform === 'tiktok' ? 'bg-black text-white shadow-md' : 'text-gray-600 hover:bg-gray-50'" class="flex items-center gap-2 px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-300 whitespace-nowrap">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.28 6.28 0 005.4 15.6a6.28 6.28 0 0012.06 3.05 6.29 6.29 0 002.13-4.69V10.6a8.2 8.2 0 003.81 1.13V8.28a5 5 0 01-3.81-1.59z"/></svg>
+                        TikTok
+                    </button>
+                    <button @click="platform = 'youtube'" :class="platform === 'youtube' ? 'bg-red-600 text-white shadow-md' : 'text-gray-600 hover:bg-gray-50'" class="flex items-center gap-2 px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-300 whitespace-nowrap">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                        YouTube
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Content Card (Instagram Feed Container) -->
+            <div x-show="platform === 'instagram'" x-transition.opacity.duration.500ms class="bg-white rounded-3xl shadow-lg border border-gray-100 p-6 md:p-8 lg:p-10 w-full mx-auto w-full overflow-hidden">
+                
+                <!-- Instagram Profile Header Top Row -->
+                <div class="flex items-center justify-between mb-8 pb-6 border-b border-gray-100">
+                    <div class="flex items-center gap-4">
+                        <!-- Instagram gradient ring avatar -->
+                        <div class="w-12 h-12 rounded-full p-[2px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 flex-shrink-0">
+                            <div class="w-full h-full bg-white rounded-full p-[2px]">
+                                <img src="{{ asset('tutwurihandayani.png') }}" alt="Avatar" class="w-full h-full rounded-full object-contain">
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-gray-900 text-base md:text-lg">BPMP Sultra di Instagram</h3>
+                            <p class="text-gray-500 text-sm">@bpmpsultra</p>
+                        </div>
+                    </div>
+                    <a href="https://www.instagram.com/bpmpsultra/" target="_blank" class="px-5 py-2 bg-gradient-to-r from-pink-500 to-rose-500 text-white text-sm font-bold rounded-full shadow-sm hover:shadow-md hover:scale-105 transition-all flex-shrink-0">
+                        Follow Kami
+                    </a>
+                </div>
+
+                <!-- Instagram Stats Middle Row -->
+                <div class="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-10 mb-10 px-0 md:px-4">
+                    <div class="w-24 h-24 md:w-32 md:h-32 rounded-full p-1 bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 flex-shrink-0">
+                        <div class="w-full h-full bg-white rounded-full p-1">
+                            <img src="{{ asset('tutwurihandayani.png') }}" alt="Profile" class="w-full h-full rounded-full object-contain bg-gray-50">
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-4 flex-grow w-full text-center md:text-left">
+                        <div class="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
+                            <h2 class="text-xl md:text-2xl font-medium text-gray-900">bpmpsultra</h2>
+                            <div class="flex gap-2 justify-center">
+                                <a href="https://www.instagram.com/bpmpsultra/" target="_blank" class="px-6 py-1.5 bg-[#0095f6] hover:bg-[#1877f2] text-white font-bold text-sm rounded-lg transition-colors">Follow</a>
+                                <button class="px-6 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold text-sm rounded-lg transition-colors">Message</button>
+                            </div>
+                        </div>
+                        <div class="flex gap-6 justify-center md:justify-start">
+                            <span class="text-gray-900"><span class="font-bold">814</span> posts</span>
+                            <span class="text-gray-900"><span class="font-bold">6K</span> followers</span>
+                            <span class="text-gray-900"><span class="font-bold">217</span> following</span>
+                        </div>
+                        <div>
+                            <span class="font-bold text-gray-900 text-sm block">BPMP SULTRA</span>
+                            <p class="text-gray-800 text-sm">Kementerian Pendidikan Dasar dan Menengah</p>
+                            <p class="text-blue-900 text-sm font-medium">www.bpmpsultra.kemdikbud.go.id</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grid Layout for Posts -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Post 1 -->
+                    <div class="border border-gray-100 rounded-xl overflow-hidden hover:shadow-lg transition-shadow bg-white flex flex-col">
+                        <!-- Top bar -->
+                        <div class="flex items-center justify-between p-3">
+                            <div class="flex items-center gap-2">
+                                <div class="w-7 h-7 rounded-full p-[1.5px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600">
+                                    <div class="w-full h-full bg-white rounded-full p-[1px]">
+                                        <img src="{{ asset('tutwurihandayani.png') }}" alt="Avatar" class="w-full h-full rounded-full object-contain">
+                                    </div>
+                                </div>
+                                <span class="text-xs font-bold text-gray-900">bpmpsultra</span>
+                            </div>
+                            <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"></path></svg>
+                        </div>
+                        <!-- Image area -->
+                        <div class="relative w-full aspect-[4/5] bg-gray-100">
+                            <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Post Image" class="w-full h-full object-cover">
+                        </div>
+                        <!-- Bottom bar -->
+                        <div class="p-3">
+                            <div class="flex items-center gap-3 mb-2">
+                                <svg class="w-5 h-5 text-gray-800 hover:text-gray-500 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                                <svg class="w-5 h-5 text-gray-800 hover:text-gray-500 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                                <svg class="w-5 h-5 text-gray-800 hover:text-gray-500 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+                            </div>
+                            <p class="text-xs font-bold text-gray-900 mb-1">124 likes</p>
+                            <p class="text-xs text-gray-800 line-clamp-2"><span class="font-bold">bpmpsultra</span> Kegiatan Evaluasi Implementasi Rapor Pendidikan tingkat provinsi Sulawesi Tenggara...</p>
+                        </div>
+                    </div>
+
+                    <!-- Post 2 -->
+                    <div class="border border-gray-100 rounded-xl overflow-hidden hover:shadow-lg transition-shadow bg-white flex flex-col">
+                        <!-- Top bar -->
+                        <div class="flex items-center justify-between p-3">
+                            <div class="flex items-center gap-2">
+                                <div class="w-7 h-7 rounded-full p-[1.5px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600">
+                                    <div class="w-full h-full bg-white rounded-full p-[1px]">
+                                        <img src="{{ asset('tutwurihandayani.png') }}" alt="Avatar" class="w-full h-full rounded-full object-contain">
+                                    </div>
+                                </div>
+                                <span class="text-xs font-bold text-gray-900">bpmpsultra</span>
+                            </div>
+                            <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"></path></svg>
+                        </div>
+                        <!-- Image area -->
+                        <div class="relative w-full aspect-[4/5] bg-gray-100">
+                            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Post Image" class="w-full h-full object-cover">
+                        </div>
+                        <!-- Bottom bar -->
+                        <div class="p-3">
+                            <div class="flex items-center gap-3 mb-2">
+                                <svg class="w-5 h-5 text-gray-800 hover:text-gray-500 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                                <svg class="w-5 h-5 text-gray-800 hover:text-gray-500 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                                <svg class="w-5 h-5 text-gray-800 hover:text-gray-500 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+                            </div>
+                            <p class="text-xs font-bold text-gray-900 mb-1">98 likes</p>
+                            <p class="text-xs text-gray-800 line-clamp-2"><span class="font-bold">bpmpsultra</span> Sinergi BPMP bersama Dinas Pendidikan dalam menyukseskan program prioritas nasional.</p>
+                        </div>
+                    </div>
+
+                    <!-- Post 3 -->
+                    <div class="border border-gray-100 rounded-xl overflow-hidden hover:shadow-lg transition-shadow bg-white flex flex-col">
+                        <!-- Top bar -->
+                        <div class="flex items-center justify-between p-3">
+                            <div class="flex items-center gap-2">
+                                <div class="w-7 h-7 rounded-full p-[1.5px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600">
+                                    <div class="w-full h-full bg-white rounded-full p-[1px]">
+                                        <img src="{{ asset('tutwurihandayani.png') }}" alt="Avatar" class="w-full h-full rounded-full object-contain">
+                                    </div>
+                                </div>
+                                <span class="text-xs font-bold text-gray-900">bpmpsultra</span>
+                            </div>
+                            <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"></path></svg>
+                        </div>
+                        <!-- Image area -->
+                        <div class="relative w-full aspect-[4/5] bg-gray-100">
+                            <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Post Image" class="w-full h-full object-cover">
+                        </div>
+                        <!-- Bottom bar -->
+                        <div class="p-3">
+                            <div class="flex items-center gap-3 mb-2">
+                                <svg class="w-5 h-5 text-gray-800 hover:text-gray-500 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                                <svg class="w-5 h-5 text-gray-800 hover:text-gray-500 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                                <svg class="w-5 h-5 text-gray-800 hover:text-gray-500 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+                            </div>
+                            <p class="text-xs font-bold text-gray-900 mb-1">210 likes</p>
+                            <p class="text-xs text-gray-800 line-clamp-2"><span class="font-bold">bpmpsultra</span> Sosialisasi peningkatkan literasi numerasi bersama komunitas guru penggerak.</p>
+                        </div>
+                    </div>
+
+                    <!-- Post 4 -->
+                    <div class="border border-gray-100 rounded-xl overflow-hidden hover:shadow-lg transition-shadow bg-white flex flex-col">
+                        <!-- Top bar -->
+                        <div class="flex items-center justify-between p-3">
+                            <div class="flex items-center gap-2">
+                                <div class="w-7 h-7 rounded-full p-[1.5px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600">
+                                    <div class="w-full h-full bg-white rounded-full p-[1px]">
+                                        <img src="{{ asset('tutwurihandayani.png') }}" alt="Avatar" class="w-full h-full rounded-full object-contain">
+                                    </div>
+                                </div>
+                                <span class="text-xs font-bold text-gray-900">bpmpsultra</span>
+                            </div>
+                            <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"></path></svg>
+                        </div>
+                        <!-- Image area -->
+                        <div class="relative w-full aspect-[4/5] bg-gray-100">
+                            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Post Image" class="w-full h-full object-cover">
+                        </div>
+                        <!-- Bottom bar -->
+                        <div class="p-3">
+                            <div class="flex items-center gap-3 mb-2">
+                                <svg class="w-5 h-5 text-gray-800 hover:text-gray-500 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                                <svg class="w-5 h-5 text-gray-800 hover:text-gray-500 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                                <svg class="w-5 h-5 text-gray-800 hover:text-gray-500 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+                            </div>
+                            <p class="text-xs font-bold text-gray-900 mb-1">156 likes</p>
+                            <p class="text-xs text-gray-800 line-clamp-2"><span class="font-bold">bpmpsultra</span> Kunjungan lapangan di wilayah 3T untuk memastikan akses pendidikan yang merata.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- TikTok Panel -->
+            <div x-show="platform === 'tiktok'" x-transition.opacity.duration.500ms style="display: none;" class="bg-white rounded-3xl shadow-lg border border-gray-100 p-6 md:p-8 lg:p-10 w-full mx-auto">
+                <div class="flex items-center justify-between mb-8 pb-6 border-b border-gray-100">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full p-[2px] bg-black flex-shrink-0">
+                            <div class="w-full h-full bg-white rounded-full p-[2px]">
+                                <img src="{{ asset('tutwurihandayani.png') }}" alt="Avatar" class="w-full h-full rounded-full object-contain">
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-gray-900 text-base md:text-lg">BPMP Sultra di TikTok</h3>
+                            <p class="text-gray-500 text-sm">@bpmp.sulawesitenggara</p>
+                        </div>
+                    </div>
+                    <a href="https://www.tiktok.com/@bpmp.sulawesitenggara" target="_blank" class="px-5 py-2 bg-black text-white text-sm font-bold rounded-full shadow-sm hover:shadow-md hover:scale-105 transition-all flex-shrink-0">
+                        Follow Kami
+                    </a>
+                </div>
+                
+                <!-- Elfsight TikTok Widget -->
+                <div class="elfsight-app-5f5a5923-4bd1-4aaa-a109-7680e293f81a" data-elfsight-app-lazy></div>
+            </div>
+
+            <!-- YouTube Panel -->
+            <div x-show="platform === 'youtube'" x-transition.opacity.duration.500ms style="display: none;" class="bg-white rounded-3xl shadow-lg border border-gray-100 p-6 md:p-8 lg:p-10 w-full mx-auto">
+                <div class="flex items-center justify-between mb-8 pb-6 border-b border-gray-100">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full p-[2px] bg-red-600 flex-shrink-0">
+                            <div class="w-full h-full bg-white rounded-full p-[2px]">
+                                <img src="{{ asset('tutwurihandayani.png') }}" alt="Avatar" class="w-full h-full rounded-full object-contain">
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-gray-900 text-base md:text-lg">BPMP Sultra di YouTube</h3>
+                            <p class="text-gray-500 text-sm">@bpmpsultra</p>
+                        </div>
+                    </div>
+                    <a href="https://www.youtube.com/@bpmpsultra" target="_blank" class="px-5 py-2 bg-red-600 text-white text-sm font-bold rounded-full shadow-sm hover:shadow-md hover:scale-105 transition-all flex-shrink-0">
+                        Subscribe
+                    </a>
+                </div>
+                
+                <!-- Elfsight YouTube Widget -->
+                <div class="elfsight-app-0bbc46c3-7224-4e01-804d-243726b1c183" data-elfsight-app-lazy></div>
+            </div>
+
+        </div>
+    </section>
 
     <!-- 8. Statistik Kinerja (Dark Section) -->
     <section class="py-24 bg-blue-950 relative overflow-hidden">
@@ -851,11 +1246,28 @@
 
     <!-- 9. Lokasi, Jam Kerja & Kontak Form -->
     <section id="kontak" class="py-24 bg-white relative">
-        <div class="container mx-auto px-4">
+        <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Centered Header -->
+            <div class="text-center mb-16">
+                <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-100 text-blue-700 font-bold tracking-wider text-xs uppercase mb-3 border border-blue-200 shadow-sm">
+                    Hubungi Kami
+                </span>
+                <h2 class="font-display text-3xl md:text-4xl font-extrabold text-blue-900 mb-4">
+                    Kontak & Lokasi <span class="text-blue-600">Pelayanan</span>
+                </h2>
+                <div class="w-20 h-1.5 bg-blue-600 mx-auto rounded-full"></div>
+            </div>
+
+            <!-- Map Sub-header -->
+            <div class="mb-6 text-center md:text-left">
+                <h3 class="font-display text-2xl font-extrabold text-blue-900 mb-2">Lokasi Kantor Operasional BPMP Sultra</h3>
+                <p class="text-gray-600 font-medium">Jl. D.I. Panjaitan No. 83, Wundudopi, Kota Kendari, Sulawesi Tenggara</p>
+            </div>
+
             <!-- Google Maps -->
             <div class="w-full aspect-[21/9] bg-gray-100 rounded-2xl overflow-hidden mb-16 border border-slate-200/80 shadow-lg relative">
                 <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15920.084478832598!2d122.4939764!3d-4.0470535!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2d98f2abdf837c73%3A0xdabf7f6a27e1f40d!2sBPMP%20Provinsi%20Sulawesi%20Tenggara!5e0!3m2!1sid!2sid!4v1684307525359!5m2!1sid!2sid" 
+                    src="https://maps.google.com/maps?q=BPMP+Sultra,+Jl.+DI+Panjaitan,+Kendari&t=&z=17&ie=UTF8&iwloc=&output=embed" 
                     class="w-full h-full border-0" 
                     allowfullscreen="" 
                     loading="lazy" 
@@ -948,7 +1360,7 @@
 
     <!-- 10. Deep Footer -->
     <footer class="bg-blue-950 pt-20 pb-10">
-        <div class="container mx-auto px-4">
+        <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
                 <!-- Column 1 -->
                 <div>
@@ -1019,14 +1431,338 @@
         </div>
     </footer>
 
-    <!-- Floating WhatsApp Button -->
-    <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" class="fixed bottom-6 right-6 z-50 group flex items-center gap-3">
-        <div class="px-4 py-2 bg-white text-gray-800 text-sm font-bold rounded-xl shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0 pointer-events-none whitespace-nowrap">
-            Hubungi Kami via WhatsApp
+    
+    
+    
+    <!-- Native Accessibility Popup Modal & Trigger -->
+    <div x-data="{ 
+            openA11y: false,
+            contrast: false,
+            highlightLinks: false,
+            biggerText: false,
+            textSpacing: false,
+            pauseAnimations: false,
+            hideImages: false,
+            dyslexia: false,
+            bigCursor: false,
+            lineHeight: false,
+            textAlign: 0,
+            saturation: false,
+            toggle(setting) {
+                this[setting] = !this[setting];
+                this.applySettings();
+            },
+            cycleAlign() {
+                this.textAlign = (this.textAlign + 1) % 3;
+                this.applySettings();
+            },
+            reset() {
+                this.contrast = false;
+                this.highlightLinks = false;
+                this.biggerText = false;
+                this.textSpacing = false;
+                this.pauseAnimations = false;
+                this.hideImages = false;
+                this.dyslexia = false;
+                this.bigCursor = false;
+                this.lineHeight = false;
+                this.textAlign = 0;
+                this.saturation = false;
+                this.applySettings();
+            },
+            applySettings() {
+                const b = document.body;
+                b.style.filter = this.contrast ? 'contrast(150%)' : (this.saturation ? 'grayscale(100%)' : 'none');
+                this.highlightLinks ? b.classList.add('a11y-highlight-links') : b.classList.remove('a11y-highlight-links');
+                b.style.fontSize = this.biggerText ? '110%' : '';
+                b.style.letterSpacing = this.textSpacing ? '0.1em' : '';
+                b.style.wordSpacing = this.textSpacing ? '0.2em' : '';
+                this.pauseAnimations ? b.classList.add('a11y-pause-animations') : b.classList.remove('a11y-pause-animations');
+                this.hideImages ? b.classList.add('a11y-hide-images') : b.classList.remove('a11y-hide-images');
+                b.style.fontFamily = this.dyslexia ? 'Arial, sans-serif' : '';
+                this.bigCursor ? b.classList.add('a11y-big-cursor') : b.classList.remove('a11y-big-cursor');
+                b.style.lineHeight = this.lineHeight ? '2' : '';
+                if (this.textAlign === 1) b.style.textAlign = 'left';
+                else if (this.textAlign === 2) b.style.textAlign = 'center';
+                else b.style.textAlign = '';
+                
+                localStorage.setItem('a11ySettings', JSON.stringify({
+                    contrast: this.contrast,
+                    highlightLinks: this.highlightLinks,
+                    biggerText: this.biggerText,
+                    textSpacing: this.textSpacing,
+                    pauseAnimations: this.pauseAnimations,
+                    hideImages: this.hideImages,
+                    dyslexia: this.dyslexia,
+                    bigCursor: this.bigCursor,
+                    lineHeight: this.lineHeight,
+                    textAlign: this.textAlign,
+                    saturation: this.saturation
+                }));
+            },
+            init() {
+                let saved = localStorage.getItem('a11ySettings');
+                if (saved) {
+                    try {
+                        let s = JSON.parse(saved);
+                        this.contrast = s.contrast || false;
+                        this.highlightLinks = s.highlightLinks || false;
+                        this.biggerText = s.biggerText || false;
+                        this.textSpacing = s.textSpacing || false;
+                        this.pauseAnimations = s.pauseAnimations || false;
+                        this.hideImages = s.hideImages || false;
+                        this.dyslexia = s.dyslexia || false;
+                        this.bigCursor = s.bigCursor || false;
+                        this.lineHeight = s.lineHeight || false;
+                        this.textAlign = s.textAlign || 0;
+                        this.saturation = s.saturation || false;
+                        this.applySettings();
+                    } catch(e) {}
+                }
+                
+                window.addEventListener('keydown', (e) => {
+                    if (e.ctrlKey && e.key.toLowerCase() === 'u') {
+                        e.preventDefault();
+                        this.openA11y = !this.openA11y;
+                    }
+                });
+                
+                if (!document.getElementById('a11y-styles')) {
+                    const style = document.createElement('style');
+                    style.id = 'a11y-styles';
+                    style.innerHTML = `
+                        .a11y-highlight-links a { text-decoration: underline !important; text-decoration-color: #fbbf24 !important; text-decoration-thickness: 3px !important; color: #d97706 !important; }
+                        .a11y-pause-animations * { animation: none !important; transition: none !important; }
+                        .a11y-hide-images img, .a11y-hide-images [style*="background-image"] { opacity: 0 !important; }
+                        .a11y-big-cursor * { cursor: zoom-in !important; }
+                        
+                        @keyframes ripple-wave {
+                          0% { transform: scale(0.95); opacity: 0.8; }
+                          100% { transform: scale(1.6); opacity: 0; }
+                        }
+                        .animate-ripple {
+                          animation: ripple-wave 2.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+            }
+        }"
+         class="fixed bottom-6 left-6 z-50 flex flex-col items-start"
+         @keydown.escape.window="openA11y = false">
+        
+        <!-- Modal Container -->
+        <div id="accessibility-modal"
+             x-show="openA11y"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 translate-y-6 scale-95"
+             x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+             x-transition:leave-end="opacity-0 translate-y-6 scale-95"
+             class="w-80 sm:w-96 bg-slate-50 dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden mb-4 transition-all"
+             style="display: none; max-height: 85vh; overflow-y: auto;">
+             
+             <!-- Header -->
+             <div class="bg-blue-600 text-white p-4 flex items-center justify-between sticky top-0 z-10">
+                 <h4 class="font-bold text-sm sm:text-base flex items-center gap-2">
+                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                     Accessibility Menu <span class="text-[10px] font-normal opacity-80 bg-blue-700 px-1.5 py-0.5 rounded">(CTRL+U)</span>
+                 </h4>
+                 <button @click="openA11y = false" class="w-7 h-7 rounded-full border border-white/30 flex items-center justify-center hover:bg-white/20 transition-colors">
+                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                 </button>
+             </div>
+             
+             <!-- Banner Button -->
+             <button class="bg-blue-600 text-white text-xs font-bold py-2 px-4 rounded-xl flex items-center justify-center gap-2 mx-4 mt-4 w-[calc(100%-2rem)] shadow-sm hover:bg-blue-700 transition-colors">
+                 <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg> How UserWay Works
+             </button>
+             
+             <!-- Oversized Widget Toggle -->
+             <div class="flex items-center justify-between px-5 py-3 mt-2 text-xs font-semibold text-slate-700 dark:text-slate-300">
+                 <span>Oversized Widget</span>
+                 <div class="w-8 h-4 bg-slate-300 dark:bg-slate-600 rounded-full relative cursor-pointer">
+                     <div class="w-4 h-4 bg-white rounded-full shadow absolute left-0 top-0 border border-slate-200"></div>
+                 </div>
+             </div>
+             
+             <!-- Grid Features -->
+             <div class="grid grid-cols-2 gap-2.5 p-4 pt-0">
+                 
+                 <!-- Contrast + -->
+                 <div @click="toggle('contrast')" :class="contrast ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700/60'" class="bg-white dark:bg-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm hover:border-blue-500 cursor-pointer transition-all border">
+                     <svg class="w-6 h-6 text-slate-700 dark:text-slate-200" :class="contrast ? 'text-blue-600 dark:text-blue-400' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2V4c-4.418 0-8 3.582-8 8s3.582 8 8 8z"></path></svg>
+                     <span class="text-xs font-semibold text-slate-800 dark:text-slate-100 mt-2">Contrast +</span>
+                 </div>
+                 
+                 <!-- Highlight Links -->
+                 <div @click="toggle('highlightLinks')" :class="highlightLinks ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700/60'" class="bg-white dark:bg-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm hover:border-blue-500 cursor-pointer transition-all border">
+                     <svg class="w-6 h-6 text-slate-700 dark:text-slate-200" :class="highlightLinks ? 'text-blue-600 dark:text-blue-400' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+                     <span class="text-xs font-semibold text-slate-800 dark:text-slate-100 mt-2">Highlight Links</span>
+                 </div>
+                 
+                 <!-- Bigger Text -->
+                 <div @click="toggle('biggerText')" :class="biggerText ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700/60'" class="bg-white dark:bg-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm hover:border-blue-500 cursor-pointer transition-all border">
+                     <div class="flex items-end text-slate-700 dark:text-slate-200 gap-0.5" :class="biggerText ? 'text-blue-600 dark:text-blue-400' : ''">
+                         <span class="font-serif text-lg leading-none font-bold">T</span><span class="font-serif text-2xl leading-none font-bold">T</span>
+                     </div>
+                     <span class="text-xs font-semibold text-slate-800 dark:text-slate-100 mt-2">Bigger Text</span>
+                 </div>
+                 
+                 <!-- Text Spacing -->
+                 <div @click="toggle('textSpacing')" :class="textSpacing ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700/60'" class="bg-white dark:bg-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm hover:border-blue-500 cursor-pointer transition-all border">
+                     <svg class="w-6 h-6 text-slate-700 dark:text-slate-200" :class="textSpacing ? 'text-blue-600 dark:text-blue-400' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l-4 3 4 3m8-6l4 3-4 3m-9-3h10"></path></svg>
+                     <span class="text-xs font-semibold text-slate-800 dark:text-slate-100 mt-2">Text Spacing</span>
+                 </div>
+                 
+                 <!-- Pause Animations -->
+                 <div @click="toggle('pauseAnimations')" :class="pauseAnimations ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700/60'" class="bg-white dark:bg-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm hover:border-blue-500 cursor-pointer transition-all border">
+                     <svg class="w-6 h-6 text-slate-700 dark:text-slate-200" :class="pauseAnimations ? 'text-blue-600 dark:text-blue-400' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                     <span class="text-xs font-semibold text-slate-800 dark:text-slate-100 mt-2">Pause Animations</span>
+                 </div>
+                 
+                 <!-- Hide Images -->
+                 <div @click="toggle('hideImages')" :class="hideImages ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700/60'" class="bg-white dark:bg-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm hover:border-blue-500 cursor-pointer transition-all border">
+                     <svg class="w-6 h-6 text-slate-700 dark:text-slate-200 relative" :class="hideImages ? 'text-blue-600 dark:text-blue-400' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" class="text-red-500"></path></svg>
+                     <span class="text-xs font-semibold text-slate-800 dark:text-slate-100 mt-2">Hide Images</span>
+                 </div>
+                 
+                 <!-- Dyslexia Friendly -->
+                 <div @click="toggle('dyslexia')" :class="dyslexia ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700/60'" class="bg-white dark:bg-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm hover:border-blue-500 cursor-pointer transition-all border">
+                     <div class="w-6 h-6 bg-slate-100 dark:bg-slate-700 rounded flex items-center justify-center text-sm font-bold text-slate-700 dark:text-slate-200" :class="dyslexia ? 'text-blue-600 bg-blue-100 dark:text-blue-400 dark:bg-blue-900/40' : ''">Df</div>
+                     <span class="text-xs font-semibold text-slate-800 dark:text-slate-100 mt-2">Dyslexia Friendly</span>
+                 </div>
+                 
+                 <!-- Cursor -->
+                 <div @click="toggle('bigCursor')" :class="bigCursor ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700/60'" class="bg-white dark:bg-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm hover:border-blue-500 cursor-pointer transition-all border">
+                     <svg class="w-6 h-6 text-slate-700 dark:text-slate-200" :class="bigCursor ? 'text-blue-600 dark:text-blue-400' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
+                     <span class="text-xs font-semibold text-slate-800 dark:text-slate-100 mt-2">Cursor</span>
+                 </div>
+                 
+                 <!-- Tooltips -->
+                 <div @click="toggle('tooltips')" :class="tooltips ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700/60'" class="bg-white dark:bg-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm hover:border-blue-500 cursor-pointer transition-all border">
+                     <svg class="w-6 h-6 text-slate-700 dark:text-slate-200" :class="tooltips ? 'text-blue-600 dark:text-blue-400' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                     <span class="text-xs font-semibold text-slate-800 dark:text-slate-100 mt-2">Tooltips</span>
+                 </div>
+                 
+                 <!-- Line Height -->
+                 <div @click="toggle('lineHeight')" :class="lineHeight ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700/60'" class="bg-white dark:bg-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm hover:border-blue-500 cursor-pointer transition-all border">
+                     <svg class="w-6 h-6 text-slate-700 dark:text-slate-200" :class="lineHeight ? 'text-blue-600 dark:text-blue-400' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16M8 9l-4-3 4-3m8 12l4 3-4 3"></path></svg>
+                     <span class="text-xs font-semibold text-slate-800 dark:text-slate-100 mt-2">Line Height</span>
+                 </div>
+                 
+                 <!-- Text Align -->
+                 <div @click="cycleAlign()" :class="textAlign !== 0 ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700/60'" class="bg-white dark:bg-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm hover:border-blue-500 cursor-pointer transition-all border">
+                     <svg class="w-6 h-6 text-slate-700 dark:text-slate-200" :class="textAlign !== 0 ? 'text-blue-600 dark:text-blue-400' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h10M4 18h16"></path></svg>
+                     <span class="text-xs font-semibold text-slate-800 dark:text-slate-100 mt-2">Text Align</span>
+                 </div>
+                 
+                 <!-- Saturation -->
+                 <div @click="toggle('saturation')" :class="saturation ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700/60'" class="bg-white dark:bg-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm hover:border-blue-500 cursor-pointer transition-all border">
+                     <svg class="w-6 h-6 text-slate-700 dark:text-slate-200" :class="saturation ? 'text-blue-600 dark:text-blue-400' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S12 3 12 3s-4.5 3.97-4.5 9 2.015 9 4.5 9zM9 12h6"></path></svg>
+                     <span class="text-xs font-semibold text-slate-800 dark:text-slate-100 mt-2">Saturation</span>
+                 </div>
+                 
+             </div>
+             
+             <!-- Bottom Action Buttons -->
+             <button @click="reset()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs py-3 px-4 rounded-xl mx-4 mb-3 flex items-center justify-center gap-2 w-[calc(100%-2rem)] transition-colors shadow-sm">
+                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                 Reset All Accessibility Settings
+             </button>
+             
+             <!-- Footer Links -->
+             <div class="px-5 pb-5 flex flex-col gap-2">
+                 <a href="#" class="text-xs font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-1 hover:underline">
+                     Move/Hide Accessibility Widget
+                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                 </a>
+                 <div class="flex items-center gap-2 mt-1">
+                     <span class="bg-slate-200 dark:bg-slate-700 text-[9px] font-bold px-1.5 py-0.5 rounded text-slate-600 dark:text-slate-300">MANAGE</span>
+                     <span class="text-[10px] font-black tracking-widest text-blue-800 dark:text-blue-500">USERWAY</span>
+                 </div>
+             </div>
         </div>
-        <div class="w-14 h-14 bg-green-500 hover:bg-green-600 rounded-full flex items-center justify-center shadow-lg transition-transform transform group-hover:scale-110">
-            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.898-4.45 9.896-9.898-.001-5.45-4.449-9.896-9.897-9.896-5.448 0-9.898 4.45-9.897 9.896 0 2.115.602 3.734 1.595 5.412l-1.066 3.896 3.973-1.002zm10.536-7.147c-.574-.287-3.411-1.683-3.939-1.875-.528-.192-.912-.287-1.295.287-.383.574-1.488 1.875-1.82 2.257-.333.383-.664.431-1.238.144-.574-.287-2.433-.897-4.636-2.868-1.713-1.534-2.871-3.428-3.204-4.002-.333-.574-.036-.884.25-.17.287.287.574.67.861 1.002.287.333.383.574.574.956.191.383.096.717-.048 1.002-.144.287-1.295 3.123-1.774 4.272-.462 1.11-9.932.956-1.295.956-.383 0-.912-.144-1.439-.717-.528-.574-2.01-1.961-2.01-4.782 0-2.82 2.058-5.547 2.345-5.93.287-.383 4.02-6.143 9.734-8.611 1.36-.587 2.418-.938 3.242-1.202 1.36-.431 2.6-.37 3.585-.224 1.109.165 3.411 1.393 3.89 2.74.479 1.347.479 2.502.336 2.74-.143.239-.527.383-1.101.67z"/></svg>
+
+        <!-- Floating Trigger Button (A11y) -->
+        <div class="relative flex items-center justify-center w-14 h-14 mt-4">
+            <span class="absolute inline-flex h-full w-full rounded-full bg-blue-500/40 animate-ripple pointer-events-none"></span>
+            <button id="btn-accessibility" @click="openA11y = !openA11y" class="relative z-10 w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-2xl flex items-center justify-center transition duration-300 transform hover:-translate-y-1 active:scale-95 focus:outline-none">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+            </button>
         </div>
-    </a>
+    </div>
+
+    <!-- Floating WhatsApp Helpdesk Popup -->
+    <div x-data="{ openWA: false }" class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+        
+        <!-- Popup Modal Card -->
+        <div id="whatsapp-modal"
+             x-show="openWA"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 translate-y-6 scale-95"
+             x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+             x-transition:leave-end="opacity-0 translate-y-6 scale-95"
+             class="w-[calc(100vw-2rem)] sm:w-[350px] rounded-3xl bg-white max-h-[80vh] overflow-y-auto dark:bg-slate-900 shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden mb-4"
+             style="display: none;">
+            
+            <!-- Header (Green Banner) -->
+            <div class="bg-emerald-500 p-5 text-white flex items-center gap-3 rounded-t-3xl">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                <div>
+                    <h4 class="text-base font-bold">Mulai Percakapan</h4>
+                    <p class="text-xs text-emerald-100">Pilih saluran bantuan kami</p>
+                </div>
+            </div>
+
+            <!-- Body Content -->
+            <div class="pt-4 pb-2">
+                <p class="text-xs font-medium text-slate-400 dark:text-slate-500 px-5 mb-3">Klik link dibawah ini :</p>
+                
+                <!-- Option 1: Helpdesk Kemdikbud -->
+                <a href="https://wa.me/6281281435091" target="_blank" class="mx-4 mb-3 p-3.5 rounded-2xl bg-white dark:bg-slate-800 border-l-4 border-l-emerald-500 shadow-sm border border-slate-100 dark:border-slate-700/60 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/80 transition cursor-pointer group">
+                    <div class="flex items-center gap-3">
+                        <div class="w-11 h-11 bg-emerald-500 text-white rounded-full flex items-center justify-center shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                        </div>
+                        <div>
+                            <h5 class="text-sm font-bold text-slate-800 dark:text-slate-100">Helpdesk Kemdikbud</h5>
+                            <p class="text-xs text-slate-500">+62 812-8143-5091</p>
+                        </div>
+                    </div>
+                    <svg class="w-5 h-5 text-slate-300 group-hover:text-emerald-500 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </a>
+
+                <!-- Option 2: ULT BPMP Sultra -->
+                <a href="https://chat.whatsapp.com/CfzJauo1F17I5sTHXmme2L?mode=r_c" target="_blank" class="mx-4 mb-4 p-3.5 rounded-2xl bg-white dark:bg-slate-800 border-l-4 border-l-emerald-500 shadow-sm border border-slate-100 dark:border-slate-700/60 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/80 transition cursor-pointer group">
+                    <div class="flex items-center gap-3">
+                        <div class="w-11 h-11 bg-teal-600 text-white rounded-full flex items-center justify-center shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        </div>
+                        <div>
+                            <h5 class="text-sm font-bold text-slate-800 dark:text-slate-100">ULT BPMP Sultra</h5>
+                            <p class="text-xs text-slate-500">Grup WhatsApp Resmi</p>
+                        </div>
+                    </div>
+                    <svg class="w-5 h-5 text-slate-300 group-hover:text-emerald-500 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </a>
+            </div>
+        </div>
+
+        <!-- Floating Trigger Button (WhatsApp) -->
+        <div class="relative flex items-center justify-center w-14 h-14 mt-4">
+            <span class="absolute inline-flex h-full w-full rounded-full bg-emerald-500/40 animate-ripple pointer-events-none"></span>
+            <button id="btn-whatsapp" @click="openWA = !openWA" class="relative z-10 w-14 h-14 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full shadow-2xl flex items-center justify-center transition duration-300 transform hover:-translate-y-1 active:scale-95 focus:outline-none">
+                <!-- WhatsApp Icon (shows when closed) -->
+                <svg x-show="!openWA" class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.559 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                <!-- Close Cross Icon (shows when open) -->
+                <svg x-show="openWA" class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+    </div>
+
 </body>
 </html>

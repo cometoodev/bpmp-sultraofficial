@@ -2,7 +2,7 @@
 <html lang="id" class="scroll-smooth overflow-x-hidden w-full max-w-full">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>BPMP Provinsi Sulawesi Tenggara</title>
     <!-- 2. Favicon -->
     <link rel="icon" href="{{ asset('tutwurihandayani.png') }}">
@@ -158,15 +158,15 @@
         <div class="animate-marquee-continuous items-center gap-16 md:gap-24 px-8">
             <!-- Set 1 -->
             @foreach(['bangga.png', 'rumahpendidikan.png', 'sehat.png', 'berahlak.png', 'ramah.png', 'pendidikan.png'] as $logo)
-                <img src="{{ asset('slidelogo/' . $logo) }}" alt="Logo" class="h-10 sm:h-12 md:h-20 lg:h-24 w-auto object-contain shrink-0">
+                <img src="{{ asset('slidelogo/' . $logo) }}" alt="Logo" class="h-14 md:h-16 lg:h-20 w-auto object-contain shrink-0 dark:brightness-110 dark:drop-shadow-[0_2px_10px_rgba(255,255,255,0.25)]">
             @endforeach
             <!-- Set 2 (Duplicate for continuous loop) -->
             @foreach(['bangga.png', 'rumahpendidikan.png', 'sehat.png', 'berahlak.png', 'ramah.png', 'pendidikan.png'] as $logo)
-                <img src="{{ asset('slidelogo/' . $logo) }}" alt="Logo" class="h-10 sm:h-12 md:h-20 lg:h-24 w-auto object-contain shrink-0">
+                <img src="{{ asset('slidelogo/' . $logo) }}" alt="Logo" class="h-14 md:h-16 lg:h-20 w-auto object-contain shrink-0 dark:brightness-110 dark:drop-shadow-[0_2px_10px_rgba(255,255,255,0.25)]">
             @endforeach
             <!-- Set 3 (Buffer) -->
             @foreach(['bangga.png', 'rumahpendidikan.png', 'sehat.png', 'berahlak.png', 'ramah.png', 'pendidikan.png'] as $logo)
-                <img src="{{ asset('slidelogo/' . $logo) }}" alt="Logo" class="h-10 sm:h-12 md:h-20 lg:h-24 w-auto object-contain shrink-0">
+                <img src="{{ asset('slidelogo/' . $logo) }}" alt="Logo" class="h-14 md:h-16 lg:h-20 w-auto object-contain shrink-0 dark:brightness-110 dark:drop-shadow-[0_2px_10px_rgba(255,255,255,0.25)]">
             @endforeach
         </div>
     </section>
@@ -663,7 +663,7 @@
                      @mouseenter="stopTimer()"
                      @mouseleave="startTimer()"
                 >
-                    <div class="h-full h-[340px] sm:h-[400px] lg:h-full lg:min-h-[440px] relative rounded-3xl overflow-hidden group shadow-md bg-gray-900">
+                    <div class="min-h-[360px] sm:min-h-[420px] h-auto flex-grow relative rounded-3xl overflow-hidden group shadow-md bg-gray-900">
                         <!-- Slides -->
                         <template x-for="(slide, index) in slides" :key="index">
                             <div x-show="active === index"
@@ -1560,8 +1560,11 @@
              x-transition:leave="transition ease-in duration-200"
              x-transition:leave-start="opacity-100 translate-y-0 scale-100"
              x-transition:leave-end="opacity-0 translate-y-6 scale-95"
-             class="w-80 sm:w-96 bg-slate-50 dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden mb-4 transition-all"
-             style="display: none; max-height: 85vh; overflow-y: auto;">
+             class="w-[min(24rem,calc(100vw-2rem))] max-h-[80vh] flex flex-col bg-slate-50 dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden mb-4 transition-all"
+             style="display: none;">
+             
+             <!-- Body Content -->
+             <div class="overflow-y-auto flex-1">
              
              <!-- Header -->
              <div class="bg-blue-600 text-white p-4 flex items-center justify-between sticky top-0 z-10">
@@ -1676,8 +1679,9 @@
              <div class="px-5 pb-5 flex flex-col gap-2">
                  <a href="#" class="text-xs font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-1 hover:underline">
                      Move/Hide Accessibility Widget
-                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                  </a>
+             </div>
+             </div>
                  <div class="flex items-center gap-2 mt-1">
                      <span class="bg-slate-200 dark:bg-slate-700 text-[9px] font-bold px-1.5 py-0.5 rounded text-slate-600 dark:text-slate-300">MANAGE</span>
                      <span class="text-[10px] font-black tracking-widest text-blue-800 dark:text-blue-500">USERWAY</span>
@@ -1706,7 +1710,7 @@
              x-transition:leave="transition ease-in duration-200"
              x-transition:leave-start="opacity-100 translate-y-0 scale-100"
              x-transition:leave-end="opacity-0 translate-y-6 scale-95"
-             class="w-[calc(100vw-2rem)] sm:w-[350px] rounded-3xl bg-white max-h-[80vh] overflow-y-auto dark:bg-slate-900 shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden mb-4"
+             class="w-[min(24rem,calc(100vw-2rem))] max-h-[80vh] flex flex-col rounded-3xl bg-white dark:bg-slate-900 shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden mb-4"
              style="display: none;">
             
             <!-- Header (Green Banner) -->
@@ -1719,7 +1723,7 @@
             </div>
 
             <!-- Body Content -->
-            <div class="pt-4 pb-2">
+            <div class="pt-4 pb-2 overflow-y-auto flex-1">
                 <p class="text-xs font-medium text-slate-400 dark:text-slate-500 px-5 mb-3">Klik link dibawah ini :</p>
                 
                 <!-- Option 1: Helpdesk Kemdikbud -->

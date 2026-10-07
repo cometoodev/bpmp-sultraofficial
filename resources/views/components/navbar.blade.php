@@ -15,7 +15,7 @@
 <header class="fixed top-0 z-50 w-full transition-all duration-300" 
         x-data="{ mobileMenuOpen: false, scrolled: {{ $alwaysScrolled ? 'true' : 'false' }} }" 
         @scroll.window="if (!{{ $alwaysScrolled ? 'true' : 'false' }}) scrolled = (window.pageYOffset > 20)"
-        :class="scrolled ? 'bg-white shadow-md border-b border-gray-200' : 'bg-white/10 backdrop-blur-md border-b border-white/20'">
+        :class="scrolled ? 'bg-white dark:bg-[#0b1329]/90 shadow-md border-b border-gray-200 dark:border-slate-800' : 'bg-white/10 dark:bg-[#0b1329]/90 backdrop-blur-md border-b border-white/20 dark:border-slate-800'">
     
     <!-- Top Bar -->
     <div class="hidden lg:flex items-center justify-between w-full px-6 lg:px-12 py-2 bg-slate-950/40 backdrop-blur-md border-b border-white/10 text-xs text-white/90 transition-all duration-300"
@@ -50,7 +50,7 @@
         </div>
     </div>
 
-    <nav class="w-full flex items-center justify-between px-4 lg:px-8 py-3 relative z-50">
+    <nav class="w-full flex items-center justify-between px-4 lg:px-8 py-3 bg-white/90 dark:bg-[#0b1329]/90 border-b border-slate-200/80 dark:border-slate-800 text-slate-800 dark:text-slate-100 backdrop-blur-md sticky top-0 z-50">
             
             <!-- 3. Logo Text -->
             <div class="flex items-center shrink-0 space-x-3">
@@ -66,14 +66,14 @@
             </div>
 
             <!-- Desktop Menu -->
-            <div class="hidden lg:flex items-center space-x-4 xl:space-x-6 text-sm font-medium" 
+            <div class="hidden lg:flex items-center gap-1 xl:gap-3 2xl:gap-5 text-xs xl:text-sm 2xl:text-base font-medium" 
                  x-data="{ activeMenu: null }" 
                  @click.outside="activeMenu = null" 
                  @keydown.escape.window="activeMenu = null">
 
                 <!-- A. PROFIL -->
                 <div class="group" @mouseenter="activeMenu = 'profil'" @click="activeMenu = activeMenu === 'profil' ? null : 'profil'">
-                    <button class="px-1.5 lg:px-2 py-2 text-[11.5px] lg:text-[12.5px] font-medium whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
+                    <button class="px-1.5 lg:px-2 py-2 text-[11.5px] lg:text-[12.5px] font-medium whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400">
                         <svg class="w-4 h-4 transition-colors" :class="scrolled ? 'text-blue-600 group-hover:text-blue-800' : 'text-blue-300 group-hover:text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                         Profil
                         <svg class="w-3.5 h-3.5 opacity-70 transition-transform duration-200" :class="activeMenu === 'profil' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -86,7 +86,7 @@
                          x-transition:leave="transition ease-in duration-150" 
                          x-transition:leave-start="opacity-100 translate-y-0" 
                          x-transition:leave-end="opacity-0 translate-y-2" 
-                         class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[92vw] max-w-5xl rounded-2xl bg-white dark:bg-[#0f1b38] shadow-2xl border border-slate-100 dark:border-slate-800 p-6 md:p-8 z-50">
+                         class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[min(94vw,1140px)] max-h-[85vh] overflow-y-auto rounded-2xl bg-white dark:bg-[#0f1b38] shadow-2xl border border-slate-100 dark:border-slate-800 p-6 md:p-8 z-50">
                         
                          <h3 class="text-xl font-bold text-blue-900 dark:text-blue-400">Profil</h3>
                          <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 mb-6 pb-2 border-b border-slate-100 dark:border-slate-800/80">Mengenal lebih dekat Balai Penjaminan Mutu Pendidikan Provinsi Sulawesi Tenggara</p>
@@ -134,7 +134,7 @@
 
                 <!-- B. PROGRAM -->
                 <div class="group" @mouseenter="activeMenu = 'program'" @click="activeMenu = activeMenu === 'program' ? null : 'program'">
-                    <button class="px-1.5 lg:px-2 py-2 text-[11.5px] lg:text-[12.5px] font-medium whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
+                    <button class="px-1.5 lg:px-2 py-2 text-[11.5px] lg:text-[12.5px] font-medium whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400">
                         <svg class="w-4 h-4 transition-colors" :class="scrolled ? 'text-blue-600 group-hover:text-blue-800' : 'text-blue-300 group-hover:text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
                         Program
                         <svg class="w-3.5 h-3.5 opacity-70 transition-transform duration-200" :class="activeMenu === 'program' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -147,7 +147,7 @@
                          x-transition:leave="transition ease-in duration-150" 
                          x-transition:leave-start="opacity-100 translate-y-0" 
                          x-transition:leave-end="opacity-0 translate-y-2" 
-                         class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[92vw] max-w-5xl rounded-2xl bg-white dark:bg-[#0f1b38] shadow-2xl border border-slate-100 dark:border-slate-800 p-6 md:p-8 z-50">
+                         class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[min(94vw,1140px)] max-h-[85vh] overflow-y-auto rounded-2xl bg-white dark:bg-[#0f1b38] shadow-2xl border border-slate-100 dark:border-slate-800 p-6 md:p-8 z-50">
                         
                          <h3 class="text-xl font-bold text-blue-900 dark:text-blue-400">Program Kerja</h3>
                          <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 mb-6 pb-2 border-b border-slate-100 dark:border-slate-800/80">Program prioritas penjaminan dan peningkatan mutu pendidikan</p>
@@ -186,7 +186,7 @@
 
                 <!-- C. ULT -->
                 <div class="group" @mouseenter="activeMenu = 'ult'" @click="activeMenu = activeMenu === 'ult' ? null : 'ult'">
-                    <button class="px-1.5 lg:px-2 py-2 text-[11.5px] lg:text-[12.5px] font-medium whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
+                    <button class="px-1.5 lg:px-2 py-2 text-[11.5px] lg:text-[12.5px] font-medium whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400">
                         <svg class="w-4 h-4 transition-colors" :class="scrolled ? 'text-blue-600 group-hover:text-blue-800' : 'text-blue-300 group-hover:text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                         ULT
                         <svg class="w-3.5 h-3.5 opacity-70 transition-transform duration-200" :class="activeMenu === 'ult' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -199,7 +199,7 @@
                          x-transition:leave="transition ease-in duration-150" 
                          x-transition:leave-start="opacity-100 translate-y-0" 
                          x-transition:leave-end="opacity-0 translate-y-2" 
-                         class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[92vw] max-w-5xl rounded-2xl bg-white dark:bg-[#0f1b38] shadow-2xl border border-slate-100 dark:border-slate-800 p-6 md:p-8 z-50">
+                         class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[min(94vw,1140px)] max-h-[85vh] overflow-y-auto rounded-2xl bg-white dark:bg-[#0f1b38] shadow-2xl border border-slate-100 dark:border-slate-800 p-6 md:p-8 z-50">
                         
                          <h3 class="text-xl font-bold text-blue-900 dark:text-blue-400">Unit Layanan Terpadu (ULT)</h3>
                          <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 mb-6 pb-2 border-b border-slate-100 dark:border-slate-800/80">Layanan keterbukaan informasi dan survei kepuasan masyarakat</p>
@@ -220,7 +220,7 @@
 
                 <!-- D. PUBLIKASI -->
                 <div class="group" @mouseenter="activeMenu = 'publikasi'" @click="activeMenu = activeMenu === 'publikasi' ? null : 'publikasi'">
-                    <button class="px-1.5 lg:px-2 py-2 text-[11.5px] lg:text-[12.5px] font-medium whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
+                    <button class="px-1.5 lg:px-2 py-2 text-[11.5px] lg:text-[12.5px] font-medium whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400">
                         <svg class="w-4 h-4 transition-colors" :class="scrolled ? 'text-blue-600 group-hover:text-blue-800' : 'text-blue-300 group-hover:text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15"></path></svg>
                         Publikasi
                         <svg class="w-3.5 h-3.5 opacity-70 transition-transform duration-200" :class="activeMenu === 'publikasi' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -233,7 +233,7 @@
                          x-transition:leave="transition ease-in duration-150" 
                          x-transition:leave-start="opacity-100 translate-y-0" 
                          x-transition:leave-end="opacity-0 translate-y-2" 
-                         class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[92vw] max-w-5xl rounded-2xl bg-white dark:bg-[#0f1b38] shadow-2xl border border-slate-100 dark:border-slate-800 p-6 md:p-8 z-50">
+                         class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[min(94vw,1140px)] max-h-[85vh] overflow-y-auto rounded-2xl bg-white dark:bg-[#0f1b38] shadow-2xl border border-slate-100 dark:border-slate-800 p-6 md:p-8 z-50">
                         
                          <h3 class="text-xl font-bold text-blue-900 dark:text-blue-400">Publikasi</h3>
                          <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 mb-6 pb-2 border-b border-slate-100 dark:border-slate-800/80">Kumpulan dokumen, rilis berkala, artikel, dan materi edukasi</p>
@@ -326,7 +326,7 @@
 
                 <!-- E. SAKIP -->
                 <div class="group" @mouseenter="activeMenu = 'sakip'" @click="activeMenu = activeMenu === 'sakip' ? null : 'sakip'">
-                    <button class="px-1.5 lg:px-2 py-2 text-[11.5px] lg:text-[12.5px] font-medium whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
+                    <button class="px-1.5 lg:px-2 py-2 text-[11.5px] lg:text-[12.5px] font-medium whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400">
                         <svg class="w-4 h-4 transition-colors" :class="scrolled ? 'text-blue-600 group-hover:text-blue-800' : 'text-blue-300 group-hover:text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                         SAKIP
                         <svg class="w-3.5 h-3.5 opacity-70 transition-transform duration-200" :class="activeMenu === 'sakip' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -339,7 +339,7 @@
                          x-transition:leave="transition ease-in duration-150" 
                          x-transition:leave-start="opacity-100 translate-y-0" 
                          x-transition:leave-end="opacity-0 translate-y-2" 
-                         class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[92vw] max-w-5xl rounded-2xl bg-white dark:bg-[#0f1b38] shadow-2xl border border-slate-100 dark:border-slate-800 p-6 md:p-8 z-50">
+                         class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[min(94vw,1140px)] max-h-[85vh] overflow-y-auto rounded-2xl bg-white dark:bg-[#0f1b38] shadow-2xl border border-slate-100 dark:border-slate-800 p-6 md:p-8 z-50">
                         
                          <h3 class="text-xl font-bold text-blue-900 dark:text-blue-400">SAKIP</h3>
                          <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 mb-6 pb-2 border-b border-slate-100 dark:border-slate-800/80">Transparansi dan akuntabilitas kinerja BPMP Sulawesi Tenggara</p>
@@ -405,7 +405,7 @@
 
                 <!-- F. LINK TERKAIT -->
                 <div class="group" @mouseenter="activeMenu = 'link'" @click="activeMenu = activeMenu === 'link' ? null : 'link'">
-                    <button class="px-1.5 lg:px-2 py-2 text-[11.5px] lg:text-[12.5px] font-medium whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
+                    <button class="px-1.5 lg:px-2 py-2 text-[11.5px] lg:text-[12.5px] font-medium whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400">
                         <svg class="w-4 h-4 transition-colors" :class="scrolled ? 'text-blue-600 group-hover:text-blue-800' : 'text-blue-300 group-hover:text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
                         Link Terkait
                         <svg class="w-3.5 h-3.5 opacity-70 transition-transform duration-200" :class="activeMenu === 'link' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -418,7 +418,7 @@
                          x-transition:leave="transition ease-in duration-150" 
                          x-transition:leave-start="opacity-100 translate-y-0" 
                          x-transition:leave-end="opacity-0 translate-y-2" 
-                         class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[92vw] max-w-5xl rounded-2xl bg-white dark:bg-[#0f1b38] shadow-2xl border border-slate-100 dark:border-slate-800 p-6 md:p-8 z-50">
+                         class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[min(94vw,1140px)] max-h-[85vh] overflow-y-auto rounded-2xl bg-white dark:bg-[#0f1b38] shadow-2xl border border-slate-100 dark:border-slate-800 p-6 md:p-8 z-50">
                         
                          <h3 class="text-xl font-bold text-blue-900 dark:text-blue-400">Link Terkait</h3>
                          <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 mb-6 pb-2 border-b border-slate-100 dark:border-slate-800/80">Akses cepat ke portal layanan kepegawaian dan pangkalan data pendidikan</p>
@@ -514,7 +514,7 @@
 
                 <!-- G. PPID (Direct Link) -->
                 <div class="group" @mouseenter="activeMenu = null">
-                    <a href="https://ppid-bpmpsultra.page.gd/" target="_blank" class="px-1.5 lg:px-2 py-2 text-[11.5px] lg:text-[12.5px] font-medium whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
+                    <a href="https://ppid-bpmpsultra.page.gd/" target="_blank" class="px-1.5 lg:px-2 py-2 text-[11.5px] lg:text-[12.5px] font-medium whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400">
                         <svg class="w-4 h-4 transition-colors" :class="scrolled ? 'text-blue-600 group-hover:text-blue-800' : 'text-blue-300 group-hover:text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                         PPID
                         <svg class="w-3.5 h-3.5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
@@ -523,7 +523,7 @@
 
                 <!-- H. ZI WBK -->
                 <div class="group" @mouseenter="activeMenu = 'ziwbk'" @click="activeMenu = activeMenu === 'ziwbk' ? null : 'ziwbk'">
-                    <button class="px-1.5 lg:px-2 py-2 text-[11.5px] lg:text-[12.5px] font-medium whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
+                    <button class="px-1.5 lg:px-2 py-2 text-[11.5px] lg:text-[12.5px] font-medium whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400">
                         <svg class="w-4 h-4 transition-colors" :class="scrolled ? 'text-blue-600 group-hover:text-blue-800' : 'text-blue-300 group-hover:text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path></svg>
                         ZI WBK
                         <svg class="w-3.5 h-3.5 opacity-70 transition-transform duration-200" :class="activeMenu === 'ziwbk' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -536,7 +536,7 @@
                          x-transition:leave="transition ease-in duration-150" 
                          x-transition:leave-start="opacity-100 translate-y-0" 
                          x-transition:leave-end="opacity-0 translate-y-2" 
-                         class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[92vw] max-w-5xl rounded-2xl bg-white dark:bg-[#0f1b38] shadow-2xl border border-slate-100 dark:border-slate-800 p-6 md:p-8 z-50">
+                         class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[min(94vw,1140px)] max-h-[85vh] overflow-y-auto rounded-2xl bg-white dark:bg-[#0f1b38] shadow-2xl border border-slate-100 dark:border-slate-800 p-6 md:p-8 z-50">
                         
                          <h3 class="text-xl font-bold text-blue-900 dark:text-blue-400">Zona Integritas (WBK/WBBM)</h3>
                          <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 mb-6 pb-2 border-b border-slate-100 dark:border-slate-800/80">Pembangunan zona integritas menuju Wilayah Bebas dari Korupsi</p>
@@ -608,7 +608,7 @@
 
                 <!-- I. PENGADUAN -->
                 <div class="group" @mouseenter="activeMenu = 'pengaduan'" @click="activeMenu = activeMenu === 'pengaduan' ? null : 'pengaduan'">
-                    <button class="px-1.5 lg:px-2 py-2 text-[11.5px] lg:text-[12.5px] font-medium whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
+                    <button class="px-1.5 lg:px-2 py-2 text-[11.5px] lg:text-[12.5px] font-medium whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400">
                         <svg class="w-4 h-4 transition-colors" :class="scrolled ? 'text-blue-600 group-hover:text-blue-800' : 'text-blue-300 group-hover:text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
                         Pengaduan
                         <svg class="w-3.5 h-3.5 opacity-70 transition-transform duration-200" :class="activeMenu === 'pengaduan' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -621,7 +621,7 @@
                          x-transition:leave="transition ease-in duration-150" 
                          x-transition:leave-start="opacity-100 translate-y-0" 
                          x-transition:leave-end="opacity-0 translate-y-2" 
-                         class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[92vw] max-w-5xl rounded-2xl bg-white dark:bg-[#0f1b38] shadow-2xl border border-slate-100 dark:border-slate-800 p-6 md:p-8 z-50">
+                         class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[min(94vw,1140px)] max-h-[85vh] overflow-y-auto rounded-2xl bg-white dark:bg-[#0f1b38] shadow-2xl border border-slate-100 dark:border-slate-800 p-6 md:p-8 z-50">
                         
                          <h3 class="text-xl font-bold text-blue-900 dark:text-blue-400">Saluran Pengaduan</h3>
                          <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 mb-6 pb-2 border-b border-slate-100 dark:border-slate-800/80">Kanal resmi penyampaian aspirasi, laporan, dan pengaduan masyarakat</p>
@@ -669,7 +669,7 @@
 
                 <!-- Hubungi Kami -->
                 <div class="group" @mouseenter="activeMenu = null">
-                    <a href="{{ url('/kontak') }}" class="px-1.5 lg:px-2 py-2 text-[11.5px] lg:text-[12.5px] font-medium whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
+                    <a href="{{ url('/kontak') }}" class="px-1.5 lg:px-2 py-2 text-[11.5px] lg:text-[12.5px] font-medium whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400">
                         <svg class="w-4 h-4 transition-colors" :class="scrolled ? 'text-blue-600 group-hover:text-blue-800' : 'text-blue-300 group-hover:text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                         Hubungi Kami
                     </a>

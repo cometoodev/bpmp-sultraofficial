@@ -146,5 +146,8 @@ class DatabaseSeeder extends Seeder
 
         // 7. Menus
         $this->call(MenuSeeder::class);
+
+        // 8. Posts from CSV (2025 onwards)
+        $this->call(PostCsvSeeder::class);
     }
 }

@@ -41,7 +41,7 @@
                             <td class="p-4">
                                 <div class="flex items-center gap-4">
                                     <div class="w-24 h-14 rounded-lg bg-slate-100 overflow-hidden shrink-0 border border-slate-200/50">
-                                        <img src="{{ Storage::url($banner->image) }}" alt="{{ $banner->title }}" class="w-full h-full object-cover">
+                                        <img src="{{ \Illuminate\Support\Str::startsWith($banner->image, 'http') ? $banner->image : asset('storage/' . ltrim($banner->image, '/')) }}" alt="{{ $banner->title }}" class="w-full h-full object-cover">
                                     </div>
                                     <div>
                                         <h3 class="font-bold text-sm text-slate-800">{{ $banner->title }}</h3>

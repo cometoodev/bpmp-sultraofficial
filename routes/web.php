@@ -10,10 +10,16 @@ use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SeoController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\SurveyController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\PublicPageController;
 use App\Models\Announcement;
 use App\Models\Banner;
+use App\Models\Category;
+use App\Models\Post;
+use App\Models\Survey;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,22 +30,81 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     $banners = Banner::where('status', true)->orderBy('order', 'asc')->get();
     $announcements = Announcement::where('status', 'published')->latest('published_at')->take(5)->get();
-    
-    $latestPosts = \App\Models\Post::with('category', 'author')
+
+    $featuredPosts = Post::with('category', 'author')
         ->where('status', 'published')
         ->latest('published_at')
         ->take(3)
         ->get();
 
-    return view('welcome', compact('banners', 'announcements', 'latestPosts'));
+    $sidePosts = Post::with('category', 'author')
+        ->where('status', 'published')
+        ->latest('published_at')
+        ->skip(3)
+        ->take(3)
+        ->get();
+
+    $settings = DB::table('settings')->where('group', 'general')->pluck('value', 'key');
+
+    $surveys = Survey::orderBy('year', 'desc')->orderBy('period', 'asc')->get();
+    $activeSurvey = null;
+    if (request()->filled('survey_id')) {
+        $activeSurvey = Survey::find(request('survey_id'));
+    } elseif (request()->filled('survey_year') && request()->filled('survey_period')) {
+        $activeSurvey = Survey::where('year', request('survey_year'))
+            ->where('period', request('survey_period'))
+            ->first();
+    } elseif (request()->filled('survey_year')) {
+        $activeSurvey = Survey::where('year', request('survey_year'))->where('is_active', true)->first()
+            ?? Survey::where('year', request('survey_year'))->first();
+    }
+    if (! $activeSurvey) {
+        $activeSurvey = Survey::where('is_active', true)->first() ?? $surveys->first();
+    }
+
+    return view('welcome', compact('banners', 'announcements', 'featuredPosts', 'sidePosts', 'settings', 'activeSurvey', 'surveys'));
 })->name('home');
 
-Route::get('/berita', function () {
-    return view('berita.index');
+Route::get('/berita', function (Request $request) {
+    $query = Post::with('category', 'author')->where('status', 'published');
+
+    if ($request->filled('kategori')) {
+        $query->whereHas('category', function ($q) use ($request) {
+            $q->where('slug', $request->kategori);
+        });
+    }
+
+    if ($request->filled('q')) {
+        $query->where(function ($q) use ($request) {
+            $q->where('title', 'like', '%'.$request->q.'%')
+                ->orWhere('content', 'like', '%'.$request->q.'%');
+        });
+    }
+
+    $posts = $query->latest('published_at')->paginate(9)->withQueryString();
+    $categories = Category::where('is_active', true)->get();
+
+    return view('berita.index', compact('posts', 'categories'));
 })->name('berita.index');
 
-Route::get('/berita/{id}', function ($id) {
-    return view('berita.show', ['id' => $id]);
+Route::get('/berita/{slug}', function ($slug) {
+    $post = Post::with('category', 'author')
+        ->where('slug', $slug)
+        ->orWhere('id', $slug)
+        ->first();
+
+    if (! $post) {
+        return view('berita.show', ['id' => $slug, 'post' => null]);
+    }
+
+    $relatedPosts = Post::with('category')
+        ->where('id', '!=', $post->id)
+        ->where('status', 'published')
+        ->latest('published_at')
+        ->take(3)
+        ->get();
+
+    return view('berita.show', compact('post', 'relatedPosts'));
 })->name('berita.show');
 
 /*
@@ -72,6 +137,7 @@ Route::prefix('admin')
         Route::get('pages/{page}/preview', [PageController::class, 'preview'])->name('pages.preview');
         Route::get('pages/{page}/builder', [PageController::class, 'builder'])->name('pages.builder');
         Route::post('pages/{page}/builder', [PageController::class, 'saveBuilder'])->name('pages.builder.save');
+        Route::post('pages/builder/upload-image', [PageController::class, 'uploadImage'])->name('pages.builder.upload_image');
         Route::resource('pages', PageController::class);
 
         // Posts / Berita
@@ -99,6 +165,12 @@ Route::prefix('admin')
         // Website Settings
         Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
         Route::put('settings', [SettingController::class, 'update'])->name('settings.update');
+
+        // Survei Kepuasan Masyarakat (SKM)
+        Route::get('surveys/template', [SurveyController::class, 'downloadTemplate'])->name('surveys.template');
+        Route::post('surveys/{survey}/active', [SurveyController::class, 'setActive'])->name('surveys.active');
+        Route::post('surveys/{survey}/recalculate', [SurveyController::class, 'recalculate'])->name('surveys.recalculate');
+        Route::resource('surveys', SurveyController::class);
     });
 
 /*

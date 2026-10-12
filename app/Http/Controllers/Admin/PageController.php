@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PageRequest;
+use App\Models\Media;
 use App\Models\Page;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class PageController extends Controller
@@ -116,6 +119,34 @@ class PageController extends Controller
         ]);
 
         return response()->json(['success' => true]);
+    }
+
+    public function uploadImage(Request $request): JsonResponse
+    {
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
+        ]);
+
+        $file = $request->file('image');
+        $originalName = $file->getClientOriginalName();
+        $mimeType = $file->getMimeType();
+        $size = $file->getSize();
+
+        $safeName = Str::slug(pathinfo($originalName, PATHINFO_FILENAME)).'-'.time().'.'.$file->getClientOriginalExtension();
+        $path = $file->storeAs('media', $safeName, 'public');
+
+        Media::create([
+            'filename' => $originalName,
+            'path' => $path,
+            'mime_type' => $mimeType,
+            'size' => $size,
+            'uploaded_by' => Auth::id(),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'url' => Storage::disk('public')->url($path),
+        ]);
     }
 
     private function compileText(string $text, array $settings, string $defaultClasses = '', string $defaultTag = 'p'): string
@@ -286,6 +317,124 @@ class PageController extends Controller
                     $html .= $wrapperStart."
                         <div class=\"flex flex-col lg:flex-row items-center gap-12\">
                             {$layoutHtml}
+                        </div>
+                    ".$wrapperEnd;
+                    break;
+
+                case 'image':
+                    $imgUrl = $content['image'] ?? '';
+                    if (empty($imgUrl)) {
+                        break;
+                    }
+                    $alt = htmlspecialchars($content['alt'] ?? '');
+                    $caption = htmlspecialchars($content['caption'] ?? '');
+                    $link = $content['link'] ?? '';
+                    $width = $content['width'] ?? 'max-w-5xl';
+                    $rounded = $content['rounded'] ?? 'rounded-2xl';
+                    $shadow = $content['shadow'] ?? 'shadow-lg';
+                    $align = $settings['align'] ?? 'center';
+
+                    $widthClass = match ($width) {
+                        'w-full' => 'w-full max-w-6xl',
+                        'max-w-5xl' => 'max-w-5xl',
+                        'max-w-3xl' => 'max-w-3xl',
+                        'max-w-xl' => 'max-w-xl',
+                        'max-w-md' => 'max-w-md',
+                        default => 'w-full max-w-5xl',
+                    };
+
+                    $alignClass = match ($align) {
+                        'left' => 'mr-auto text-left',
+                        'right' => 'ml-auto text-right',
+                        default => 'mx-auto text-center',
+                    };
+
+                    $safeImgUrl = htmlspecialchars($imgUrl);
+                    $imgElement = "<img src=\"{$safeImgUrl}\" alt=\"{$alt}\" class=\"w-full h-auto {$rounded} {$shadow} object-cover\">";
+
+                    if (! empty($link)) {
+                        $safeLink = htmlspecialchars($link);
+                        $imgElement = "<a href=\"{$safeLink}\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"block hover:opacity-95 transition-opacity\">{$imgElement}</a>";
+                    }
+
+                    $captionHtml = ! empty($caption) ? "<figcaption class=\"mt-3 text-sm text-slate-500 italic text-center\">{$caption}</figcaption>" : '';
+
+                    $html .= $wrapperStart."
+                        <div class=\"{$widthClass} {$alignClass}\">
+                            <figure class=\"inline-block w-full\">
+                                {$imgElement}
+                                {$captionHtml}
+                            </figure>
+                        </div>
+                    ".$wrapperEnd;
+                    break;
+
+                case 'list':
+                case 'lists':
+                    $heading = htmlspecialchars($content['heading'] ?? '');
+                    $headingSettings = $content['heading_settings'] ?? [];
+                    $desc = htmlspecialchars($content['description'] ?? '');
+                    $style = $content['style'] ?? 'check';
+                    $cols = (int) ($content['columns'] ?? 1);
+                    $items = $content['items'] ?? [];
+
+                    if (empty($heading) && empty($desc) && empty($items)) {
+                        break;
+                    }
+
+                    $compiledHeading = $this->compileText($heading, $headingSettings, 'text-2xl md:text-3xl font-bold text-slate-900', 'h2');
+                    $headingHtml = $compiledHeading ? "<div class=\"mb-3\">{$compiledHeading}</div>" : '';
+                    $descHtml = $desc ? "<p class=\"text-slate-600 text-sm sm:text-base mb-6 max-w-3xl\">{$desc}</p>" : '';
+
+                    $gridClass = $cols === 2 ? 'grid grid-cols-1 md:grid-cols-2 gap-3.5' : 'space-y-3';
+
+                    $itemsHtml = '';
+                    foreach ($items as $idx => $item) {
+                        $itemTitle = htmlspecialchars($item['title'] ?? '');
+                        $itemDesc = htmlspecialchars($item['description'] ?? '');
+                        $itemLink = $item['link'] ?? '';
+
+                        if (empty($itemTitle) && empty($itemDesc)) {
+                            continue;
+                        }
+
+                        // Icon based on style
+                        if ($style === 'number') {
+                            $num = $idx + 1;
+                            $iconHtml = "<span class=\"flex-shrink-0 w-7 h-7 rounded-full bg-blue-100 text-blue-600 font-bold text-xs flex items-center justify-center mt-0.5\">{$num}</span>";
+                        } elseif ($style === 'arrow') {
+                            $iconHtml = '<span class="flex-shrink-0 w-7 h-7 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mt-0.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></span>';
+                        } elseif ($style === 'bullet') {
+                            $iconHtml = '<span class="flex-shrink-0 w-7 h-7 flex items-center justify-center mt-0.5 text-blue-600 font-extrabold text-xl leading-none">•</span>';
+                        } else {
+                            // default check
+                            $iconHtml = '<span class="flex-shrink-0 w-7 h-7 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mt-0.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg></span>';
+                        }
+
+                        $titleHtml = "<span class=\"font-semibold text-slate-800 text-sm sm:text-base leading-snug\">{$itemTitle}</span>";
+                        if (! empty($itemLink)) {
+                            $safeLink = htmlspecialchars($itemLink);
+                            $titleHtml = "<a href=\"{$safeLink}\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"hover:text-blue-600 hover:underline transition-colors\">{$titleHtml}</a>";
+                        }
+
+                        $descItemHtml = ! empty($itemDesc) ? "<p class=\"text-xs text-slate-500 mt-1 leading-relaxed\">{$itemDesc}</p>" : '';
+
+                        $itemsHtml .= "<div class=\"flex items-start gap-3.5 p-3.5 rounded-xl bg-white/70 border border-slate-100/80 shadow-xs hover:border-blue-200 transition-colors\">
+                            {$iconHtml}
+                            <div class=\"flex-1 min-w-0\">
+                                {$titleHtml}
+                                {$descItemHtml}
+                            </div>
+                        </div>";
+                    }
+
+                    $html .= $wrapperStart."
+                        <div class=\"max-w-4xl mx-auto\">
+                            {$headingHtml}
+                            {$descHtml}
+                            <div class=\"{$gridClass}\">
+                                {$itemsHtml}
+                            </div>
                         </div>
                     ".$wrapperEnd;
                     break;

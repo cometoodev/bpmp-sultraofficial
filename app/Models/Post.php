@@ -76,4 +76,22 @@ class Post extends Model
 
         return str($this->content ? strip_tags($this->content) : '')->limit(160)->toString();
     }
+
+    public function getThumbnailUrlAttribute(): string
+    {
+        if (empty($this->thumbnail)) {
+            return 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=800&q=80';
+        }
+
+        if (str_starts_with($this->thumbnail, 'http://') || str_starts_with($this->thumbnail, 'https://')) {
+            return $this->thumbnail;
+        }
+
+        return asset('storage/'.ltrim($this->thumbnail, '/'));
+    }
+
+    public function getFeaturedImageAttribute(): string
+    {
+        return $this->thumbnail_url;
+    }
 }

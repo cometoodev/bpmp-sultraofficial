@@ -116,10 +116,112 @@
                                     <div><label class="text-xs font-bold">HTML / Konten Teks</label><textarea x-model="block.content.html" rows="5" class="w-full font-mono text-xs rounded-md border-slate-200"></textarea></div>
                                 </div>
                             </template>
+
+                            <template x-if="block.type === 'image'">
+                                <div class="space-y-4">
+                                    <!-- Input & Upload Gambar -->
+                                    <div>
+                                        <label class="text-xs font-bold text-slate-700 block mb-1">Pilih / URL Gambar</label>
+                                        <div class="space-y-2">
+                                            <div class="flex gap-2">
+                                                <input type="text" x-model="block.content.image" placeholder="https://... atau /storage/..." class="flex-1 text-xs rounded-md border-slate-200">
+                                                <label class="cursor-pointer px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-md text-xs font-bold flex items-center gap-1 border border-blue-200 shrink-0">
+                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                                                    <span class="upload-label">Upload</span>
+                                                    <input type="file" accept="image/*" class="hidden" @change="uploadImage($event, block)">
+                                                </label>
+                                            </div>
+
+                                            <!-- Thumbnail Preview jika gambar terisi -->
+                                            <template x-if="block.content.image">
+                                                <div class="relative rounded-lg overflow-hidden border border-slate-200 bg-slate-50 p-2 flex items-center justify-center">
+                                                    <img :src="block.content.image" alt="Preview" class="max-h-36 w-auto object-contain rounded">
+                                                    <button type="button" @click="block.content.image = ''" class="absolute top-2 right-2 bg-red-600/80 hover:bg-red-700 text-white rounded-full p-1 text-xs shadow" title="Hapus Gambar">
+                                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                                    </button>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+
+                                    <!-- Lebar Gambar & Perataan -->
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <div>
+                                            <label class="text-xs font-bold text-slate-700 block mb-1">Lebar Gambar</label>
+                                            <select x-model="block.content.width" class="w-full text-xs rounded-md border-slate-200">
+                                                <option value="w-full">Penuh Layar (Full Width)</option>
+                                                <option value="max-w-5xl">Besar (Maks 5XL)</option>
+                                                <option value="max-w-3xl">Sedang (Maks 3XL)</option>
+                                                <option value="max-w-xl">Kecil (Maks XL)</option>
+                                                <option value="max-w-md">Kompak (Maks MD)</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="text-xs font-bold text-slate-700 block mb-1">Perataan Posisi</label>
+                                            <select x-model="block.settings.align" class="w-full text-xs rounded-md border-slate-200">
+                                                <option value="center">Tengah (Center)</option>
+                                                <option value="left">Rata Kiri</option>
+                                                <option value="right">Rata Kanan</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Lengkungan Sudut & Bayangan -->
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <div>
+                                            <label class="text-xs font-bold text-slate-700 block mb-1">Lengkungan Sudut</label>
+                                            <select x-model="block.content.rounded" class="w-full text-xs rounded-md border-slate-200">
+                                                <option value="rounded-none">Persegi (Tanpa Lengkung)</option>
+                                                <option value="rounded-lg">Lengkung Halus (lg)</option>
+                                                <option value="rounded-2xl">Lengkung Modern (2xl)</option>
+                                                <option value="rounded-3xl">Lengkung Ekstra (3xl)</option>
+                                                <option value="rounded-full">Melingkar (Circle)</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="text-xs font-bold text-slate-700 block mb-1">Efek Bayangan</label>
+                                            <select x-model="block.content.shadow" class="w-full text-xs rounded-md border-slate-200">
+                                                <option value="shadow-none">Tanpa Bayangan</option>
+                                                <option value="shadow-md">Bayangan Ringan</option>
+                                                <option value="shadow-lg">Bayangan Standar</option>
+                                                <option value="shadow-2xl">Bayangan Tebal</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Keterangan / Caption -->
+                                    <div>
+                                        <label class="text-xs font-bold text-slate-700 block mb-1">Keterangan / Caption (Opsional)</label>
+                                        <input type="text" x-model="block.content.caption" placeholder="Contoh: Dokumentasi Kegiatan Sosialisasi 2026" class="w-full text-xs rounded-md border-slate-200">
+                                    </div>
+
+                                    <!-- Alt Text -->
+                                    <div>
+                                        <label class="text-xs font-bold text-slate-700 block mb-1">Alt Text (SEO & Aksesibilitas)</label>
+                                        <input type="text" x-model="block.content.alt" placeholder="Deskripsi ringkas isi gambar" class="w-full text-xs rounded-md border-slate-200">
+                                    </div>
+
+                                    <!-- Tautan Gambar (Link) -->
+                                    <div>
+                                        <label class="text-xs font-bold text-slate-700 block mb-1">Tautan / Link Gambar (Opsional)</label>
+                                        <input type="text" x-model="block.content.link" placeholder="https://... (ketika gambar diklik)" class="w-full text-xs rounded-md border-slate-200">
+                                    </div>
+                                </div>
+                            </template>
                             
                             <template x-if="block.type === 'image_text'">
                                 <div class="space-y-4">
-                                    <div><label class="text-xs font-bold">URL Gambar</label><input type="text" x-model="block.content.image" placeholder="https://..." class="w-full text-sm rounded-md border-slate-200"></div>
+                                    <div>
+                                        <label class="text-xs font-bold text-slate-700 block mb-1">URL / File Gambar</label>
+                                        <div class="flex gap-2">
+                                            <input type="text" x-model="block.content.image" placeholder="https://... atau /storage/..." class="flex-1 text-xs rounded-md border-slate-200">
+                                            <label class="cursor-pointer px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-md text-xs font-bold flex items-center gap-1 border border-blue-200 shrink-0">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                                                <span class="upload-label">Upload</span>
+                                                <input type="file" accept="image/*" class="hidden" @change="uploadImage($event, block)">
+                                            </label>
+                                        </div>
+                                    </div>
                                     <div><label class="text-xs font-bold">Posisi Gambar</label>
                                         <select x-model="block.settings.image_position" class="w-full text-sm rounded-md border-slate-200">
                                             <option value="left">Kiri</option><option value="right">Kanan</option>
@@ -189,6 +291,82 @@
                                     </div>
                                 </div>
                             </template>
+
+                            <template x-if="block.type === 'list' || block.type === 'lists'">
+                                <div class="space-y-4">
+                                    <!-- Heading -->
+                                    <div>
+                                        <div class="flex justify-between items-center mb-1">
+                                            <label class="text-xs font-bold text-slate-700">Judul / Heading (Opsional)</label>
+                                            <button type="button" @click="openTextSettings(block.content, 'heading_settings', 'Pengaturan Judul List')" class="text-[10px] bg-slate-100 px-2 py-1 rounded text-blue-600 hover:bg-blue-100 font-bold flex items-center gap-1">⚙️ Style Teks</button>
+                                        </div>
+                                        <input type="text" x-model="block.content.heading" placeholder="Contoh: Dokumen Persyaratan Layanan" class="w-full text-sm rounded-md border-slate-200">
+                                    </div>
+
+                                    <!-- Deskripsi Pembuka -->
+                                    <div>
+                                        <label class="text-xs font-bold text-slate-700 block mb-1">Deskripsi Pengantar (Opsional)</label>
+                                        <textarea x-model="block.content.description" rows="2" placeholder="Penjelasan singkat pengantar daftar..." class="w-full text-xs rounded-md border-slate-200"></textarea>
+                                    </div>
+
+                                    <!-- Gaya List & Jumlah Kolom -->
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <div>
+                                            <label class="text-xs font-bold text-slate-700 block mb-1">Gaya Tampilan (Ikon)</label>
+                                            <select x-model="block.content.style" class="w-full text-xs rounded-md border-slate-200">
+                                                <option value="check">Ceklis Hijau (✓)</option>
+                                                <option value="number">Angka Bernomor (1, 2, 3)</option>
+                                                <option value="arrow">Panah Biru (➔)</option>
+                                                <option value="bullet">Bullet Titik Bulat (•)</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="text-xs font-bold text-slate-700 block mb-1">Tata Letak (Kolom)</label>
+                                            <select x-model="block.content.columns" class="w-full text-xs rounded-md border-slate-200">
+                                                <option value="1">1 Kolom (Menurun)</option>
+                                                <option value="2">2 Kolom (Berdampingan)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Daftar Items -->
+                                    <div class="border-t border-slate-100 pt-3 mt-3">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <label class="text-xs font-bold text-slate-700">Daftar Poin / Item</label>
+                                            <span class="text-[10px] text-slate-400" x-text="(block.content.items || []).length + ' item'"></span>
+                                        </div>
+                                        
+                                        <div class="space-y-2">
+                                            <template x-for="(item, iIndex) in block.content.items" :key="iIndex">
+                                                <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 relative group">
+                                                    <div class="flex items-center justify-between mb-1.5">
+                                                        <span class="text-[10px] font-bold text-slate-400" x-text="'Item #' + (iIndex + 1)"></span>
+                                                        <div class="flex items-center gap-1">
+                                                            <button type="button" @click="if(iIndex > 0) { const temp = block.content.items[iIndex]; block.content.items[iIndex] = block.content.items[iIndex-1]; block.content.items[iIndex-1] = temp; }" x-show="iIndex > 0" class="text-slate-400 hover:text-blue-600 p-0.5" title="Naik"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg></button>
+                                                            <button type="button" @click="if(iIndex < block.content.items.length - 1) { const temp = block.content.items[iIndex]; block.content.items[iIndex] = block.content.items[iIndex+1]; block.content.items[iIndex+1] = temp; }" x-show="iIndex < block.content.items.length - 1" class="text-slate-400 hover:text-blue-600 p-0.5" title="Turun"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
+                                                            <button type="button" @click="block.content.items.splice(iIndex, 1)" class="text-red-400 hover:text-red-600 p-0.5 ml-1" title="Hapus"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Teks Item -->
+                                                    <input type="text" x-model="item.title" placeholder="Teks poin / butir daftar..." class="w-full text-xs font-semibold rounded mb-1.5 border-slate-200">
+                                                    
+                                                    <!-- Keterangan Tambahan (Opsional) -->
+                                                    <textarea x-model="item.description" rows="1" placeholder="Keterangan tambahan (opsional)..." class="w-full text-[11px] rounded mb-1.5 border-slate-200"></textarea>
+
+                                                    <!-- Tautan (Opsional) -->
+                                                    <input type="text" x-model="item.link" placeholder="Tautan / Link URL (opsional)..." class="w-full text-[11px] rounded border-slate-200">
+                                                </div>
+                                            </template>
+                                        </div>
+
+                                        <button type="button" @click="block.content.items.push({title:'', description:'', link:''})" class="w-full mt-2 py-2 bg-white border border-dashed border-slate-300 text-slate-600 text-xs font-bold rounded-lg hover:border-blue-500 hover:text-blue-600 transition-colors flex items-center justify-center gap-1.5">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                            + Tambah Item List
+                                        </button>
+                                    </div>
+                                </div>
+                            </template>
                         </div>
                     </div>
                 </template>
@@ -200,8 +378,10 @@
                 <div class="mt-4 pt-4 border-t border-slate-200 grid grid-cols-2 gap-2">
                     <button type="button" @click="addBlock('hero')" class="px-3 py-2 bg-white border border-slate-200 shadow-sm text-xs font-bold text-slate-700 rounded-lg hover:bg-slate-50 hover:border-blue-300 flex items-center justify-center gap-1">+ Hero</button>
                     <button type="button" @click="addBlock('text')" class="px-3 py-2 bg-white border border-slate-200 shadow-sm text-xs font-bold text-slate-700 rounded-lg hover:bg-slate-50 hover:border-blue-300 flex items-center justify-center gap-1">+ HTML</button>
-                    <button type="button" @click="addBlock('image_text')" class="px-3 py-2 bg-white border border-slate-200 shadow-sm text-xs font-bold text-slate-700 rounded-lg hover:bg-slate-50 hover:border-blue-300 flex items-center justify-center gap-1">+ Img&Txt</button>
+                    <button type="button" @click="addBlock('image')" class="px-3 py-2 bg-white border border-slate-200 shadow-sm text-xs font-bold text-slate-700 rounded-lg hover:bg-slate-50 hover:border-blue-300 flex items-center justify-center gap-1">+ Gambar Saja</button>
+                    <button type="button" @click="addBlock('image_text')" class="px-3 py-2 bg-white border border-slate-200 shadow-sm text-xs font-bold text-slate-700 rounded-lg hover:bg-slate-50 hover:border-blue-300 flex items-center justify-center gap-1">+ Img & Teks</button>
                     <button type="button" @click="addBlock('cards')" class="px-3 py-2 bg-white border border-slate-200 shadow-sm text-xs font-bold text-slate-700 rounded-lg hover:bg-slate-50 hover:border-blue-300 flex items-center justify-center gap-1">+ Cards</button>
+                    <button type="button" @click="addBlock('list')" class="px-3 py-2 bg-blue-50 border border-blue-200 shadow-sm text-xs font-bold text-blue-700 rounded-lg hover:bg-blue-100 hover:border-blue-300 flex items-center justify-center gap-1">+ Daftar List</button>
                 </div>
             </div>
         </aside>
@@ -412,7 +592,7 @@
             },
 
             getBlockLabel(type) {
-                const labels = { 'hero': 'Hero Banner', 'text': 'Teks / HTML', 'image_text': 'Gambar & Teks', 'cards': 'Grid Cards' };
+                const labels = { 'hero': 'Hero Banner', 'text': 'Teks / HTML', 'image': 'Gambar Saja', 'image_text': 'Gambar & Teks', 'cards': 'Grid Cards', 'list': 'Daftar List', 'lists': 'Daftar List' };
                 return labels[type] || 'Section';
             },
 
@@ -428,14 +608,77 @@
                     newBlock.content = { title: 'Judul Baru', description: 'Deskripsi...', button_text: '', button_url: '' };
                 } else if (type === 'text') {
                     newBlock.content = { html: '<p>Teks paragraf baru...</p>' };
+                } else if (type === 'image') {
+                    newBlock.settings.align = 'center';
+                    newBlock.content = {
+                        image: '',
+                        caption: '',
+                        alt: '',
+                        width: 'max-w-5xl',
+                        rounded: 'rounded-2xl',
+                        shadow: 'shadow-lg',
+                        link: ''
+                    };
                 } else if (type === 'image_text') {
                     newBlock.content = { image: '', title: 'Judul Baru', description: 'Deskripsi...', button_text: '', button_url: '' };
                 } else if (type === 'cards') {
                     newBlock.content = { heading: 'Layanan Kami', columns: 3, items: [{title: 'Card 1', description: 'Desc 1', image: '', button_text:'', button_url:''}] };
+                } else if (type === 'list' || type === 'lists') {
+                    newBlock.type = 'list';
+                    newBlock.content = {
+                        heading: 'Daftar Poin & Layanan',
+                        description: 'Berikut ini adalah poin-poin penting informasi.',
+                        style: 'check',
+                        columns: 1,
+                        items: [
+                            { title: 'Persyaratan atau poin pertama', description: 'Penjelasan ringkas mengenai poin ini', link: '' },
+                            { title: 'Persyaratan atau poin kedua', description: 'Penjelasan ringkas mengenai poin ini', link: '' },
+                            { title: 'Persyaratan atau poin ketiga', description: 'Penjelasan ringkas mengenai poin ini', link: '' }
+                        ]
+                    };
                 }
 
                 this.blocks.push(newBlock);
                 this.activeBlockIndex = this.blocks.length - 1;
+            },
+
+            async uploadImage(event, targetBlockOrItem) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const formData = new FormData();
+                formData.append('image', file);
+
+                const labelEl = event.target.closest('label');
+                const textSpan = labelEl ? labelEl.querySelector('span.upload-label') : null;
+                const prevText = textSpan ? textSpan.textContent : 'Upload';
+                if (textSpan) textSpan.textContent = '...';
+
+                try {
+                    const response = await fetch('{{ route('admin.pages.builder.upload_image') }}', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: formData
+                    });
+
+                    const data = await response.json();
+                    if (response.ok && data.url) {
+                        if (targetBlockOrItem.content) {
+                            targetBlockOrItem.content.image = data.url;
+                        } else {
+                            targetBlockOrItem.image = data.url;
+                        }
+                    } else {
+                        alert(data.message || 'Gagal mengunggah gambar.');
+                    }
+                } catch (err) {
+                    alert('Terjadi kesalahan saat mengunggah gambar.');
+                } finally {
+                    if (textSpan) textSpan.textContent = prevText;
+                    event.target.value = '';
+                }
             },
 
             removeBlock(index) {
@@ -563,6 +806,28 @@
                         </div>`;
                     } else if (block.type === 'text') {
                         html += `<div class="prose max-w-4xl mx-auto !break-words !break-all overflow-hidden">${block.content.html || ''}</div>`;
+                    } else if (block.type === 'image') {
+                        let imgUrl = block.content.image;
+                        let altText = block.content.alt || '';
+                        let caption = block.content.caption || '';
+                        let width = block.content.width || 'max-w-5xl';
+                        let rounded = block.content.rounded || 'rounded-2xl';
+                        let shadow = block.content.shadow || 'shadow-lg';
+                        let align = block.settings.align || 'center';
+
+                        let widthClass = width === 'w-full' ? 'w-full max-w-6xl' : width;
+                        let alignClass = align === 'left' ? 'mr-auto text-left' : (align === 'right' ? 'ml-auto text-right' : 'mx-auto text-center');
+
+                        let displaySrc = imgUrl || 'https://via.placeholder.com/1200x600?text=Pilih+atau+Upload+Gambar';
+                        let imgTag = `<img src="${displaySrc}" alt="${altText}" class="w-full h-auto ${rounded} ${shadow} object-cover">`;
+
+                        if (block.content.link) {
+                            imgTag = `<a href="${block.content.link}" target="_blank" class="block hover:opacity-95 transition-opacity">${imgTag}</a>`;
+                        }
+
+                        let captionHtml = caption ? `<figcaption class="mt-3 text-sm text-slate-500 italic text-center">${caption}</figcaption>` : '';
+
+                        html += `<div class="${widthClass} ${alignClass}"><figure class="inline-block w-full">${imgTag}${captionHtml}</figure></div>`;
                     } else if (block.type === 'image_text') {
                         let compiledTitle = this.compileTextHelper(block.content.title, block.content.title_settings, 'text-3xl lg:text-4xl font-bold text-slate-900', 'h2');
                         
@@ -594,6 +859,55 @@
                             </div>`;
                         });
                         html += `</div>`;
+                    } else if (block.type === 'list' || block.type === 'lists') {
+                        let heading = block.content.heading || '';
+                        let desc = block.content.description || '';
+                        let style = block.content.style || 'check';
+                        let cols = parseInt(block.content.columns || 1);
+                        let items = block.content.items || [];
+
+                        let compiledHeading = this.compileTextHelper(heading, block.content.heading_settings, 'text-2xl md:text-3xl font-bold text-slate-900', 'h2');
+                        let headingHtml = compiledHeading ? `<div class="mb-3">${compiledHeading}</div>` : '';
+                        let descHtml = desc ? `<p class="text-slate-600 text-sm sm:text-base mb-6 max-w-3xl">${desc}</p>` : '';
+
+                        let gridClass = cols === 2 ? 'grid grid-cols-1 md:grid-cols-2 gap-3.5' : 'space-y-3';
+
+                        let itemsHtml = '';
+                        (items.length ? items : [{title: 'Contoh butir poin list...', description: ''}]).forEach((item, idx) => {
+                            let iconHtml = '';
+                            if (style === 'number') {
+                                iconHtml = `<span class="flex-shrink-0 w-7 h-7 rounded-full bg-blue-100 text-blue-600 font-bold text-xs flex items-center justify-center mt-0.5">${idx + 1}</span>`;
+                            } else if (style === 'arrow') {
+                                iconHtml = `<span class="flex-shrink-0 w-7 h-7 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mt-0.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></span>`;
+                            } else if (style === 'bullet') {
+                                iconHtml = `<span class="flex-shrink-0 w-7 h-7 flex items-center justify-center mt-0.5 text-blue-600 font-extrabold text-xl leading-none">•</span>`;
+                            } else {
+                                iconHtml = `<span class="flex-shrink-0 w-7 h-7 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mt-0.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg></span>`;
+                            }
+
+                            let titleHtml = `<span class="font-semibold text-slate-800 text-sm sm:text-base leading-snug">${item.title || 'Poin list baru'}</span>`;
+                            if (item.link) {
+                                titleHtml = `<a href="${item.link}" target="_blank" class="hover:text-blue-600 hover:underline transition-colors">${titleHtml}</a>`;
+                            }
+
+                            let descItemHtml = item.description ? `<p class="text-xs text-slate-500 mt-1 leading-relaxed">${item.description}</p>` : '';
+
+                            itemsHtml += `<div class="flex items-start gap-3.5 p-3.5 rounded-xl bg-white/70 border border-slate-100 shadow-xs hover:border-blue-200 transition-colors">
+                                ${iconHtml}
+                                <div class="flex-1 min-w-0">
+                                    ${titleHtml}
+                                    ${descItemHtml}
+                                </div>
+                            </div>`;
+                        });
+
+                        html += `<div class="max-w-4xl mx-auto">
+                            ${headingHtml}
+                            ${descHtml}
+                            <div class="${gridClass}">
+                                ${itemsHtml}
+                            </div>
+                        </div>`;
                     }
                     
                     html += `</div></section>`;

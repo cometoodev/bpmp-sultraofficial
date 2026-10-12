@@ -61,7 +61,7 @@
     @endif
 
     {{-- NAVBAR --}}
-    <x-frontend-header :is-preview="!empty($isPreview)" />
+    <x-navbar :alwaysScrolled="true" :isPreview="!empty($isPreview)" />
 
     {{-- HERO HEADER --}}
     <section class="bg-gradient-to-b from-slate-950 via-blue-950 to-blue-900 {{ !empty($isPreview) ? 'pt-36' : 'pt-28' }} pb-14 relative overflow-hidden text-white">

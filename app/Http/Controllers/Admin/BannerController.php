@@ -28,7 +28,7 @@ class BannerController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'required|image|max:3072', // max 3MB
+            'image' => 'required|file|mimes:jpeg,png,jpg,webp,avif,gif,svg|max:10240',
             'button_text' => 'nullable|string|max:100',
             'button_url' => 'nullable|string|max:255',
             'order' => 'required|integer',
@@ -57,7 +57,7 @@ class BannerController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|max:3072',
+            'image' => 'nullable|file|mimes:jpeg,png,jpg,webp,avif,gif,svg|max:10240',
             'button_text' => 'nullable|string|max:100',
             'button_url' => 'nullable|string|max:255',
             'order' => 'required|integer',

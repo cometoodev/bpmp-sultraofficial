@@ -23,7 +23,7 @@
             </div>
 
             <!-- Upload Gambar -->
-            <div class="space-y-1.5" x-data="{ imagePreview: '{{ Storage::url($banner->image) }}' }">
+            <div class="space-y-1.5" x-data="{ imagePreview: '{{ \Illuminate\Support\Str::startsWith($banner->image, 'http') ? $banner->image : asset('storage/' . ltrim($banner->image, '/')) }}' }">
                 <label class="block text-sm font-bold text-slate-700">Gambar Banner</label>
                 <div class="relative w-full h-48 md:h-64 rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 flex flex-col items-center justify-center overflow-hidden hover:bg-slate-100 transition-colors">
                     <input type="file" name="image" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"

@@ -42,9 +42,14 @@
                                         {{ $menu->order }}
                                     </div>
                                     <div>
-                                        <h3 class="font-bold text-slate-800">{{ $menu->title }}</h3>
+                                        <div class="flex items-center gap-2">
+                                            <h3 class="font-bold text-slate-800">{{ $menu->title }}</h3>
+                                            @if($menu->children->count() > 0)
+                                                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-600 border border-blue-200/50">{{ $menu->children->count() }} Submenu</span>
+                                            @endif
+                                        </div>
                                         <p class="text-xs text-slate-500 font-mono">{{ $menu->url }} 
-                                            @if($menu->target == '_blank') <span class="text-blue-500 ml-1">(Tab Baru)</span> @endif
+                                            @if($menu->target == '_blank') <span class="text-blue-500 ml-1 font-sans font-bold">(Tab Baru)</span> @endif
                                         </p>
                                     </div>
                                 </div>
@@ -79,7 +84,9 @@
                                                 <span class="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded">{{ $child->order }}</span>
                                                 <div>
                                                     <h4 class="font-medium text-slate-700 text-sm">{{ $child->title }}</h4>
-                                                    <p class="text-xs text-slate-400 font-mono">{{ $child->url }}</p>
+                                                    <p class="text-xs text-slate-400 font-mono">{{ $child->url }}
+                                                        @if($child->target == '_blank') <span class="text-blue-500 ml-1 font-sans font-bold">(Tab Baru)</span> @endif
+                                                    </p>
                                                 </div>
                                             </div>
                                             <div class="flex items-center gap-4">

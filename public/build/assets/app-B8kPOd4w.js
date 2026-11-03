@@ -1,0 +1,1 @@
+(function(){typeof window<`u`&&window.addEventListener(`wheel`,function(e){Math.abs(e.deltaY)},{passive:!0})})();

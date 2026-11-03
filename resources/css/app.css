@@ -6,9 +6,46 @@ html {
   font-size: clamp(14px, 1vw + 0.25rem, 16px);
   overflow-x: hidden;
   width: 100%;
+  scroll-behavior: smooth;
 }
 body {
   overflow-x: hidden;
   width: 100%;
   min-width: 320px;
+  -webkit-overflow-scrolling: touch;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 30s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Memastikan warna font seluruh input teks dan formulir terbaca jelas (hitam pekat) */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+input[type="password"],
+input[type="url"],
+input[type="search"],
+textarea,
+select {
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #94a3b8 !important;
+  -webkit-text-fill-color: #94a3b8 !important;
 }

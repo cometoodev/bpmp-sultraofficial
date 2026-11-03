@@ -13,11 +13,30 @@ use Illuminate\View\View;
 
 class PostController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $posts = Post::with('category', 'author')->latest()->paginate(15);
+        $query = Post::with('category', 'author')->latest();
 
-        return view('admin.posts.index', compact('posts'));
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('slug', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('status') && $request->input('status') !== 'semua') {
+            $query->where('status', $request->input('status'));
+        }
+
+        if ($request->filled('category_id') && $request->input('category_id') !== 'semua') {
+            $query->where('category_id', $request->input('category_id'));
+        }
+
+        $posts = $query->paginate(15)->withQueryString();
+        $categories = Category::where('is_active', true)->get();
+
+        return view('admin.posts.index', compact('posts', 'categories'));
     }
 
     public function create(): View

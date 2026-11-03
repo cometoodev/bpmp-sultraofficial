@@ -12,55 +12,72 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <style>body { font-family: 'Poppins', sans-serif; }</style>
+    <style>
+        /* Mengaktifkan native smooth scrolling pada seluruh halaman */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Meredam loncatan scroll yang terlalu sensitif pada touchpad */
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            -webkit-overflow-scrolling: touch;
+        }
+    </style>
 </head>
 <body class="bg-gray-50 text-gray-900 antialiased overflow-x-hidden">
 
     {{-- NAVBAR --}}
     <x-navbar :alwaysScrolled="true" />
 
-    {{-- HERO HEADER --}}
-    <section class="bg-gradient-to-b from-blue-950 to-blue-900 pt-28 pb-14 relative overflow-hidden">
-        <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 20% 50%, #3b82f6 0%, transparent 60%), radial-gradient(circle at 80% 20%, #1d4ed8 0%, transparent 50%);"></div>
-        <div class="container mx-auto px-4 text-center relative z-10">
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-blue-200 text-xs font-semibold mb-5">
-                <span>&#128240;</span>
-                <span>Pusat Informasi Publik</span>
+    {{-- HERO HEADER (Sama Persis Master Template: Biru Solid & Teks Putih) --}}
+    <div style="width: 100%; background-color: #1e3a8a; padding: 7rem 1.5rem 4.5rem 1.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+        
+        <div style="max-width: 900px; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+            
+            <!-- Badge Kapsul Atas (Pusat Informasi Publik) -->
+            <div style="background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.2); padding: 0.4rem 1.25rem; border-radius: 9999px; display: inline-flex; align-items: center; gap: 0.5rem; backdrop-filter: blur(8px);">
+                <span style="width: 0.5rem; height: 0.5rem; border-radius: 50%; background: #60a5fa;"></span>
+                <span style="color: white; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase;">Pusat Informasi Publik</span>
             </div>
-            <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight" style="font-family:'Plus Jakarta Sans',sans-serif;">
-                Berita &amp; <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-300 to-blue-400">Publikasi</span> BPMP
+
+            <!-- Judul Utama (Putih Bersih & Ukuran Proporsional Master Template) -->
+            <h1 style="color: white; font-weight: 900; font-size: clamp(2.25rem, 4vw, 3.25rem); margin: 0; letter-spacing: -0.02em; font-family: 'Plus Jakarta Sans', sans-serif;">
+                Berita &amp; Publikasi BPMP
             </h1>
-            <p class="text-blue-200/80 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
-                Dapatkan informasi terkini seputar kebijakan pendidikan, kegiatan operasional, dan program penjaminan mutu dari BPMP Provinsi Sulawesi Tenggara.
+
+            <!-- Deskripsi Singkat (Putih Bersih) -->
+            <p style="color: rgba(255, 255, 255, 0.9); font-size: 1.05rem; line-height: 1.6; max-width: 650px; margin: 0; font-weight: 400;">
+                Dapatkan informasi terkini dari BPMP Provinsi Sulawesi Tenggara.
             </p>
-            <div class="flex items-center justify-center gap-2 mt-6 text-xs text-blue-300/70 font-medium">
-                <a href="/" class="hover:text-white transition-colors">Beranda</a>
-                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                <span class="text-white">Berita &amp; Publikasi</span>
+
+            <!-- Breadcrumb Navigasi (Putih) -->
+            <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; font-weight: 600; color: rgba(255, 255, 255, 0.8); margin-top: 0.75rem;">
+                <a href="/" style="color: white; text-decoration: none;" class="hover:underline">Beranda</a>
+                <span style="color: rgba(255, 255, 255, 0.5);">&#8250;</span>
+                <span style="color: white;">Berita &amp; Publikasi</span>
             </div>
+
         </div>
-    </section>
+    </div>
 
     {{-- FILTER & SEARCH BAR --}}
-    <div class="sticky top-[64px] z-40 bg-white/80 backdrop-blur-xl border-b border-gray-200/60 shadow-sm" x-data="{ activeTab: '{{ request('kategori', 'semua') }}' }">
+    <div class="sticky top-[64px] z-40 bg-white/80 backdrop-blur-xl border-b border-gray-200/60 shadow-sm" x-data="{ activeTab: '{{ request('category', request('kategori', 'semua')) }}' }">
         <div class="container mx-auto px-4 py-3">
             <div class="flex flex-col md:flex-row items-center justify-between gap-3">
                 <div class="flex flex-wrap items-center gap-2">
-                    <a href="{{ route('berita.index') }}" :class="activeTab === 'semua' ? 'bg-blue-600 text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'" class="px-4 py-1.5 rounded-full text-xs font-bold transition-all">Semua Kategori</a>
+                    <a href="{{ route('berita.index') }}" :class="activeTab === 'semua' || activeTab === 'Semua Kategori' || activeTab === '' ? 'bg-blue-600 text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'" class="px-4 py-1.5 rounded-full text-xs font-bold transition-all">Semua Kategori</a>
                     @if(isset($categories) && $categories->isNotEmpty())
                         @foreach($categories as $cat)
-                            <a href="{{ route('berita.index', ['kategori' => $cat->slug]) }}" :class="activeTab === '{{ $cat->slug }}' ? 'bg-blue-600 text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'" class="px-4 py-1.5 rounded-full text-xs font-bold transition-all">{{ $cat->name }}</a>
+                            <a href="{{ route('berita.index', ['category' => $cat->slug]) }}" :class="activeTab === '{{ $cat->slug }}' || activeTab === '{{ $cat->name }}' ? 'bg-blue-600 text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'" class="px-4 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap">{{ $cat->name }}</a>
                         @endforeach
-                    @else
-                        <button @click="activeTab = 'berita'" :class="activeTab === 'berita' ? 'bg-blue-600 text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'" class="px-4 py-1.5 rounded-full text-xs font-bold transition-all">Berita Terkini</button>
-                        <button @click="activeTab = 'artikel'" :class="activeTab === 'artikel' ? 'bg-blue-600 text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'" class="px-4 py-1.5 rounded-full text-xs font-bold transition-all">Artikel</button>
-                        <button @click="activeTab = 'program'" :class="activeTab === 'program' ? 'bg-blue-600 text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'" class="px-4 py-1.5 rounded-full text-xs font-bold transition-all">Program Prioritas</button>
-                        <button @click="activeTab = 'pengumuman'" :class="activeTab === 'pengumuman' ? 'bg-blue-600 text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'" class="px-4 py-1.5 rounded-full text-xs font-bold transition-all">Pengumuman</button>
                     @endif
                 </div>
                 <form method="GET" action="{{ route('berita.index') }}" class="relative w-full md:w-64">
-                    @if(request('kategori'))
-                        <input type="hidden" name="kategori" value="{{ request('kategori') }}">
+                    @if(request('category'))
+                        <input type="hidden" name="category" value="{{ request('category') }}">
+                    @elseif(request('kategori'))
+                        <input type="hidden" name="category" value="{{ request('kategori') }}">
                     @endif
                     <input type="search" name="q" value="{{ request('q') }}" placeholder="Ketik kata kunci..." class="w-full pl-9 pr-4 py-2 text-sm rounded-full bg-gray-100 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:bg-white transition-all">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -76,8 +93,6 @@
         <div class="flex items-center justify-between mb-8">
             @if(isset($posts) && $posts->total() > 0)
                 <p class="text-sm text-gray-500 font-medium">Menampilkan <strong class="text-gray-800">{{ $posts->firstItem() }}</strong> sampai <strong class="text-gray-800">{{ $posts->lastItem() }}</strong> dari <strong class="text-gray-800">{{ $posts->total() }}</strong> berita</p>
-            @else
-                <p class="text-sm text-gray-500 font-medium">Showing <strong class="text-gray-800">1</strong> to <strong class="text-gray-800">9</strong> of <strong class="text-gray-800">143</strong> results</p>
             @endif
         </div>
 
@@ -104,9 +119,61 @@
                 @endforeach
             </div>
 
-            {{-- Dynamic Pagination --}}
-            <div class="mt-14">
-                {{ $posts->links() }}
+            {{-- Kustomisasi Pagination Modern (Tanpa teks "Showing...", Berpusat di tengah dengan tombol Prev & Next) --}}
+            @php
+                $newsList = $newsList ?? ($posts ?? null);
+            @endphp
+            @if (isset($newsList) && $newsList->hasPages())
+                <div style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 0.5rem; margin-top: 3rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                    
+                    {{-- Tombol Previous --}}
+                    @if ($newsList->onFirstPage())
+                        <span style="padding: 0.6rem 1.25rem; border-radius: 0.75rem; background: #f1f5f9; color: #94a3b8; font-size: 0.85rem; font-weight: 700; cursor: not-allowed; border: 1px solid #e2e8f0;">
+                            &laquo; Previous
+                        </span>
+                    @else
+                        <a href="{{ $newsList->previousPageUrl() }}" style="padding: 0.6rem 1.25rem; border-radius: 0.75rem; background: white; color: #475569; font-size: 0.85rem; font-weight: 700; text-decoration: none; border: 1px solid #cbd5e1; transition: all 0.2s;" class="hover:bg-slate-50 hover:text-indigo-600">
+                            &laquo; Previous
+                        </a>
+                    @endif
+
+                    {{-- Nomor Halaman --}}
+                    @foreach ($newsList->getUrlRange(1, $newsList->lastPage()) as $pageNum => $url)
+                        @if ($pageNum == $newsList->currentPage())
+                            <span style="width: 2.5rem; height: 2.5rem; border-radius: 0.75rem; background: #4f46e5; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 800; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);">
+                                {{ $pageNum }}
+                            </span>
+                        @else
+                            <a href="{{ $url }}" style="width: 2.5rem; height: 2.5rem; border-radius: 0.75rem; background: white; color: #475569; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 700; text-decoration: none; border: 1px solid #cbd5e1; transition: all 0.2s;" class="hover:bg-slate-50 hover:text-indigo-600">
+                                {{ $pageNum }}
+                            </a>
+                        @endif
+                    @endforeach
+
+                    {{-- Tombol Next --}}
+                    @if ($newsList->hasMorePages())
+                        <a href="{{ $newsList->nextPageUrl() }}" style="padding: 0.6rem 1.25rem; border-radius: 0.75rem; background: white; color: #475569; font-size: 0.85rem; font-weight: 700; text-decoration: none; border: 1px solid #cbd5e1; transition: all 0.2s;" class="hover:bg-slate-50 hover:text-indigo-600">
+                            Next &raquo;
+                        </a>
+                    @else
+                        <span style="padding: 0.6rem 1.25rem; border-radius: 0.75rem; background: #f1f5f9; color: #94a3b8; font-size: 0.85rem; font-weight: 700; cursor: not-allowed; border: 1px solid #e2e8f0;">
+                            Next &raquo;
+                        </span>
+                    @endif
+
+                </div>
+            @endif
+        @elseif(request()->filled('category') || request()->filled('kategori') || request()->filled('q'))
+            <div class="text-center py-16 bg-white rounded-3xl border border-gray-100 shadow-sm p-8 max-w-xl mx-auto">
+                <div class="w-16 h-16 bg-blue-50 text-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
+                </div>
+                <h3 class="text-lg font-bold text-gray-800 mb-2">Belum ada berita ditemukan</h3>
+                <p class="text-gray-500 text-sm max-w-md mx-auto mb-6">Artikel untuk kategori atau kata kunci pencarian yang Anda pilih belum tersedia atau sedang dalam proses penyusunan.</p>
+                <a href="{{ route('berita.index') }}" class="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shadow-md">
+                    <span>Lihat Semua Kategori</span>
+                    <span>&rarr;</span>
+                </a>
             </div>
         @else
             @php
@@ -146,355 +213,32 @@
             </div>
 
             {{-- Fallback Pagination --}}
-            <div class="flex items-center justify-center gap-1.5 mt-14">
-                <button class="w-9 h-9 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            <div style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 0.5rem; margin-top: 3rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                <span style="padding: 0.6rem 1.25rem; border-radius: 0.75rem; background: #f1f5f9; color: #94a3b8; font-size: 0.85rem; font-weight: 700; cursor: not-allowed; border: 1px solid #e2e8f0;">
+                    &laquo; Previous
+                </span>
+                <span style="width: 2.5rem; height: 2.5rem; border-radius: 0.75rem; background: #4f46e5; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 800; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);">
+                    1
+                </span>
+                <button type="button" style="width: 2.5rem; height: 2.5rem; border-radius: 0.75rem; background: white; color: #475569; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 700; border: 1px solid #cbd5e1; cursor: pointer;">
+                    2
                 </button>
-                <button class="w-9 h-9 flex items-center justify-center rounded-lg bg-blue-600 text-white font-bold text-sm shadow-md">1</button>
-                <button class="w-9 h-9 flex items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 font-medium text-sm">2</button>
-                <button class="w-9 h-9 flex items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 font-medium text-sm">3</button>
+                <button type="button" style="width: 2.5rem; height: 2.5rem; border-radius: 0.75rem; background: white; color: #475569; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 700; border: 1px solid #cbd5e1; cursor: pointer;">
+                    3
+                </button>
+                <button type="button" style="padding: 0.6rem 1.25rem; border-radius: 0.75rem; background: white; color: #475569; font-size: 0.85rem; font-weight: 700; border: 1px solid #cbd5e1; cursor: pointer;">
+                    Next &raquo;
+                </button>
             </div>
         @endif
     </main>
 
-    <footer class="bg-blue-950 py-8 mt-8">
-        <div class="container mx-auto px-4 text-center">
-            <p class="text-sm text-blue-100/50 font-medium">&copy; 2026 BPMP Provinsi Sulawesi Tenggara. Hak Cipta Dilindungi.</p>
-        </div>
-    </footer>
+    {{-- GLOBAL FOOTER --}}
+    <x-footer />
 
 
     
     
-    <!-- Native Accessibility Popup Modal & Trigger -->
-    <div x-data="{ 
-            openA11y: false,
-            contrast: false,
-            highlightLinks: false,
-            biggerText: false,
-            textSpacing: false,
-            pauseAnimations: false,
-            hideImages: false,
-            dyslexia: false,
-            bigCursor: false,
-            lineHeight: false,
-            textAlign: 0,
-            saturation: false,
-            toggle(setting) {
-                this[setting] = !this[setting];
-                this.applySettings();
-            },
-            cycleAlign() {
-                this.textAlign = (this.textAlign + 1) % 3;
-                this.applySettings();
-            },
-            reset() {
-                this.contrast = false;
-                this.highlightLinks = false;
-                this.biggerText = false;
-                this.textSpacing = false;
-                this.pauseAnimations = false;
-                this.hideImages = false;
-                this.dyslexia = false;
-                this.bigCursor = false;
-                this.lineHeight = false;
-                this.textAlign = 0;
-                this.saturation = false;
-                this.applySettings();
-            },
-            applySettings() {
-                const b = document.body;
-                b.style.filter = this.contrast ? 'contrast(150%)' : (this.saturation ? 'grayscale(100%)' : 'none');
-                this.highlightLinks ? b.classList.add('a11y-highlight-links') : b.classList.remove('a11y-highlight-links');
-                b.style.fontSize = this.biggerText ? '110%' : '';
-                b.style.letterSpacing = this.textSpacing ? '0.1em' : '';
-                b.style.wordSpacing = this.textSpacing ? '0.2em' : '';
-                this.pauseAnimations ? b.classList.add('a11y-pause-animations') : b.classList.remove('a11y-pause-animations');
-                this.hideImages ? b.classList.add('a11y-hide-images') : b.classList.remove('a11y-hide-images');
-                b.style.fontFamily = this.dyslexia ? 'Arial, sans-serif' : '';
-                this.bigCursor ? b.classList.add('a11y-big-cursor') : b.classList.remove('a11y-big-cursor');
-                b.style.lineHeight = this.lineHeight ? '2' : '';
-                if (this.textAlign === 1) b.style.textAlign = 'left';
-                else if (this.textAlign === 2) b.style.textAlign = 'center';
-                else b.style.textAlign = '';
-                
-                localStorage.setItem('a11ySettings', JSON.stringify({
-                    contrast: this.contrast,
-                    highlightLinks: this.highlightLinks,
-                    biggerText: this.biggerText,
-                    textSpacing: this.textSpacing,
-                    pauseAnimations: this.pauseAnimations,
-                    hideImages: this.hideImages,
-                    dyslexia: this.dyslexia,
-                    bigCursor: this.bigCursor,
-                    lineHeight: this.lineHeight,
-                    textAlign: this.textAlign,
-                    saturation: this.saturation
-                }));
-            },
-            init() {
-                let saved = localStorage.getItem('a11ySettings');
-                if (saved) {
-                    try {
-                        let s = JSON.parse(saved);
-                        this.contrast = s.contrast || false;
-                        this.highlightLinks = s.highlightLinks || false;
-                        this.biggerText = s.biggerText || false;
-                        this.textSpacing = s.textSpacing || false;
-                        this.pauseAnimations = s.pauseAnimations || false;
-                        this.hideImages = s.hideImages || false;
-                        this.dyslexia = s.dyslexia || false;
-                        this.bigCursor = s.bigCursor || false;
-                        this.lineHeight = s.lineHeight || false;
-                        this.textAlign = s.textAlign || 0;
-                        this.saturation = s.saturation || false;
-                        this.applySettings();
-                    } catch(e) {}
-                }
-                
-                window.addEventListener('keydown', (e) => {
-                    if (e.ctrlKey && e.key.toLowerCase() === 'u') {
-                        e.preventDefault();
-                        this.openA11y = !this.openA11y;
-                    }
-                });
-                
-                if (!document.getElementById('a11y-styles')) {
-                    const style = document.createElement('style');
-                    style.id = 'a11y-styles';
-                    style.innerHTML = `
-                        .a11y-highlight-links a { text-decoration: underline !important; text-decoration-color: #fbbf24 !important; text-decoration-thickness: 3px !important; color: #d97706 !important; }
-                        .a11y-pause-animations * { animation: none !important; transition: none !important; }
-                        .a11y-hide-images img, .a11y-hide-images [style*="background-image"] { opacity: 0 !important; }
-                        .a11y-big-cursor * { cursor: zoom-in !important; }
-                        
-                        @keyframes ripple-wave {
-                          0% { transform: scale(0.95); opacity: 0.8; }
-                          100% { transform: scale(1.6); opacity: 0; }
-                        }
-                        .animate-ripple {
-                          animation: ripple-wave 2.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
-                        }
-                    `;
-                    document.head.appendChild(style);
-                }
-            }
-        }"
-         class="fixed bottom-6 left-6 z-50 flex flex-col items-start"
-         @keydown.escape.window="openA11y = false">
-        
-        <!-- Modal Container -->
-        <div id="accessibility-modal"
-             x-show="openA11y"
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="opacity-0 translate-y-6 scale-95"
-             x-transition:enter-end="opacity-100 translate-y-0 scale-100"
-             x-transition:leave="transition ease-in duration-200"
-             x-transition:leave-start="opacity-100 translate-y-0 scale-100"
-             x-transition:leave-end="opacity-0 translate-y-6 scale-95"
-             class="w-80 sm:w-96 bg-slate-50 dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden mb-4 transition-all"
-             style="display: none; max-height: 85vh; overflow-y: auto;">
-             
-             <!-- Header -->
-             <div class="bg-blue-600 text-white p-4 flex items-center justify-between sticky top-0 z-10">
-                 <h4 class="font-bold text-sm sm:text-base flex items-center gap-2">
-                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                     Accessibility Menu <span class="text-[10px] font-normal opacity-80 bg-blue-700 px-1.5 py-0.5 rounded">(CTRL+U)</span>
-                 </h4>
-                 <button @click="openA11y = false" class="w-7 h-7 rounded-full border border-white/30 flex items-center justify-center hover:bg-white/20 transition-colors">
-                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                 </button>
-             </div>
-             
-             <!-- Banner Button -->
-             <button class="bg-blue-600 text-white text-xs font-bold py-2 px-4 rounded-xl flex items-center justify-center gap-2 mx-4 mt-4 w-[calc(100%-2rem)] shadow-sm hover:bg-blue-700 transition-colors">
-                 <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg> How UserWay Works
-             </button>
-             
-             <!-- Oversized Widget Toggle -->
-             <div class="flex items-center justify-between px-5 py-3 mt-2 text-xs font-semibold text-slate-700 dark:text-slate-300">
-                 <span>Oversized Widget</span>
-                 <div class="w-8 h-4 bg-slate-300 dark:bg-slate-600 rounded-full relative cursor-pointer">
-                     <div class="w-4 h-4 bg-white rounded-full shadow absolute left-0 top-0 border border-slate-200"></div>
-                 </div>
-             </div>
-             
-             <!-- Grid Features -->
-             <div class="grid grid-cols-2 gap-2.5 p-4 pt-0">
-                 
-                 <!-- Contrast + -->
-                 <div @click="toggle('contrast')" :class="contrast ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700/60'" class="bg-white dark:bg-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm hover:border-blue-500 cursor-pointer transition-all border">
-                     <svg class="w-6 h-6 text-slate-700 dark:text-slate-200" :class="contrast ? 'text-blue-600 dark:text-blue-400' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2V4c-4.418 0-8 3.582-8 8s3.582 8 8 8z"></path></svg>
-                     <span class="text-xs font-semibold text-slate-800 dark:text-slate-100 mt-2">Contrast +</span>
-                 </div>
-                 
-                 <!-- Highlight Links -->
-                 <div @click="toggle('highlightLinks')" :class="highlightLinks ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700/60'" class="bg-white dark:bg-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm hover:border-blue-500 cursor-pointer transition-all border">
-                     <svg class="w-6 h-6 text-slate-700 dark:text-slate-200" :class="highlightLinks ? 'text-blue-600 dark:text-blue-400' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
-                     <span class="text-xs font-semibold text-slate-800 dark:text-slate-100 mt-2">Highlight Links</span>
-                 </div>
-                 
-                 <!-- Bigger Text -->
-                 <div @click="toggle('biggerText')" :class="biggerText ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700/60'" class="bg-white dark:bg-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm hover:border-blue-500 cursor-pointer transition-all border">
-                     <div class="flex items-end text-slate-700 dark:text-slate-200 gap-0.5" :class="biggerText ? 'text-blue-600 dark:text-blue-400' : ''">
-                         <span class="font-serif text-lg leading-none font-bold">T</span><span class="font-serif text-2xl leading-none font-bold">T</span>
-                     </div>
-                     <span class="text-xs font-semibold text-slate-800 dark:text-slate-100 mt-2">Bigger Text</span>
-                 </div>
-                 
-                 <!-- Text Spacing -->
-                 <div @click="toggle('textSpacing')" :class="textSpacing ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700/60'" class="bg-white dark:bg-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm hover:border-blue-500 cursor-pointer transition-all border">
-                     <svg class="w-6 h-6 text-slate-700 dark:text-slate-200" :class="textSpacing ? 'text-blue-600 dark:text-blue-400' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l-4 3 4 3m8-6l4 3-4 3m-9-3h10"></path></svg>
-                     <span class="text-xs font-semibold text-slate-800 dark:text-slate-100 mt-2">Text Spacing</span>
-                 </div>
-                 
-                 <!-- Pause Animations -->
-                 <div @click="toggle('pauseAnimations')" :class="pauseAnimations ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700/60'" class="bg-white dark:bg-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm hover:border-blue-500 cursor-pointer transition-all border">
-                     <svg class="w-6 h-6 text-slate-700 dark:text-slate-200" :class="pauseAnimations ? 'text-blue-600 dark:text-blue-400' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                     <span class="text-xs font-semibold text-slate-800 dark:text-slate-100 mt-2">Pause Animations</span>
-                 </div>
-                 
-                 <!-- Hide Images -->
-                 <div @click="toggle('hideImages')" :class="hideImages ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700/60'" class="bg-white dark:bg-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm hover:border-blue-500 cursor-pointer transition-all border">
-                     <svg class="w-6 h-6 text-slate-700 dark:text-slate-200 relative" :class="hideImages ? 'text-blue-600 dark:text-blue-400' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" class="text-red-500"></path></svg>
-                     <span class="text-xs font-semibold text-slate-800 dark:text-slate-100 mt-2">Hide Images</span>
-                 </div>
-                 
-                 <!-- Dyslexia Friendly -->
-                 <div @click="toggle('dyslexia')" :class="dyslexia ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700/60'" class="bg-white dark:bg-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm hover:border-blue-500 cursor-pointer transition-all border">
-                     <div class="w-6 h-6 bg-slate-100 dark:bg-slate-700 rounded flex items-center justify-center text-sm font-bold text-slate-700 dark:text-slate-200" :class="dyslexia ? 'text-blue-600 bg-blue-100 dark:text-blue-400 dark:bg-blue-900/40' : ''">Df</div>
-                     <span class="text-xs font-semibold text-slate-800 dark:text-slate-100 mt-2">Dyslexia Friendly</span>
-                 </div>
-                 
-                 <!-- Cursor -->
-                 <div @click="toggle('bigCursor')" :class="bigCursor ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700/60'" class="bg-white dark:bg-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm hover:border-blue-500 cursor-pointer transition-all border">
-                     <svg class="w-6 h-6 text-slate-700 dark:text-slate-200" :class="bigCursor ? 'text-blue-600 dark:text-blue-400' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
-                     <span class="text-xs font-semibold text-slate-800 dark:text-slate-100 mt-2">Cursor</span>
-                 </div>
-                 
-                 <!-- Tooltips -->
-                 <div @click="toggle('tooltips')" :class="tooltips ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700/60'" class="bg-white dark:bg-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm hover:border-blue-500 cursor-pointer transition-all border">
-                     <svg class="w-6 h-6 text-slate-700 dark:text-slate-200" :class="tooltips ? 'text-blue-600 dark:text-blue-400' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
-                     <span class="text-xs font-semibold text-slate-800 dark:text-slate-100 mt-2">Tooltips</span>
-                 </div>
-                 
-                 <!-- Line Height -->
-                 <div @click="toggle('lineHeight')" :class="lineHeight ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700/60'" class="bg-white dark:bg-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm hover:border-blue-500 cursor-pointer transition-all border">
-                     <svg class="w-6 h-6 text-slate-700 dark:text-slate-200" :class="lineHeight ? 'text-blue-600 dark:text-blue-400' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16M8 9l-4-3 4-3m8 12l4 3-4 3"></path></svg>
-                     <span class="text-xs font-semibold text-slate-800 dark:text-slate-100 mt-2">Line Height</span>
-                 </div>
-                 
-                 <!-- Text Align -->
-                 <div @click="cycleAlign()" :class="textAlign !== 0 ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700/60'" class="bg-white dark:bg-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm hover:border-blue-500 cursor-pointer transition-all border">
-                     <svg class="w-6 h-6 text-slate-700 dark:text-slate-200" :class="textAlign !== 0 ? 'text-blue-600 dark:text-blue-400' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h10M4 18h16"></path></svg>
-                     <span class="text-xs font-semibold text-slate-800 dark:text-slate-100 mt-2">Text Align</span>
-                 </div>
-                 
-                 <!-- Saturation -->
-                 <div @click="toggle('saturation')" :class="saturation ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700/60'" class="bg-white dark:bg-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm hover:border-blue-500 cursor-pointer transition-all border">
-                     <svg class="w-6 h-6 text-slate-700 dark:text-slate-200" :class="saturation ? 'text-blue-600 dark:text-blue-400' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S12 3 12 3s-4.5 3.97-4.5 9 2.015 9 4.5 9zM9 12h6"></path></svg>
-                     <span class="text-xs font-semibold text-slate-800 dark:text-slate-100 mt-2">Saturation</span>
-                 </div>
-                 
-             </div>
-             
-             <!-- Bottom Action Buttons -->
-             <button @click="reset()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs py-3 px-4 rounded-xl mx-4 mb-3 flex items-center justify-center gap-2 w-[calc(100%-2rem)] transition-colors shadow-sm">
-                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                 Reset All Accessibility Settings
-             </button>
-             
-             <!-- Footer Links -->
-             <div class="px-5 pb-5 flex flex-col gap-2">
-                 <a href="#" class="text-xs font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-1 hover:underline">
-                     Move/Hide Accessibility Widget
-                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                 </a>
-                 <div class="flex items-center gap-2 mt-1">
-                     <span class="bg-slate-200 dark:bg-slate-700 text-[9px] font-bold px-1.5 py-0.5 rounded text-slate-600 dark:text-slate-300">MANAGE</span>
-                     <span class="text-[10px] font-black tracking-widest text-blue-800 dark:text-blue-500">USERWAY</span>
-                 </div>
-             </div>
-        </div>
-
-        <!-- Floating Trigger Button (A11y) -->
-        <div class="relative flex items-center justify-center w-14 h-14 mt-4">
-            <span class="absolute inline-flex h-full w-full rounded-full bg-blue-500/40 animate-ripple pointer-events-none"></span>
-            <button id="btn-accessibility" @click="openA11y = !openA11y" class="relative z-10 w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-2xl flex items-center justify-center transition duration-300 transform hover:-translate-y-1 active:scale-95 focus:outline-none">
-                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-            </button>
-        </div>
-    </div>
-
-    <!-- Floating WhatsApp Helpdesk Popup -->
-    <div x-data="{ openWA: false }" class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
-        
-        <!-- Popup Modal Card -->
-        <div id="whatsapp-modal"
-             x-show="openWA"
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="opacity-0 translate-y-6 scale-95"
-             x-transition:enter-end="opacity-100 translate-y-0 scale-100"
-             x-transition:leave="transition ease-in duration-200"
-             x-transition:leave-start="opacity-100 translate-y-0 scale-100"
-             x-transition:leave-end="opacity-0 translate-y-6 scale-95"
-             class="w-80 sm:w-96 rounded-3xl bg-white dark:bg-slate-900 shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden mb-4"
-             style="display: none;">
-            
-            <!-- Header (Green Banner) -->
-            <div class="bg-emerald-500 p-5 text-white flex items-center gap-3 rounded-t-3xl">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
-                <div>
-                    <h4 class="text-base font-bold">Mulai Percakapan</h4>
-                    <p class="text-xs text-emerald-100">Pilih saluran bantuan kami</p>
-                </div>
-            </div>
-
-            <!-- Body Content -->
-            <div class="pt-4 pb-2">
-                <p class="text-xs font-medium text-slate-400 dark:text-slate-500 px-5 mb-3">Klik link dibawah ini :</p>
-                
-                <!-- Option 1: Helpdesk Kemdikbud -->
-                <a href="https://wa.me/6281281435091" target="_blank" class="mx-4 mb-3 p-3.5 rounded-2xl bg-white dark:bg-slate-800 border-l-4 border-l-emerald-500 shadow-sm border border-slate-100 dark:border-slate-700/60 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/80 transition cursor-pointer group">
-                    <div class="flex items-center gap-3">
-                        <div class="w-11 h-11 bg-emerald-500 text-white rounded-full flex items-center justify-center shrink-0">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-                        </div>
-                        <div>
-                            <h5 class="text-sm font-bold text-slate-800 dark:text-slate-100">Helpdesk Kemdikbud</h5>
-                            <p class="text-xs text-slate-500">+62 812-8143-5091</p>
-                        </div>
-                    </div>
-                    <svg class="w-5 h-5 text-slate-300 group-hover:text-emerald-500 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                </a>
-
-                <!-- Option 2: ULT BPMP Sultra -->
-                <a href="https://chat.whatsapp.com/CfzJauo1F17I5sTHXmme2L?mode=r_c" target="_blank" class="mx-4 mb-4 p-3.5 rounded-2xl bg-white dark:bg-slate-800 border-l-4 border-l-emerald-500 shadow-sm border border-slate-100 dark:border-slate-700/60 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/80 transition cursor-pointer group">
-                    <div class="flex items-center gap-3">
-                        <div class="w-11 h-11 bg-teal-600 text-white rounded-full flex items-center justify-center shrink-0">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                        </div>
-                        <div>
-                            <h5 class="text-sm font-bold text-slate-800 dark:text-slate-100">ULT BPMP Sultra</h5>
-                            <p class="text-xs text-slate-500">Grup WhatsApp Resmi</p>
-                        </div>
-                    </div>
-                    <svg class="w-5 h-5 text-slate-300 group-hover:text-emerald-500 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                </a>
-            </div>
-        </div>
-
-        <!-- Floating Trigger Button (WhatsApp) -->
-        <div class="relative flex items-center justify-center w-14 h-14 mt-4">
-            <span class="absolute inline-flex h-full w-full rounded-full bg-emerald-500/40 animate-ripple pointer-events-none"></span>
-            <button id="btn-whatsapp" @click="openWA = !openWA" class="relative z-10 w-14 h-14 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full shadow-2xl flex items-center justify-center transition duration-300 transform hover:-translate-y-1 active:scale-95 focus:outline-none">
-                <!-- WhatsApp Icon (shows when closed) -->
-                <svg x-show="!openWA" class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.559 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                <!-- Close Cross Icon (shows when open) -->
-                <svg x-show="openWA" class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-        </div>
-    </div>
-
+    <x-accessibility />
 </body>
 </html>

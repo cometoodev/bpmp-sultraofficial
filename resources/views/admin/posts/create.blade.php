@@ -1,7 +1,8 @@
-@extends('admin.layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Tambah Berita')
-@section('page_title', 'Tambah Berita')
+@section('header_title', 'Tambah Berita Baru')
+@section('header_subtitle', 'Tulis dan publikasikan berita atau artikel baru')
 
 @push('styles')
 <!-- Quill CSS -->
@@ -26,97 +27,103 @@
     <form action="{{ route('admin.posts.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6" id="postForm">
         @csrf
         
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Left Column: Main Content -->
-            <div class="lg:col-span-2 space-y-6">
-                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-6">
-                    <!-- Title -->
-                    <div class="space-y-1.5">
-                        <label for="title" class="block text-sm font-bold text-slate-700">Judul Berita <span class="text-red-500">*</span></label>
-                        <input type="text" name="title" id="title" value="{{ old('title') }}" required 
-                            class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 block p-3 transition-colors">
-                        @error('title') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                    </div>
+        <!-- Wrapper Form Create (Glassmorphism & Background Glow) -->
+        <div class="bg-white/60 backdrop-blur-2xl rounded-[2.5rem] shadow-xl border border-white/80 p-6 sm:p-8 mb-8 relative overflow-hidden">
+            <!-- Efek Cahaya Latar -->
+            <div class="absolute -top-20 -right-20 w-64 h-64 bg-blue-400/10 rounded-full blur-3xl pointer-events-none"></div>
 
-                    <!-- Content (Quill Editor) -->
-                    <div class="space-y-1.5">
-                        <label class="block text-sm font-bold text-slate-700">Isi Berita <span class="text-red-500">*</span></label>
-                        <div>
-                            <div id="editor-container">{!! old('content') !!}</div>
-                            <input type="hidden" name="content" id="content" value="{{ old('content') }}">
+            <div class="relative z-10 grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Left Column: Main Content -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="bg-white/80 backdrop-blur-md p-6 rounded-2xl border border-slate-200/60 shadow-xs space-y-6">
+                        <!-- Title -->
+                        <div class="space-y-1.5">
+                            <label for="title" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Judul Berita <span class="text-red-500">*</span></label>
+                            <input type="text" name="title" id="title" value="{{ old('title') }}" required 
+                                class="w-full bg-white/80 border border-slate-200 text-slate-800 text-sm font-semibold rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 block p-3 transition-colors shadow-sm">
+                            @error('title') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
-                        @error('content') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                    </div>
 
-                    <!-- Excerpt -->
-                    <div class="space-y-1.5">
-                        <label for="excerpt" class="block text-sm font-bold text-slate-700">Kutipan / Ringkasan (Opsional)</label>
-                        <textarea name="excerpt" id="excerpt" rows="3" 
-                            class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 block p-3 transition-colors">{{ old('excerpt') }}</textarea>
-                        <p class="text-[11px] text-slate-500">Ditampilkan di daftar berita/kartu berita.</p>
-                        @error('excerpt') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        <!-- Content (Quill Editor) -->
+                        <div class="space-y-1.5">
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Isi Berita <span class="text-red-500">*</span></label>
+                            <div>
+                                <div id="editor-container">{!! old('content') !!}</div>
+                                <input type="hidden" name="content" id="content" value="{{ old('content') }}">
+                            </div>
+                            @error('content') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        </div>
+
+                        <!-- Excerpt -->
+                        <div class="space-y-1.5">
+                            <label for="excerpt" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Kutipan / Ringkasan (Opsional)</label>
+                            <textarea name="excerpt" id="excerpt" rows="3" 
+                                class="w-full bg-white/80 border border-slate-200 text-slate-800 text-sm rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 block p-3 transition-colors shadow-sm">{{ old('excerpt') }}</textarea>
+                            <p class="text-[11px] text-slate-500">Ditampilkan di daftar berita/kartu berita.</p>
+                            @error('excerpt') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Right Column: Sidebar Options -->
-            <div class="space-y-6">
-                <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs space-y-5">
-                    
-                    <h3 class="font-bold text-slate-800 border-b border-slate-100 pb-2">Pengaturan Berita</h3>
+                <!-- Right Column: Sidebar Options -->
+                <div class="space-y-6">
+                    <div class="bg-white/80 backdrop-blur-md p-5 rounded-2xl border border-slate-200/60 shadow-xs space-y-5">
+                        
+                        <h3 class="font-bold text-slate-800 border-b border-slate-100 pb-2">Pengaturan Berita</h3>
 
-                    <!-- Status -->
-                    <div class="space-y-1.5">
-                        <label for="status" class="block text-sm font-bold text-slate-700">Status</label>
-                        <select name="status" id="status" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 block p-3 transition-colors">
-                            <option value="published" {{ old('status') == 'published' ? 'selected' : '' }}>Published (Terbit)</option>
-                            <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>Draft (Konsep)</option>
-                            <option value="archived" {{ old('status') == 'archived' ? 'selected' : '' }}>Archived (Arsip)</option>
-                        </select>
-                        @error('status') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                    </div>
-
-                    <!-- Category -->
-                    <div class="space-y-1.5">
-                        <label for="category_id" class="block text-sm font-bold text-slate-700">Kategori <span class="text-red-500">*</span></label>
-                        <select name="category_id" id="category_id" required class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 block p-3 transition-colors">
-                            <option value="">-- Pilih Kategori --</option>
-                            @foreach($categories as $category)
-                                <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('category_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                    </div>
-
-                    <!-- Slug -->
-                    <div class="space-y-1.5">
-                        <label for="slug" class="block text-sm font-bold text-slate-700">Slug URL (Opsional)</label>
-                        <input type="text" name="slug" id="slug" value="{{ old('slug') }}" placeholder="judul-berita"
-                            class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 block p-3 transition-colors">
-                        @error('slug') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                    </div>
-
-                    <!-- Featured -->
-                    <label class="flex items-center gap-3 cursor-pointer p-3 rounded-xl border border-slate-200/80 bg-slate-50/50">
-                        <input type="checkbox" name="is_featured" value="1" class="w-4 h-4 text-blue-600 bg-white border-slate-300 rounded focus:ring-blue-500" {{ old('is_featured') ? 'checked' : '' }}>
-                        <div>
-                            <span class="text-sm font-bold text-slate-700 block">Jadikan Pilihan/Unggulan</span>
+                        <!-- Status -->
+                        <div class="space-y-1.5">
+                            <label for="status" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Status</label>
+                            <select name="status" id="status" class="w-full bg-white/80 border border-slate-200 text-slate-800 text-sm rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 block p-3 transition-colors shadow-sm">
+                                <option value="published" {{ old('status') == 'published' ? 'selected' : '' }}>Published (Terbit)</option>
+                                <option value="draft" {{ old('status', 'draft') == 'draft' ? 'selected' : '' }}>Draft (Konsep)</option>
+                                <option value="archived" {{ old('status') == 'archived' ? 'selected' : '' }}>Archived (Arsip)</option>
+                            </select>
+                            @error('status') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
-                    </label>
 
-                    <!-- Featured Image -->
-                    <div class="space-y-1.5 pt-2 border-t border-slate-100">
-                        <label for="featured_image" class="block text-sm font-bold text-slate-700">Gambar Utama (Featured Image)</label>
-                        <input type="file" name="featured_image" id="featured_image" accept="image/*"
-                            class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 block p-2 transition-colors file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                        <p class="text-[11px] text-slate-500 mt-1">Format: JPG, PNG, WEBP. Maks 2MB.</p>
-                        @error('featured_image') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                    </div>
+                        <!-- Category -->
+                        <div class="space-y-1.5">
+                            <label for="category_id" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Kategori <span class="text-red-500">*</span></label>
+                            <select name="category_id" id="category_id" required class="w-full bg-white/80 border border-slate-200 text-slate-800 text-sm rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 block p-3 transition-colors shadow-sm">
+                                <option value="">-- Pilih Kategori --</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('category_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        </div>
 
-                    <div class="pt-4 border-t border-slate-100">
-                        <button type="submit" class="w-full px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition-colors">
-                            Simpan Berita
-                        </button>
+                        <!-- Slug -->
+                        <div class="space-y-1.5">
+                            <label for="slug" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Slug URL (Opsional)</label>
+                            <input type="text" name="slug" id="slug" value="{{ old('slug') }}" placeholder="judul-berita"
+                                class="w-full bg-white/80 border border-slate-200 text-slate-800 text-sm font-mono rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 block p-3 transition-colors shadow-sm">
+                            @error('slug') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        </div>
+
+                        <!-- Featured -->
+                        <label class="flex items-center gap-3 cursor-pointer p-3 rounded-xl border border-slate-200/80 bg-white/60">
+                            <input type="checkbox" name="is_featured" value="1" class="w-4 h-4 text-blue-600 bg-white border-slate-300 rounded focus:ring-blue-500" {{ old('is_featured') ? 'checked' : '' }}>
+                            <div>
+                                <span class="text-xs font-bold text-slate-700 block">Jadikan Pilihan/Unggulan</span>
+                            </div>
+                        </label>
+
+                        <!-- Featured Image -->
+                        <div class="space-y-1.5 pt-2 border-t border-slate-100">
+                            <label for="featured_image" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Gambar Utama (Featured Image)</label>
+                            <input type="file" name="featured_image" id="featured_image" accept="image/*"
+                                class="w-full bg-white/80 border border-slate-200 text-slate-800 text-sm rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 block p-2 transition-colors file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                            <p class="text-[11px] text-slate-500 mt-1">Format: JPG, PNG, WEBP. Maks 2MB.</p>
+                            @error('featured_image') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div class="pt-4 border-t border-slate-100">
+                            <button type="submit" class="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-sm font-bold rounded-xl shadow-lg shadow-blue-500/25 transition-all">
+                                Simpan Berita
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

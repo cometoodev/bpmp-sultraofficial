@@ -1,7 +1,8 @@
-@extends('admin.layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Tulis Pengumuman')
-@section('page_title', 'Tulis Pengumuman')
+@section('header_title', 'Tulis Pengumuman Baru')
+@section('header_subtitle', 'Publikasikan informasi penting atau pengumuman resmi instansi')
 
 @push('styles')
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">

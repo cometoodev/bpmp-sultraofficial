@@ -1,7 +1,8 @@
-@extends('admin.layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'SEO Dasar')
-@section('page_title', 'SEO Dasar')
+@section('header_title', 'Pengaturan SEO Dasar')
+@section('header_subtitle', 'Konfigurasi meta tag, title, deskripsi, dan indeks mesin pencari')
 
 @section('content')
 <div class="max-w-4xl mx-auto space-y-6">

@@ -1,7 +1,8 @@
-@extends('admin.layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Survei Kepuasan Masyarakat (SKM)')
-@section('page_title', 'Survei Kepuasan Masyarakat (SKM)')
+@section('header_title', 'Survei Kepuasan Masyarakat (SKM)')
+@section('header_subtitle', 'Data responden dan pengisian kuesioner mutu layanan publik')
 
 @section('content')
 <div class="space-y-6">

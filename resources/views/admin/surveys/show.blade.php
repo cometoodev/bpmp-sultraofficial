@@ -1,7 +1,8 @@
-@extends('admin.layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Detail & Hasil Perhitungan SKM')
-@section('page_title', 'Detail Perhitungan SKM')
+@section('header_title', 'Detail Perhitungan SKM')
+@section('header_subtitle', 'Rincian nilai unsur, IKM, dan mutu pelayanan per triwulan')
 
 @section('content')
 <div class="space-y-6">

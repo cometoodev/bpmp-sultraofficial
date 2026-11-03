@@ -49,7 +49,8 @@ class MenuSeeder extends Seeder
                 'target' => '_self',
                 'children' => [
                     ['title' => 'Unit Layanan Terpadu', 'url' => '/ult-unit-layanan-terpadu', 'order' => 1, 'target' => '_self'],
-                    ['title' => 'Hasil SKM', 'url' => '/hasil-skm', 'order' => 2, 'target' => '_self'],
+                    ['title' => 'Buku Tamu & Kuisioner', 'url' => '/buku-tamu', 'order' => 2, 'target' => '_self'],
+                    ['title' => 'Hasil SKM', 'url' => '/hasil-skm', 'order' => 3, 'target' => '_self'],
                 ],
             ],
             [

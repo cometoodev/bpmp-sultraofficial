@@ -112,10 +112,15 @@
                         </button>
                         <div x-show="activeAccordion === '{{ $m->id }}'" x-collapse class="pl-6 space-y-2 pb-2 text-slate-600 font-normal">
                             @foreach($m->children as $child)
-                                <a href="{{ $child->url }}" target="{{ $child->target }}" class="flex items-center justify-between py-1 hover:text-blue-600 transition-colors">
-                                    <span>{{ $child->title }}</span>
+                                <a href="{{ $child->url }}" target="{{ $child->target }}" class="flex items-center justify-between py-1.5 hover:text-blue-600 transition-colors">
+                                    <div class="flex flex-col">
+                                        <span class="font-medium">{{ $child->title }}</span>
+                                        @if(!empty($child->description))
+                                            <span class="text-[10px] text-slate-400 font-normal leading-tight mt-0.5">{{ $child->description }}</span>
+                                        @endif
+                                    </div>
                                     @if($child->target == '_blank')
-                                        <svg class="w-3 h-3 opacity-50 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                                        <svg class="w-3 h-3 opacity-50 ml-1 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                                     @endif
                                 </a>
                             @endforeach

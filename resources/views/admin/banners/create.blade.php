@@ -1,7 +1,8 @@
-@extends('admin.layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Tambah Banner')
-@section('page_title', 'Tambah Banner')
+@section('header_title', 'Tambah Banner Baru')
+@section('header_subtitle', 'Unggah gambar banner dan konfigurasi link tampilan beranda')
 
 @section('content')
 <div class="max-w-4xl mx-auto space-y-6">

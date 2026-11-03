@@ -1,7 +1,8 @@
-@extends('admin.layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Edit Data SKM Per Triwulan')
-@section('page_title', 'Edit Data SKM Per Triwulan')
+@section('header_title', 'Edit Data SKM')
+@section('header_subtitle', 'Perbarui nilai unsur dan data kepuasan masyarakat')
 
 @section('content')
 <div class="max-w-4xl mx-auto space-y-6" x-data="skmEditForm()">

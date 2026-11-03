@@ -1,3 +1,5 @@
+import typography from '@tailwindcss/typography';
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -6,7 +8,13 @@ export default {
     "./resources/**/*.vue",
   ],
   theme: {
-    extend: {},
+    extend: {
+      spacing: {
+        '18': '4.5rem',
+      },
+    },
   },
-  plugins: [],
+  plugins: [
+    typography,
+  ],
 }

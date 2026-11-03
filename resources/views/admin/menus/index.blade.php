@@ -1,28 +1,18 @@
-@extends('admin.layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Menu Navigasi')
-@section('page_title', 'Menu Navigasi')
+@section('header_title', 'Menu Navigasi')
+@section('header_subtitle', 'Atur struktur menu navigasi website utama')
+
+@section('header_action')
+    <a href="{{ route('admin.menus.create') }}" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl shadow-md transition-all inline-flex items-center gap-1.5">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+        <span>+ Tambah Menu</span>
+    </a>
+@endsection
 
 @section('content')
 <div class="space-y-6">
-
-    @if(session('success'))
-        <div class="bg-emerald-50 text-emerald-700 p-4 rounded-xl text-sm font-medium border border-emerald-100 flex items-center gap-3">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-            {{ session('success') }}
-        </div>
-    @endif
-
-    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
-        <div>
-            <h1 class="text-base font-bold text-slate-800">Manajemen Menu Navigasi</h1>
-            <p class="text-xs text-slate-500 mt-1">Atur struktur menu navigasi website utama</p>
-        </div>
-        <a href="{{ route('admin.menus.create') }}" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-colors flex items-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-            Tambah Menu
-        </a>
-    </div>
 
     <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
         <div class="p-6">
@@ -48,9 +38,14 @@
                                                 <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-600 border border-blue-200/50">{{ $menu->children->count() }} Submenu</span>
                                             @endif
                                         </div>
-                                        <p class="text-xs text-slate-500 font-mono">{{ $menu->url }} 
-                                            @if($menu->target == '_blank') <span class="text-blue-500 ml-1 font-sans font-bold">(Tab Baru)</span> @endif
-                                        </p>
+                                        <div class="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-0.5">
+                                            <p class="text-xs text-slate-500 font-mono">{{ $menu->url }} 
+                                                @if($menu->target == '_blank') <span class="text-blue-500 ml-1 font-sans font-bold">(Tab Baru)</span> @endif
+                                            </p>
+                                            @if(!empty($menu->description))
+                                                <span class="text-xs text-slate-400 italic">• {{ \Illuminate\Support\Str::limit($menu->description, 45) }}</span>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-4">
@@ -84,9 +79,14 @@
                                                 <span class="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded">{{ $child->order }}</span>
                                                 <div>
                                                     <h4 class="font-medium text-slate-700 text-sm">{{ $child->title }}</h4>
-                                                    <p class="text-xs text-slate-400 font-mono">{{ $child->url }}
-                                                        @if($child->target == '_blank') <span class="text-blue-500 ml-1 font-sans font-bold">(Tab Baru)</span> @endif
-                                                    </p>
+                                                    <div class="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-0.5">
+                                                        <p class="text-xs text-slate-400 font-mono">{{ $child->url }}
+                                                            @if($child->target == '_blank') <span class="text-blue-500 ml-1 font-sans font-bold">(Tab Baru)</span> @endif
+                                                        </p>
+                                                        @if(!empty($child->description))
+                                                            <span class="text-xs text-slate-400 italic">• {{ \Illuminate\Support\Str::limit($child->description, 40) }}</span>
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="flex items-center gap-4">

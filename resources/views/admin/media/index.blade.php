@@ -1,7 +1,15 @@
-@extends('admin.layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Media Library')
-@section('page_title', 'Media Library')
+@section('header_title', 'Media Library')
+@section('header_subtitle', 'Kelola berkas media, gambar, dan dokumen website')
+
+@section('header_action')
+    <button type="button" @click="$dispatch('open-upload-modal')" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl shadow-md transition-all inline-flex items-center gap-1.5 cursor-pointer">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+        <span>+ Unggah File</span>
+    </button>
+@endsection
 
 @section('content')
 <div class="space-y-6" x-data="{ 
@@ -11,31 +19,14 @@
             alert('URL disalin ke clipboard!'); 
         }); 
     } 
-}">
+}" @open-upload-modal.window="uploadModalOpen = true">
 
-    @if(session('success'))
-        <div class="bg-emerald-50 text-emerald-700 p-4 rounded-xl text-sm font-medium border border-emerald-100 flex items-center gap-3">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-            {{ session('success') }}
-        </div>
-    @endif
     @error('file')
         <div class="bg-red-50 text-red-700 p-4 rounded-xl text-sm font-medium border border-red-100 flex items-center gap-3">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             {{ $message }}
         </div>
     @enderror
-
-    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex flex-wrap items-center justify-between gap-4">
-        <div>
-            <h1 class="text-base font-bold text-slate-800">Media Library</h1>
-            <p class="text-xs text-slate-500 mt-1">Kelola gambar dan dokumen yang diunggah</p>
-        </div>
-        <button @click="uploadModalOpen = true" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-colors flex items-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-            Unggah File
-        </button>
-    </div>
 
     <!-- Media Grid -->
     @if($media->isEmpty())

@@ -11,7 +11,7 @@
         $menuBySlug[$slug] = $m;
     }
 
-    $getChild = function($parentSlug, $childSlug, $fallbackTitle, $fallbackUrl, $fallbackTarget = '_self') use ($menuBySlug) {
+    $getChild = function($parentSlug, $childSlug, $fallbackTitle, $fallbackUrl, $fallbackTarget = '_self', $fallbackDesc = '') use ($menuBySlug) {
         if (isset($menuBySlug[$parentSlug])) {
             foreach ($menuBySlug[$parentSlug]->children as $c) {
                 $cSlug = \Illuminate\Support\Str::slug($c->title);
@@ -20,6 +20,7 @@
                         'title' => $c->title,
                         'url' => $c->url,
                         'target' => $c->target ?? '_self',
+                        'description' => !empty($c->description) ? $c->description : $fallbackDesc,
                     ];
                 }
             }
@@ -28,6 +29,7 @@
             'title' => $fallbackTitle,
             'url' => $fallbackUrl,
             'target' => $fallbackTarget,
+            'description' => $fallbackDesc,
         ];
     };
 
@@ -59,8 +61,8 @@
     @if(isset($menuBySlug['profil']))
     @php $pProfil = $getParent('profil', 'Profil'); @endphp
     <div class="group" @mouseenter="activeMenu = 'profil'" @click="activeMenu = activeMenu === 'profil' ? null : 'profil'">
-        <button class="px-2 xl:px-2.5 py-1.5 text-[11.5px] xl:text-[12.5px] font-semibold whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
-            <svg class="w-4 h-4 transition-colors" :class="scrolled ? 'text-blue-600 group-hover:text-blue-800' : 'text-blue-300 group-hover:text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+        <button class="px-2 xl:px-2.5 py-1.5 text-[11.5px] xl:text-[12.5px] font-semibold text-slate-800 hover:text-blue-600 hover:bg-blue-50/60 whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group">
+            <svg class="w-4 h-4 text-blue-600 group-hover:text-blue-800 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
             {{ $pProfil['title'] }}
             <svg class="w-3.5 h-3.5 opacity-70 transition-transform duration-200" :class="activeMenu === 'profil' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
         </button>
@@ -79,44 +81,52 @@
              <p class="text-sm text-slate-500 mt-1 mb-6 pb-2 border-b border-slate-100">Mengenal lebih dekat Balai Penjaminan Mutu Pendidikan Provinsi Sulawesi Tenggara</p>
              
              <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                 @php $item = $getChild('profil', 'profil-lembaga', 'Profil Lembaga', '/profil-lembaga'); @endphp
+                 @php $item = $getChild('profil', 'profil-lembaga', 'Profil Lembaga', '/profil-lembaga', '_self', 'Gambaran umum dan identitas instansi.'); @endphp
                  <a href="{{ $item['url'] }}" target="{{ $item['target'] }}" class="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50/70 transition-all group/item">
                      <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 group-hover/item:scale-110 transition-transform">
                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                      </div>
                      <div>
                          <h4 class="text-sm font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">{{ $item['title'] }}</h4>
-                         <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Gambaran umum dan identitas instansi.</p>
+                         @if(!empty($item['description']))
+                             <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{{ $item['description'] }}</p>
+                         @endif
                      </div>
                  </a>
-                 @php $item = $getChild('profil', 'struktur-organisasi', 'Struktur Organisasi', '/struktur-organisasi'); @endphp
+                 @php $item = $getChild('profil', 'struktur-organisasi', 'Struktur Organisasi', '/struktur-organisasi', '_self', 'Susunan kepemimpinan dan tata kelola.'); @endphp
                  <a href="{{ $item['url'] }}" target="{{ $item['target'] }}" class="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50/70 transition-all group/item">
                      <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 group-hover/item:scale-110 transition-transform">
                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path></svg>
                      </div>
                      <div>
                          <h4 class="text-sm font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">{{ $item['title'] }}</h4>
-                         <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Susunan kepemimpinan dan tata kelola.</p>
+                         @if(!empty($item['description']))
+                             <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{{ $item['description'] }}</p>
+                         @endif
                      </div>
                  </a>
-                 @php $item = $getChild('profil', 'profil-pegawai', 'Profil Pegawai', '/profil-pegawai'); @endphp
+                 @php $item = $getChild('profil', 'profil-pegawai', 'Profil Pegawai', '/profil-pegawai', '_self', 'Mengenal sumber daya manusia dan tenaga kependidikan.'); @endphp
                  <a href="{{ $item['url'] }}" target="{{ $item['target'] }}" class="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50/70 transition-all group/item">
                      <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 group-hover/item:scale-110 transition-transform">
                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                      </div>
                      <div>
                          <h4 class="text-sm font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">{{ $item['title'] }}</h4>
-                         <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Mengenal sumber daya manusia dan tenaga kependidikan.</p>
+                         @if(!empty($item['description']))
+                             <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{{ $item['description'] }}</p>
+                         @endif
                      </div>
                  </a>
-                 @php $item = $getChild('profil', 'visi-misi', 'Visi Misi', '/visi-misi'); @endphp
+                 @php $item = $getChild('profil', 'visi-misi', 'Visi Misi', '/visi-misi', '_self', 'Arah, tujuan, dan komitmen lembaga.'); @endphp
                  <a href="{{ $item['url'] }}" target="{{ $item['target'] }}" class="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50/70 transition-all group/item">
                      <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 group-hover/item:scale-110 transition-transform">
                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                      </div>
                      <div>
                          <h4 class="text-sm font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">{{ $item['title'] }}</h4>
-                         <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Arah, tujuan, dan komitmen lembaga.</p>
+                         @if(!empty($item['description']))
+                             <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{{ $item['description'] }}</p>
+                         @endif
                      </div>
                  </a>
              </div>
@@ -128,8 +138,8 @@
     @if(isset($menuBySlug['program']))
     @php $pProgram = $getParent('program', 'Program'); @endphp
     <div class="group" @mouseenter="activeMenu = 'program'" @click="activeMenu = activeMenu === 'program' ? null : 'program'">
-        <button class="px-2 xl:px-2.5 py-1.5 text-[11.5px] xl:text-[12.5px] font-semibold whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
-            <svg class="w-4 h-4 transition-colors" :class="scrolled ? 'text-blue-600 group-hover:text-blue-800' : 'text-blue-300 group-hover:text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+        <button class="px-2 xl:px-2.5 py-1.5 text-[11.5px] xl:text-[12.5px] font-semibold text-slate-800 hover:text-blue-600 hover:bg-blue-50/60 whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group">
+            <svg class="w-4 h-4 text-blue-600 group-hover:text-blue-800 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
             {{ $pProgram['title'] }}
             <svg class="w-3.5 h-3.5 opacity-70 transition-transform duration-200" :class="activeMenu === 'program' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
         </button>
@@ -148,34 +158,40 @@
              <p class="text-sm text-slate-500 mt-1 mb-6 pb-2 border-b border-slate-100">Program prioritas penjaminan dan peningkatan mutu pendidikan</p>
              
              <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-                 @php $item = $getChild('program', 'program-prioritas', 'Program Prioritas', '/program-prioritas'); @endphp
+                 @php $item = $getChild('program', 'program-prioritas', 'Program Prioritas', '/program-prioritas', '_self', 'Fokus utama dan inisiatif strategis tahun berjalan.'); @endphp
                  <a href="{{ $item['url'] }}" target="{{ $item['target'] }}" class="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50/70 transition-all group/item">
                      <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 group-hover/item:scale-110 transition-transform">
                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
                      </div>
                      <div>
                          <h4 class="text-sm font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">{{ $item['title'] }}</h4>
-                         <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Fokus utama dan inisiatif strategis tahun berjalan.</p>
+                         @if(!empty($item['description']))
+                             <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{{ $item['description'] }}</p>
+                         @endif
                      </div>
                  </a>
-                 @php $item = $getChild('program', 'rapor-pendidikan', 'Rapor Pendidikan', '/rapor-pendidikan'); @endphp
+                 @php $item = $getChild('program', 'rapor-pendidikan', 'Rapor Pendidikan', '/rapor-pendidikan', '_self', 'Indikator capaian dan evaluasi mutu pendidikan.'); @endphp
                  <a href="{{ $item['url'] }}" target="{{ $item['target'] }}" class="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50/70 transition-all group/item">
                      <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 group-hover/item:scale-110 transition-transform">
                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                      </div>
                      <div>
                          <h4 class="text-sm font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">{{ $item['title'] }}</h4>
-                         <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Indikator capaian dan evaluasi mutu pendidikan.</p>
+                         @if(!empty($item['description']))
+                             <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{{ $item['description'] }}</p>
+                         @endif
                      </div>
                  </a>
-                 @php $item = $getChild('program', 'pbd', 'PBD (Perencanaan Berbasis Data)', '/pbd-perencanaan-berbasis-data'); @endphp
+                 @php $item = $getChild('program', 'pbd', 'PBD (Perencanaan Berbasis Data)', '/pbd-perencanaan-berbasis-data', '_self', 'Perencanaan Berbasis Data untuk satuan pendidikan.'); @endphp
                  <a href="{{ $item['url'] }}" target="{{ $item['target'] }}" class="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50/70 transition-all group/item">
                      <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 group-hover/item:scale-110 transition-transform">
                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                      </div>
                      <div>
                          <h4 class="text-sm font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">{{ $item['title'] }}</h4>
-                         <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Perencanaan Berbasis Data untuk satuan pendidikan.</p>
+                         @if(!empty($item['description']))
+                             <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{{ $item['description'] }}</p>
+                         @endif
                      </div>
                  </a>
              </div>
@@ -187,8 +203,8 @@
     @if(isset($menuBySlug['ult']))
     @php $pUlt = $getParent('ult', 'ULT'); @endphp
     <div class="group" @mouseenter="activeMenu = 'ult'" @click="activeMenu = activeMenu === 'ult' ? null : 'ult'">
-        <button class="px-2 xl:px-2.5 py-1.5 text-[11.5px] xl:text-[12.5px] font-semibold whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
-            <svg class="w-4 h-4 transition-colors" :class="scrolled ? 'text-blue-600 group-hover:text-blue-800' : 'text-blue-300 group-hover:text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+        <button class="px-2 xl:px-2.5 py-1.5 text-[11.5px] xl:text-[12.5px] font-semibold text-slate-800 hover:text-blue-600 hover:bg-blue-50/60 whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group">
+            <svg class="w-4 h-4 text-blue-600 group-hover:text-blue-800 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
             {{ $pUlt['title'] }}
             <svg class="w-3.5 h-3.5 opacity-70 transition-transform duration-200" :class="activeMenu === 'ult' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
         </button>
@@ -206,25 +222,41 @@
              <h3 class="text-xl font-bold text-blue-900">{{ $pUlt['title'] }} (Unit Layanan Terpadu)</h3>
              <p class="text-sm text-slate-500 mt-1 mb-6 pb-2 border-b border-slate-100">Layanan keterbukaan informasi dan survei kepuasan masyarakat</p>
              
-             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                 @php $item = $getChild('ult', 'unit-layanan-terpadu', 'Unit Layanan Terpadu', '/ult-unit-layanan-terpadu'); @endphp
+             <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                 @php $item = $getChild('ult', 'unit-layanan-terpadu', 'Unit Layanan Terpadu', '/ult-unit-layanan-terpadu', '_self', 'Profil layanan terpadu dan informasi prosedur.'); @endphp
                  <a href="{{ $item['url'] }}" target="{{ $item['target'] }}" class="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50/70 transition-all group/item">
                      <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 group-hover/item:scale-110 transition-transform">
                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                      </div>
                      <div>
                          <h4 class="text-sm font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">{{ $item['title'] }}</h4>
-                         <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Profil layanan terpadu dan informasi prosedur.</p>
+                         @if(!empty($item['description']))
+                             <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{{ $item['description'] }}</p>
+                         @endif
                      </div>
                  </a>
-                 @php $item = $getChild('ult', 'hasil-skm', 'Hasil SKM', '/hasil-skm'); @endphp
+                 @php $itemBukuTamu = $getChild('ult', 'buku-tamu', 'Buku Tamu & Kuisioner', '/buku-tamu', '_self', 'Formulir registrasi kunjungan tamu dan penilaian layanan.'); @endphp
+                 <a href="{{ $itemBukuTamu['url'] }}" target="{{ $itemBukuTamu['target'] }}" class="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50/70 transition-all group/item">
+                     <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 flex-shrink-0 group-hover/item:scale-110 transition-transform">
+                         <svg class="w-5 h-5 flex-shrink-0" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                     </div>
+                     <div>
+                         <h4 class="text-sm font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">{{ $itemBukuTamu['title'] }}</h4>
+                         @if(!empty($itemBukuTamu['description']))
+                             <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{{ $itemBukuTamu['description'] }}</p>
+                         @endif
+                     </div>
+                 </a>
+                 @php $item = $getChild('ult', 'hasil-skm', 'Hasil SKM', '/hasil-skm', '_self', 'Laporan dan indeks Survei Kepuasan Masyarakat.'); @endphp
                  <a href="{{ $item['url'] }}" target="{{ $item['target'] }}" class="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50/70 transition-all group/item">
                      <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 group-hover/item:scale-110 transition-transform">
                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                      </div>
                      <div>
                          <h4 class="text-sm font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">{{ $item['title'] }}</h4>
-                         <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Laporan dan indeks Survei Kepuasan Masyarakat.</p>
+                         @if(!empty($item['description']))
+                             <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{{ $item['description'] }}</p>
+                         @endif
                      </div>
                  </a>
              </div>
@@ -236,8 +268,8 @@
     @if(isset($menuBySlug['publikasi']))
     @php $pPublikasi = $getParent('publikasi', 'Publikasi'); @endphp
     <div class="group" @mouseenter="activeMenu = 'publikasi'" @click="activeMenu = activeMenu === 'publikasi' ? null : 'publikasi'">
-        <button class="px-2 xl:px-2.5 py-1.5 text-[11.5px] xl:text-[12.5px] font-semibold whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
-            <svg class="w-4 h-4 transition-colors" :class="scrolled ? 'text-blue-600 group-hover:text-blue-800' : 'text-blue-300 group-hover:text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15"></path></svg>
+        <button class="px-2 xl:px-2.5 py-1.5 text-[11.5px] xl:text-[12.5px] font-semibold text-slate-800 hover:text-blue-600 hover:bg-blue-50/60 whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group">
+            <svg class="w-4 h-4 text-blue-600 group-hover:text-blue-800 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15"></path></svg>
             {{ $pPublikasi['title'] }}
             <svg class="w-3.5 h-3.5 opacity-70 transition-transform duration-200" :class="activeMenu === 'publikasi' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
         </button>
@@ -256,94 +288,112 @@
              <p class="text-sm text-slate-500 mt-1 mb-6 pb-2 border-b border-slate-100">Kumpulan dokumen, rilis berkala, artikel, dan materi edukasi</p>
              
              <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-                 @php $item = $getChild('publikasi', 'sinonggi', 'SINONGGI', '/sinonggi'); @endphp
+                 @php $item = $getChild('publikasi', 'sinonggi', 'SINONGGI', '/sinonggi', '_self', 'Sistem Inovasi Online Berbagi Informasi BPMP Sultra.'); @endphp
                  <a href="{{ $item['url'] }}" target="{{ $item['target'] }}" class="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50/70 transition-all group/item">
                      <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 group-hover/item:scale-110 transition-transform">
                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                      </div>
                      <div>
                          <h4 class="text-sm font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">{{ $item['title'] }}</h4>
-                         <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Sistem Inovasi Online Berbagi Informasi BPMP Sultra.</p>
+                         @if(!empty($item['description']))
+                             <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{{ $item['description'] }}</p>
+                         @endif
                      </div>
                  </a>
-                 @php $item = $getChild('publikasi', 'profil-mutu-pendidikan', 'Profil Mutu Pendidikan', '/profil-mutu-pendidikan'); @endphp
+                 @php $item = $getChild('publikasi', 'profil-mutu-pendidikan', 'Profil Mutu Pendidikan', '/profil-mutu-pendidikan', '_self', 'Data capaian dan profil mutu sekolah se-Sultra.'); @endphp
                  <a href="{{ $item['url'] }}" target="{{ $item['target'] }}" class="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50/70 transition-all group/item">
                      <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 group-hover/item:scale-110 transition-transform">
                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
                      </div>
                      <div>
                          <h4 class="text-sm font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">{{ $item['title'] }}</h4>
-                         <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Data capaian dan profil mutu sekolah se-Sultra.</p>
+                         @if(!empty($item['description']))
+                             <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{{ $item['description'] }}</p>
+                         @endif
                      </div>
                  </a>
-                 @php $item = $getChild('publikasi', 'regulasi-dan-peraturan', 'Regulasi dan Peraturan', '/regulasi-dan-peraturan'); @endphp
+                 @php $item = $getChild('publikasi', 'regulasi-dan-peraturan', 'Regulasi dan Peraturan', '/regulasi-dan-peraturan', '_self', 'Himpunan undang-undang, permen, dan keputusan resmi.'); @endphp
                  <a href="{{ $item['url'] }}" target="{{ $item['target'] }}" class="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50/70 transition-all group/item">
                      <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 group-hover/item:scale-110 transition-transform">
                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"></path></svg>
                      </div>
                      <div>
                          <h4 class="text-sm font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">{{ $item['title'] }}</h4>
-                         <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Himpunan undang-undang, permen, dan keputusan resmi.</p>
+                         @if(!empty($item['description']))
+                             <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{{ $item['description'] }}</p>
+                         @endif
                      </div>
                  </a>
-                 @php $item = $getChild('publikasi', 'kisah-inspiratif', 'Kisah Inspiratif', '/kisah-inspiratif'); @endphp
+                 @php $item = $getChild('publikasi', 'kisah-inspiratif', 'Kisah Inspiratif', '/kisah-inspiratif', '_self', 'Cerita sukses dan praktik baik insan pendidikan.'); @endphp
                  <a href="{{ $item['url'] }}" target="{{ $item['target'] }}" class="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50/70 transition-all group/item">
                      <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 group-hover/item:scale-110 transition-transform">
                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
                      </div>
                      <div>
                          <h4 class="text-sm font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">{{ $item['title'] }}</h4>
-                         <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Cerita sukses dan praktik baik insan pendidikan.</p>
+                         @if(!empty($item['description']))
+                             <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{{ $item['description'] }}</p>
+                         @endif
                      </div>
                  </a>
-                 @php $item = $getChild('publikasi', 'jurnal', 'JURNAL', '/jurnal'); @endphp
+                 @php $item = $getChild('publikasi', 'jurnal', 'JURNAL', '/jurnal', '_self', 'Karya ilmiah dan penelitian pendidikan terakreditasi.'); @endphp
                  <a href="{{ $item['url'] }}" target="{{ $item['target'] }}" class="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50/70 transition-all group/item">
                      <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 group-hover/item:scale-110 transition-transform">
                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
                      </div>
                      <div>
                          <h4 class="text-sm font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">{{ $item['title'] }}</h4>
-                         <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Karya ilmiah dan penelitian pendidikan terakreditasi.</p>
+                         @if(!empty($item['description']))
+                             <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{{ $item['description'] }}</p>
+                         @endif
                      </div>
                  </a>
-                 @php $item = $getChild('publikasi', 'majalah', 'Majalah', '/majalah'); @endphp
+                 @php $item = $getChild('publikasi', 'majalah', 'Majalah', '/majalah', '_self', 'Edisi buletin dan majalah berkala instansi.'); @endphp
                  <a href="{{ $item['url'] }}" target="{{ $item['target'] }}" class="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50/70 transition-all group/item">
                      <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 group-hover/item:scale-110 transition-transform">
                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                      </div>
                      <div>
                          <h4 class="text-sm font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">{{ $item['title'] }}</h4>
-                         <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Edisi buletin dan majalah berkala instansi.</p>
+                         @if(!empty($item['description']))
+                             <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{{ $item['description'] }}</p>
+                         @endif
                      </div>
                  </a>
-                 @php $item = $getChild('publikasi', 'artikel', 'Artikel', '/berita?kategori=artikel'); @endphp
+                 @php $item = $getChild('publikasi', 'artikel', 'Artikel', '/berita?kategori=artikel', '_self', 'Opini, tulisan edukatif, dan analisis mutu.'); @endphp
                  <a href="{{ $item['url'] }}" target="{{ $item['target'] }}" class="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50/70 transition-all group/item">
                      <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 group-hover/item:scale-110 transition-transform">
                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                      </div>
                      <div>
                          <h4 class="text-sm font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">{{ $item['title'] }}</h4>
-                         <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Opini, tulisan edukatif, dan analisis mutu.</p>
+                         @if(!empty($item['description']))
+                             <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{{ $item['description'] }}</p>
+                         @endif
                      </div>
                  </a>
-                 @php $item = $getChild('publikasi', 'berita', 'Berita', '/berita'); @endphp
+                 @php $item = $getChild('publikasi', 'berita', 'Berita', '/berita', '_self', 'Kabar kegiatan terkini BPMP Provinsi Sulawesi Tenggara.'); @endphp
                  <a href="{{ $item['url'] }}" target="{{ $item['target'] }}" class="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50/70 transition-all group/item">
                      <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 group-hover/item:scale-110 transition-transform">
                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15"></path></svg>
                      </div>
                      <div>
                          <h4 class="text-sm font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">{{ $item['title'] }}</h4>
-                         <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Kabar kegiatan terkini BPMP Provinsi Sulawesi Tenggara.</p>
+                         @if(!empty($item['description']))
+                             <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{{ $item['description'] }}</p>
+                         @endif
                      </div>
                  </a>
-                 @php $item = $getChild('publikasi', 'goes-to-school', 'Goes to School', '/goes-to-school'); @endphp
+                 @php $item = $getChild('publikasi', 'goes-to-school', 'Goes to School', '/goes-to-school', '_self', 'Dokumentasi kunjungan edukasi langsung ke sekolah.'); @endphp
                  <a href="{{ $item['url'] }}" target="{{ $item['target'] }}" class="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50/70 transition-all group/item">
                      <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 group-hover/item:scale-110 transition-transform">
                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"></path></svg>
                      </div>
                      <div>
                          <h4 class="text-sm font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">{{ $item['title'] }}</h4>
-                         <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Dokumentasi kunjungan edukasi langsung ke sekolah.</p>
+                         @if(!empty($item['description']))
+                             <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{{ $item['description'] }}</p>
+                         @endif
                      </div>
                  </a>
              </div>
@@ -355,8 +405,8 @@
     @if(isset($menuBySlug['sakip']))
     @php $pSakip = $getParent('sakip', 'SAKIP'); @endphp
     <div class="group" @mouseenter="activeMenu = 'sakip'" @click="activeMenu = activeMenu === 'sakip' ? null : 'sakip'">
-        <button class="px-2 xl:px-2.5 py-1.5 text-[11.5px] xl:text-[12.5px] font-semibold whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
-            <svg class="w-4 h-4 transition-colors" :class="scrolled ? 'text-blue-600 group-hover:text-blue-800' : 'text-blue-300 group-hover:text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+        <button class="px-2 xl:px-2.5 py-1.5 text-[11.5px] xl:text-[12.5px] font-semibold text-slate-800 hover:text-blue-600 hover:bg-blue-50/60 whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group">
+            <svg class="w-4 h-4 text-blue-600 group-hover:text-blue-800 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
             {{ $pSakip['title'] }}
             <svg class="w-3.5 h-3.5 opacity-70 transition-transform duration-200" :class="activeMenu === 'sakip' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
         </button>
@@ -375,64 +425,76 @@
              <p class="text-sm text-slate-500 mt-1 mb-6 pb-2 border-b border-slate-100">Transparansi dan akuntabilitas kinerja BPMP Sulawesi Tenggara</p>
              
              <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-                 @php $item = $getChild('sakip', 'renstra', 'RENSTRA', '/renstra'); @endphp
+                 @php $item = $getChild('sakip', 'renstra', 'RENSTRA', '/renstra', '_self', 'Rencana Strategis jangka menengah lembaga.'); @endphp
                  <a href="{{ $item['url'] }}" target="{{ $item['target'] }}" class="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50/70 transition-all group/item">
                      <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 group-hover/item:scale-110 transition-transform">
                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                      </div>
                      <div>
                          <h4 class="text-sm font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">{{ $item['title'] }}</h4>
-                         <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Rencana Strategis jangka menengah lembaga.</p>
+                         @if(!empty($item['description']))
+                             <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{{ $item['description'] }}</p>
+                         @endif
                      </div>
                  </a>
-                 @php $item = $getChild('sakip', 'perjanjian-kinerja', 'PERJANJIAN KINERJA', '/perjanjian-kinerja'); @endphp
+                 @php $item = $getChild('sakip', 'perjanjian-kinerja', 'PERJANJIAN KINERJA', '/perjanjian-kinerja', '_self', 'Komitmen capaian target kinerja tahunan.'); @endphp
                  <a href="{{ $item['url'] }}" target="{{ $item['target'] }}" class="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50/70 transition-all group/item">
                      <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 group-hover/item:scale-110 transition-transform">
                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                      </div>
                      <div>
                          <h4 class="text-sm font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">{{ $item['title'] }}</h4>
-                         <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Komitmen capaian target kinerja tahunan.</p>
+                         @if(!empty($item['description']))
+                             <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{{ $item['description'] }}</p>
+                         @endif
                      </div>
                  </a>
-                 @php $item = $getChild('sakip', 'lakin', 'LAKIN', '/lakin'); @endphp
+                 @php $item = $getChild('sakip', 'lakin', 'LAKIN', '/lakin', '_self', 'Laporan Akuntabilitas Kinerja Instansi Pemerintah.'); @endphp
                  <a href="{{ $item['url'] }}" target="{{ $item['target'] }}" class="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50/70 transition-all group/item">
                      <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 group-hover/item:scale-110 transition-transform">
                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                      </div>
                      <div>
                          <h4 class="text-sm font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">{{ $item['title'] }}</h4>
-                         <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Laporan Akuntabilitas Kinerja Instansi Pemerintah.</p>
+                         @if(!empty($item['description']))
+                             <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{{ $item['description'] }}</p>
+                         @endif
                      </div>
                  </a>
-                 @php $item = $getChild('sakip', 'lhe', 'LHE', '/lhe'); @endphp
+                 @php $item = $getChild('sakip', 'lhe', 'LHE', '/lhe', '_self', 'Laporan Hasil Evaluasi akuntabilitas kinerja.'); @endphp
                  <a href="{{ $item['url'] }}" target="{{ $item['target'] }}" class="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50/70 transition-all group/item">
                      <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 group-hover/item:scale-110 transition-transform">
                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
                      </div>
                      <div>
                          <h4 class="text-sm font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">{{ $item['title'] }}</h4>
-                         <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Laporan Hasil Evaluasi akuntabilitas kinerja.</p>
+                         @if(!empty($item['description']))
+                             <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{{ $item['description'] }}</p>
+                         @endif
                      </div>
                  </a>
-                 @php $item = $getChild('sakip', 'lk', 'LK', '/lk'); @endphp
+                 @php $item = $getChild('sakip', 'lk', 'LK', '/lk', '_self', 'Laporan Kinerja berkala.'); @endphp
                  <a href="{{ $item['url'] }}" target="{{ $item['target'] }}" class="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50/70 transition-all group/item">
                      <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 group-hover/item:scale-110 transition-transform">
                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
                      </div>
                      <div>
                          <h4 class="text-sm font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">{{ $item['title'] }}</h4>
-                         <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Laporan Kinerja berkala.</p>
+                         @if(!empty($item['description']))
+                             <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{{ $item['description'] }}</p>
+                         @endif
                      </div>
                  </a>
-                 @php $item = $getChild('sakip', 'dipa-2026', 'DIPA 2026', '/dipa-2026'); @endphp
+                 @php $item = $getChild('sakip', 'dipa-2026', 'DIPA 2026', '/dipa-2026', '_self', 'Daftar Isian Pelaksanaan Anggaran tahun 2026.'); @endphp
                  <a href="{{ $item['url'] }}" target="{{ $item['target'] }}" class="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50/70 transition-all group/item">
                      <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 group-hover/item:scale-110 transition-transform">
                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                      </div>
                      <div>
                          <h4 class="text-sm font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">{{ $item['title'] }}</h4>
-                         <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Daftar Isian Pelaksanaan Anggaran tahun 2026.</p>
+                         @if(!empty($item['description']))
+                             <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{{ $item['description'] }}</p>
+                         @endif
                      </div>
                  </a>
              </div>
@@ -444,8 +506,8 @@
     @if(isset($menuBySlug['link-terkait']))
     @php $pLink = $getParent('link-terkait', 'Link Terkait'); @endphp
     <div class="group" @mouseenter="activeMenu = 'link'" @click="activeMenu = activeMenu === 'link' ? null : 'link'">
-        <button class="px-2 xl:px-2.5 py-1.5 text-[11.5px] xl:text-[12.5px] font-semibold whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
-            <svg class="w-4 h-4 transition-colors" :class="scrolled ? 'text-blue-600 group-hover:text-blue-800' : 'text-blue-300 group-hover:text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+        <button class="px-2 xl:px-2.5 py-1.5 text-[11.5px] xl:text-[12.5px] font-semibold text-slate-800 hover:text-blue-600 hover:bg-blue-50/60 whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group">
+            <svg class="w-4 h-4 text-blue-600 group-hover:text-blue-800 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
             {{ $pLink['title'] }}
             <svg class="w-3.5 h-3.5 opacity-70 transition-transform duration-200" :class="activeMenu === 'link' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
         </button>
@@ -570,8 +632,8 @@
     @if(isset($menuBySlug['ppid']))
     @php $pPpid = $getParent('ppid', 'PPID', 'https://ppid-bpmpsultra.page.gd/', '_blank'); @endphp
     <div class="group" @mouseenter="activeMenu = null">
-        <a href="{{ $pPpid['url'] }}" target="{{ $pPpid['target'] }}" rel="noopener noreferrer" class="px-2 xl:px-2.5 py-1.5 text-[11.5px] xl:text-[12.5px] font-semibold whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
-            <svg class="w-4 h-4 transition-colors" :class="scrolled ? 'text-blue-600 group-hover:text-blue-800' : 'text-blue-300 group-hover:text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+        <a href="{{ $pPpid['url'] }}" target="{{ $pPpid['target'] }}" rel="noopener noreferrer" class="px-2 xl:px-2.5 py-1.5 text-[11.5px] xl:text-[12.5px] font-semibold text-slate-800 hover:text-blue-600 hover:bg-blue-50/60 whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group">
+            <svg class="w-4 h-4 text-blue-600 group-hover:text-blue-800 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
             {{ $pPpid['title'] }}
             <svg class="w-3.5 h-3.5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
         </a>
@@ -582,8 +644,8 @@
     @if(isset($menuBySlug['zi-wbk']))
     @php $pZiwbk = $getParent('zi-wbk', 'ZI WBK'); @endphp
     <div class="group" @mouseenter="activeMenu = 'ziwbk'" @click="activeMenu = activeMenu === 'ziwbk' ? null : 'ziwbk'">
-        <button class="px-2 xl:px-2.5 py-1.5 text-[11.5px] xl:text-[12.5px] font-semibold whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
-            <svg class="w-4 h-4 transition-colors" :class="scrolled ? 'text-blue-600 group-hover:text-blue-800' : 'text-blue-300 group-hover:text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path></svg>
+        <button class="px-2 xl:px-2.5 py-1.5 text-[11.5px] xl:text-[12.5px] font-semibold text-slate-800 hover:text-blue-600 hover:bg-blue-50/60 whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group">
+            <svg class="w-4 h-4 text-blue-600 group-hover:text-blue-800 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path></svg>
             {{ $pZiwbk['title'] }}
             <svg class="w-3.5 h-3.5 opacity-70 transition-transform duration-200" :class="activeMenu === 'ziwbk' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
         </button>
@@ -598,28 +660,43 @@
              style="display: none;"
              class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[92vw] max-w-5xl rounded-2xl bg-white shadow-2xl border border-slate-100 p-6 md:p-8 z-50 text-slate-800">
             
-             <h3 class="text-xl font-bold text-blue-900">{{ $pZiwbk['title'] }} (WBK/WBBM)</h3>
-             <p class="text-sm text-slate-500 mt-1 mb-6 pb-2 border-b border-slate-100">Pembangunan zona integritas menuju Wilayah Bebas dari Korupsi</p>
+             <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 mb-6 border-b border-slate-100 gap-2">
+                 <div>
+                     <h3 class="text-xl font-bold text-blue-900">{{ $pZiwbk['title'] }} (WBK/WBBM)</h3>
+                     <p class="text-sm text-slate-500 mt-1">Pembangunan zona integritas menuju Wilayah Bebas dari Korupsi</p>
+                 </div>
+                 @php $ziOverview = $getChild('zi-wbk', 'zi-wbk', 'Halaman Utama ZI-WBK', '/zi-wbk', '_self', 'Zona Integritas - Wilayah Bebas dari Korupsi.'); @endphp
+                 @if(!empty($ziOverview['url']))
+                     <a href="{{ $ziOverview['url'] }}" target="{{ $ziOverview['target'] }}" class="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-50 hover:bg-blue-600 text-blue-700 hover:text-white rounded-xl text-xs font-bold transition-all border border-blue-200/60 shadow-xs group/btn">
+                         <span>{{ $ziOverview['title'] ?: 'Halaman Utama ZI-WBK' }}</span>
+                         <svg class="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                     </a>
+                 @endif
+             </div>
              
              <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
-                 @php $item = $getChild('zi-wbk', 'standar-pelayanan', 'Standar Pelayanan', '/standar-pelayanan'); @endphp
+                 @php $item = $getChild('zi-wbk', 'standar-pelayanan', 'Standar Pelayanan', '/standar-pelayanan', '_self', 'Maklumat standar mutu pelayanan.'); @endphp
                  <a href="{{ $item['url'] }}" target="{{ $item['target'] }}" class="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50/70 transition-all group/item">
                      <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 group-hover/item:scale-110 transition-transform">
                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                      </div>
                      <div>
                          <h4 class="text-sm font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">{{ $item['title'] }}</h4>
-                         <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Maklumat standar mutu pelayanan.</p>
+                         @if(!empty($item['description']))
+                             <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{{ $item['description'] }}</p>
+                         @endif
                      </div>
                  </a>
-                 @php $item = $getChild('zi-wbk', 'maklumat-pelayanan', 'Maklumat Pelayanan', '/maklumat-pelayanan'); @endphp
+                 @php $item = $getChild('zi-wbk', 'maklumat-pelayanan', 'Maklumat Pelayanan', '/maklumat-pelayanan', '_self', 'Pernyataan kesanggupan melayani dengan integritas.'); @endphp
                  <a href="{{ $item['url'] }}" target="{{ $item['target'] }}" class="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50/70 transition-all group/item">
                      <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 group-hover/item:scale-110 transition-transform">
                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
                      </div>
                      <div>
                          <h4 class="text-sm font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">{{ $item['title'] }}</h4>
-                         <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Pernyataan kesanggupan melayani dengan integritas.</p>
+                         @if(!empty($item['description']))
+                             <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{{ $item['description'] }}</p>
+                         @endif
                      </div>
                  </a>
              </div>
@@ -679,8 +756,8 @@
     @if(isset($menuBySlug['pengaduan']))
     @php $pPengaduan = $getParent('pengaduan', 'Pengaduan'); @endphp
     <div class="group" @mouseenter="activeMenu = 'pengaduan'" @click="activeMenu = activeMenu === 'pengaduan' ? null : 'pengaduan'">
-        <button class="px-2 xl:px-2.5 py-1.5 text-[11.5px] xl:text-[12.5px] font-semibold whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
-            <svg class="w-4 h-4 transition-colors" :class="scrolled ? 'text-blue-600 group-hover:text-blue-800' : 'text-blue-300 group-hover:text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
+        <button class="px-2 xl:px-2.5 py-1.5 text-[11.5px] xl:text-[12.5px] font-semibold text-slate-800 hover:text-blue-600 hover:bg-blue-50/60 whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group">
+            <svg class="w-4 h-4 text-blue-600 group-hover:text-blue-800 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
             {{ $pPengaduan['title'] }}
             <svg class="w-3.5 h-3.5 opacity-70 transition-transform duration-200" :class="activeMenu === 'pengaduan' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
         </button>
@@ -699,44 +776,52 @@
              <p class="text-sm text-slate-500 mt-1 mb-6 pb-2 border-b border-slate-100">Kanal resmi penyampaian aspirasi, laporan, dan pengaduan masyarakat</p>
              
              <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                 @php $item = $getChild('pengaduan', 'spmb', 'SPMB', '/spmb'); @endphp
+                 @php $item = $getChild('pengaduan', 'spmb', 'SPMB', '/spmb', '_self', 'Saluran Pengaduan Masyarakat Balai.'); @endphp
                  <a href="{{ $item['url'] }}" target="{{ $item['target'] }}" class="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50/70 transition-all group/item">
                      <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 group-hover/item:scale-110 transition-transform">
                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                      </div>
                      <div>
                          <h4 class="text-sm font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">{{ $item['title'] }}</h4>
-                         <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Saluran Pengaduan Masyarakat Balai.</p>
+                         @if(!empty($item['description']))
+                             <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{{ $item['description'] }}</p>
+                         @endif
                      </div>
                  </a>
-                 @php $item = $getChild('pengaduan', 'sp4n-lapor', 'SP4N Lapor', 'https://www.lapor.go.id/', '_blank'); @endphp
+                 @php $item = $getChild('pengaduan', 'sp4n-lapor', 'SP4N Lapor', 'https://www.lapor.go.id/', '_blank', 'Sistem Pengelolaan Pengaduan Pelayanan Publik Nasional.'); @endphp
                  <a href="{{ $item['url'] }}" target="{{ $item['target'] }}" rel="noopener noreferrer" class="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50/70 transition-all group/item">
                      <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 group-hover/item:scale-110 transition-transform">
                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
                      </div>
                      <div>
                          <h4 class="text-sm font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">{{ $item['title'] }}</h4>
-                         <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Sistem Pengelolaan Pengaduan Pelayanan Publik Nasional.</p>
+                         @if(!empty($item['description']))
+                             <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{{ $item['description'] }}</p>
+                         @endif
                      </div>
                  </a>
-                 @php $item = $getChild('pengaduan', 'lapor-gratifikasi', 'Lapor Gratifikasi', 'https://gol.kpk.go.id/', '_blank'); @endphp
+                 @php $item = $getChild('pengaduan', 'lapor-gratifikasi', 'Lapor Gratifikasi', 'https://gol.kpk.go.id/', '_blank', 'Pelaporan penerimaan atau penolakan gratifikasi.'); @endphp
                  <a href="{{ $item['url'] }}" target="{{ $item['target'] }}" rel="noopener noreferrer" class="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50/70 transition-all group/item">
                      <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 group-hover/item:scale-110 transition-transform">
                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.618 5.984A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016zM12 9v2m0 4h.01"></path></svg>
                      </div>
                      <div>
                          <h4 class="text-sm font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">{{ $item['title'] }}</h4>
-                         <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Pelaporan penerimaan atau penolakan gratifikasi.</p>
+                         @if(!empty($item['description']))
+                             <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{{ $item['description'] }}</p>
+                         @endif
                      </div>
                  </a>
-                 @php $item = $getChild('pengaduan', 'whistle-blowing-system', 'Whistle Blowing System (WBS)', 'https://wbs.kemdikbud.go.id/', '_blank'); @endphp
+                 @php $item = $getChild('pengaduan', 'whistle-blowing-system', 'Whistle Blowing System (WBS)', 'https://wbs.kemdikbud.go.id/', '_blank', 'Mekanisme pelaporan pelanggaran rahasia dan aman.'); @endphp
                  <a href="{{ $item['url'] }}" target="{{ $item['target'] }}" rel="noopener noreferrer" class="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50/70 transition-all group/item">
                      <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 group-hover/item:scale-110 transition-transform">
                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                      </div>
                      <div>
                          <h4 class="text-sm font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">{{ $item['title'] }}</h4>
-                         <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Mekanisme pelaporan pelanggaran rahasia dan aman.</p>
+                         @if(!empty($item['description']))
+                             <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">{{ $item['description'] }}</p>
+                         @endif
                      </div>
                  </a>
              </div>
@@ -748,8 +833,8 @@
     @if(isset($menuBySlug['hubungi-kami']))
     @php $pKontak = $getParent('hubungi-kami', 'Hubungi Kami', '/kontak'); @endphp
     <div class="group" @mouseenter="activeMenu = null">
-        <a href="{{ $pKontak['url'] }}" target="{{ $pKontak['target'] }}" class="px-2 xl:px-2.5 py-1.5 text-[11.5px] xl:text-[12.5px] font-semibold whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
-            <svg class="w-4 h-4 transition-colors" :class="scrolled ? 'text-blue-600 group-hover:text-blue-800' : 'text-blue-300 group-hover:text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+        <a href="{{ $pKontak['url'] }}" target="{{ $pKontak['target'] }}" class="px-2 xl:px-2.5 py-1.5 text-[11.5px] xl:text-[12.5px] font-semibold text-slate-800 hover:text-blue-600 hover:bg-blue-50/60 whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group">
+            <svg class="w-4 h-4 text-blue-600 group-hover:text-blue-800 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
             {{ $pKontak['title'] }}
         </a>
     </div>
@@ -761,20 +846,23 @@
         @if(!in_array($extraSlug, $handledParents))
             @if($extraMenu->children->isEmpty())
                 <div class="group" @mouseenter="activeMenu = null">
-                    <a href="{{ $extraMenu->url }}" target="{{ $extraMenu->target }}" class="px-2 xl:px-2.5 py-1.5 text-[11.5px] xl:text-[12.5px] font-semibold whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
+                    <a href="{{ $extraMenu->url }}" target="{{ $extraMenu->target }}" class="px-2 xl:px-2.5 py-1.5 text-[11.5px] xl:text-[12.5px] font-semibold text-slate-800 hover:text-blue-600 hover:bg-blue-50/60 whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group">
                         {{ $extraMenu->title }}
                     </a>
                 </div>
             @else
                 <div class="group relative" @mouseenter="activeMenu = 'menu-{{ $extraMenu->id }}'" @mouseleave="activeMenu = null">
-                    <button class="px-2 xl:px-2.5 py-1.5 text-[11.5px] xl:text-[12.5px] font-semibold whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group" :class="scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-gray-100 hover:text-white'">
+                    <button class="px-2 xl:px-2.5 py-1.5 text-[11.5px] xl:text-[12.5px] font-semibold text-slate-800 hover:text-blue-600 hover:bg-blue-50/60 whitespace-nowrap transition-colors flex items-center gap-1 rounded-lg group">
                         {{ $extraMenu->title }}
                         <svg class="w-3.5 h-3.5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
                     <div x-show="activeMenu === 'menu-{{ $extraMenu->id }}'" style="display: none;" class="absolute left-0 mt-1 bg-white shadow-xl border border-gray-100 rounded-xl p-2 min-w-[200px] text-gray-800 z-50">
                         @foreach($extraMenu->children as $ch)
                             <a href="{{ $ch->url }}" target="{{ $ch->target }}" class="block px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors whitespace-nowrap">
-                                {{ $ch->title }}
+                                <div>{{ $ch->title }}</div>
+                                @if(!empty($ch->description))
+                                    <div class="text-[10px] text-slate-400 font-normal mt-0.5 leading-tight">{{ $ch->description }}</div>
+                                @endif
                             </a>
                         @endforeach
                     </div>

@@ -1,121 +1,120 @@
-@extends('admin.layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Daftar Halaman Website')
-@section('page_title', 'Pages (Halaman Website)')
+@section('header_title', 'Pages (Halaman Website)')
+@section('header_subtitle', 'Kelola konten website resmi BPMP Provinsi Sulawesi Tenggara')
+
+@section('header_action')
+    <a href="{{ route('admin.pages.create') }}" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl shadow-md transition-all inline-flex items-center gap-1.5">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
+        <span>+ Tambah Halaman</span>
+    </a>
+@endsection
 
 @section('content')
 <div class="space-y-6">
 
-    <!-- Top Action & Search Bar -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs">
-        
-        <!-- Search & Filter Form -->
-        <form method="GET" action="{{ route('admin.pages.index') }}" class="flex flex-wrap items-center gap-3 flex-1">
-            <div class="relative flex-1 min-w-[200px] max-w-md">
+    <!-- Search & Filter Card Glassmorphism -->
+    <div class="bg-white/60 backdrop-blur-xl border border-white/50 shadow-sm rounded-3xl p-5 mb-6">
+        <form method="GET" action="{{ route('admin.pages.index') }}" class="flex flex-wrap items-center gap-3">
+            <div class="relative flex-1 min-w-[220px] max-w-md">
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari judul atau slug halaman..."
-                       class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                       @input.debounce.500ms="$el.form.submit()"
+                       class="w-full sm:w-96 bg-white/50 border border-slate-200/60 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 backdrop-blur-sm transition-all text-slate-800 placeholder-slate-400">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </div>
             </div>
 
-            <select name="status" onchange="this.form.submit()" class="py-2 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+            <select name="status" onchange="this.form.submit()" class="py-2.5 px-3.5 bg-white/50 border border-slate-200/60 rounded-xl text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/50 backdrop-blur-sm transition-all cursor-pointer">
                 <option value="">Semua Status</option>
                 <option value="published" {{ request('status') === 'published' ? 'selected' : '' }}>Published</option>
                 <option value="draft" {{ request('status') === 'draft' ? 'selected' : '' }}>Draft</option>
             </select>
 
-            <button type="submit" class="px-3 py-2 bg-slate-800 text-white rounded-xl text-xs font-semibold hover:bg-slate-900 transition-colors">
+            <button type="submit" class="px-4 py-2.5 bg-slate-800 text-white rounded-xl text-xs font-semibold hover:bg-slate-900 transition-colors shadow-sm cursor-pointer">
                 Filter
             </button>
             @if(request()->filled('search') || request()->filled('status'))
-                <a href="{{ route('admin.pages.index') }}" class="text-xs text-slate-500 hover:text-slate-800 underline">Reset</a>
+                <a href="{{ route('admin.pages.index') }}" class="text-xs text-slate-500 hover:text-slate-800 underline transition-colors">Reset</a>
             @endif
         </form>
-
-        <!-- Create Button -->
-        <a href="{{ route('admin.pages.create') }}"
-           class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-md shadow-blue-600/20 transition-all flex items-center justify-center gap-2 shrink-0">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-            <span>Tambah Halaman</span>
-        </a>
     </div>
 
-    <!-- Table Card -->
-    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse text-xs">
+    <!-- Main Table Container Glassmorphism -->
+    <div class="bg-white/70 backdrop-blur-xl rounded-[2rem] shadow-sm border border-white p-2 sm:p-4 overflow-hidden overflow-x-auto w-full">
+        <table class="w-full text-left border-collapse min-w-[800px]">
                 <thead>
-                    <tr class="bg-slate-50/80 border-b border-slate-200 text-slate-500 font-semibold uppercase tracking-wider">
-                        <th class="py-3.5 px-4 w-12 text-center">#</th>
-                        <th class="py-3.5 px-4">Judul &amp; URL Slug</th>
-                        <th class="py-3.5 px-4 text-center">Status</th>
-                        <th class="py-3.5 px-4">Tanggal Publikasi</th>
-                        <th class="py-3.5 px-4 text-center">SEO</th>
-                        <th class="py-3.5 px-4 text-right">Aksi</th>
+                    <tr class="text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">
+                        <th class="p-4 w-12 text-center">No</th>
+                        <th class="p-4">Judul &amp; URL Slug</th>
+                        <th class="p-4 text-center">Status</th>
+                        <th class="p-4 text-center">Tanggal Publikasi</th>
+                        <th class="p-4 text-center">SEO</th>
+                        <th class="p-4 text-center">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100 text-slate-700">
+                <tbody class="divide-y divide-slate-50">
                     @forelse($pages as $index => $page)
-                        <tr class="hover:bg-slate-50/80 transition-colors">
-                            <td class="py-3.5 px-4 text-center text-slate-400 font-mono">
+                        <tr class="hover:bg-blue-50/30 transition-colors group">
+                            <td class="p-4 text-center text-slate-500 font-medium text-xs">
                                 {{ $pages->firstItem() + $index }}
                             </td>
-                            <td class="py-3.5 px-4">
+                            <td class="p-4">
                                 <div class="flex items-center gap-3">
                                     @if($page->featured_image)
-                                        <img src="{{ Storage::disk('public')->url($page->featured_image) }}" alt="{{ $page->title }}" class="w-10 h-10 rounded-lg object-cover border border-slate-200 shrink-0">
+                                        <img src="{{ Storage::disk('public')->url($page->featured_image) }}" alt="{{ $page->title }}" class="w-10 h-10 rounded-xl object-cover border border-white shadow-xs shrink-0">
                                     @else
-                                        <div class="w-10 h-10 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 shrink-0">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                        <div class="w-10 h-10 rounded-xl bg-blue-50/80 border border-blue-100 flex items-center justify-center text-blue-600 shrink-0 shadow-xs">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                                         </div>
                                     @endif
                                     <div class="min-w-0">
-                                        <a href="{{ route('admin.pages.edit', $page) }}" class="font-bold text-slate-900 hover:text-blue-600 truncate block text-sm">
+                                        <a href="{{ route('admin.pages.edit', $page) }}" class="text-sm font-bold text-slate-700 hover:text-blue-600 truncate block transition-colors" style="font-family:'Plus Jakarta Sans',sans-serif;">
                                             {{ $page->title }}
                                         </a>
-                                        <span class="text-[11px] text-slate-400 font-mono flex items-center gap-1 mt-0.5">
-                                            <span>/{{ $page->slug }}</span>
+                                        <span class="text-xs text-slate-400 font-mono flex items-center gap-1 mt-0.5">
+                                            <a href="{{ url($page->slug) }}" target="_blank" class="hover:text-blue-600 hover:underline">/{{ $page->slug }}</a>
                                         </span>
                                     </div>
                                 </div>
                             </td>
-                            <td class="py-3.5 px-4 text-center">
+                            <td class="p-4 text-center">
                                 @if($page->status === 'published')
-                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-100 shadow-xs">
                                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                                         Published
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200/60">
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-600 border border-amber-100 shadow-xs">
                                         <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
                                         Draft
                                     </span>
                                 @endif
                             </td>
-                            <td class="py-3.5 px-4 text-slate-500">
+                            <td class="p-4 text-center text-xs text-slate-500">
                                 {{ $page->published_at ? $page->published_at->format('d M Y, H:i') : '-' }}
                             </td>
-                            <td class="py-3.5 px-4 text-center">
+                            <td class="p-4 text-center">
                                 @if($page->meta_title || $page->meta_description)
-                                    <span class="inline-block p-1 bg-blue-50 text-blue-600 rounded" title="SEO Dikonfigurasi">
+                                    <span class="inline-flex items-center justify-center p-1.5 bg-blue-50/80 text-blue-600 rounded-lg border border-blue-100 shadow-xs" title="SEO Dikonfigurasi">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                                     </span>
                                 @else
-                                    <span class="text-slate-300">&bull;</span>
+                                    <span class="text-slate-300 font-bold">&bull;</span>
                                 @endif
                             </td>
-                            <td class="py-3.5 px-4 text-right">
-                                <div class="flex items-center justify-end gap-1.5">
+                            <td class="p-4 text-center">
+                                <div class="flex items-center justify-center gap-2">
                                     <!-- Preview Button -->
                                     <a href="{{ route('admin.pages.preview', $page) }}" target="_blank"
-                                       class="p-1.5 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Preview Halaman">
+                                       class="w-8 h-8 rounded-xl bg-white/50 backdrop-blur-md border border-slate-200 text-slate-400 hover:text-sky-600 hover:border-sky-300 hover:shadow-md transition-all flex items-center justify-center" title="Preview Halaman">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.264 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                     </a>
 
                                     <!-- Edit Button -->
                                     <a href="{{ route('admin.pages.edit', $page) }}"
-                                       class="p-1.5 text-slate-500 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors" title="Edit Halaman">
+                                       class="w-8 h-8 rounded-xl bg-white/50 backdrop-blur-md border border-slate-200 text-slate-400 hover:text-blue-600 hover:border-blue-300 hover:shadow-md transition-all flex items-center justify-center" title="Edit Halaman">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                     </a>
 
@@ -123,7 +122,7 @@
                                     <form method="POST" action="{{ route('admin.pages.destroy', $page) }}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus halaman \'{{ $page->title }}\'? Tindakan ini tidak dapat dibatalkan.');">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="p-1.5 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="Hapus Halaman">
+                                        <button type="submit" class="w-8 h-8 rounded-xl bg-white/50 backdrop-blur-md border border-slate-200 text-slate-400 hover:text-rose-600 hover:border-rose-300 hover:shadow-md transition-all flex items-center justify-center cursor-pointer" title="Hapus Halaman">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                         </button>
                                     </form>
@@ -146,7 +145,7 @@
         </div>
 
         @if($pages->hasPages())
-            <div class="p-4 border-t border-slate-200/80 bg-slate-50/50">
+            <div class="p-4 border-t border-slate-100 bg-white/40">
                 {{ $pages->links() }}
             </div>
         @endif

@@ -1,7 +1,8 @@
-@extends('admin.layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Edit Kategori')
-@section('page_title', 'Edit Kategori')
+@section('header_title', 'Edit Kategori Berita')
+@section('header_subtitle', 'Perbarui nama dan slug kategori berita')
 
 @section('content')
 <div class="max-w-2xl mx-auto space-y-6">

@@ -3,14 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Models\Page;
+use App\Models\Post;
+use App\Models\StandarPelayanan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class PublicPageController extends Controller
 {
     public function show(string $slug): View
     {
-        $page = Page::where('slug', $slug)->first();
+        $slug = trim($slug, '/');
+
+        // Cari halaman dengan pencocokan fleksibel (slug tepat, lowercase, slugified, atau format spasi/tanda hubung)
+        $page = Page::where('slug', $slug)
+            ->orWhere('slug', strtolower($slug))
+            ->orWhere('slug', Str::slug($slug))
+            ->orWhereRaw('LOWER(slug) = ?', [strtolower($slug)])
+            ->first();
+
+        if (! $page) {
+            $altSlug = str_replace(['_', ' '], '-', strtolower($slug));
+            $page = Page::where('slug', $altSlug)
+                ->orWhereRaw('LOWER(slug) = ?', [$altSlug])
+                ->first();
+        }
 
         if (! $page) {
             abort(404, 'Halaman tidak ditemukan');
@@ -29,10 +46,57 @@ class PublicPageController extends Controller
             ->take(6)
             ->get();
 
-        return view('pages.show', [
+        if ($page->slug === 'profil-lembaga') {
+            return view('profil.index', [
+                'page' => $page,
+                'otherPages' => $otherPages,
+                'isPreview' => ! $page->isPublished(),
+            ]);
+        }
+
+        if ($page->slug === 'standar-pelayanan') {
+            $dokumens = StandarPelayanan::orderBy('id', 'asc')->get();
+
+            return view('pages.standar-pelayanan', [
+                'page' => $page,
+                'dokumens' => $dokumens,
+                'otherPages' => $otherPages,
+                'isPreview' => ! $page->isPublished(),
+            ]);
+        }
+
+        if ($page->slug === 'kisah-inspiratif') {
+            $kisahList = Post::with('category', 'author')
+                ->whereHas('category', function ($q) {
+                    $q->where('name', 'Kisah Inspiratif')
+                        ->orWhere('slug', 'kisah-inspiratif');
+                })
+                ->published()
+                ->latest('published_at')
+                ->take(8)
+                ->get();
+
+            return view('pages.kisah-inspiratif', [
+                'page' => $page,
+                'kisahList' => $kisahList,
+                'otherPages' => $otherPages,
+                'isPreview' => ! $page->isPublished(),
+            ]);
+        }
+
+        $viewName = view()->exists("pages.{$page->slug}") ? "pages.{$page->slug}" : 'pages.show';
+
+        return view($viewName, [
             'page' => $page,
             'otherPages' => $otherPages,
             'isPreview' => ! $page->isPublished(),
         ]);
+    }
+
+    public function profilLembaga(): View
+    {
+        $page = Page::where('slug', 'profil-lembaga')->where('status', 'published')->firstOrFail();
+
+        return view('profil.index', compact('page'));
     }
 }

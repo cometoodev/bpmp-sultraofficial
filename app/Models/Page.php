@@ -14,6 +14,7 @@ class Page extends Model
         'title',
         'slug',
         'content',
+        'html_content',
         'builder_data',
         'editor_mode',
         'featured_image',
@@ -43,6 +44,21 @@ class Page extends Model
     public function isPublished(): bool
     {
         return $this->status === 'published' && ($this->published_at === null || $this->published_at <= now());
+    }
+
+    public function getDesignMethodAttribute(): string
+    {
+        return $this->editor_mode === 'visual' ? 'builder' : 'html';
+    }
+
+    public function isBuilder(): bool
+    {
+        return $this->editor_mode === 'visual' || $this->design_method === 'builder';
+    }
+
+    public function getUrlAttribute(): string
+    {
+        return url($this->slug);
     }
 
     public function getSeoTitle(): string

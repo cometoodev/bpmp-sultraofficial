@@ -1,7 +1,8 @@
-@extends('admin.layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Isi & Kelola Data SKM Per Triwulan')
-@section('page_title', 'Isi & Kelola Data SKM Per Triwulan')
+@section('header_title', 'Isi & Kelola Data SKM')
+@section('header_subtitle', 'Entri data survei kepuasan masyarakat per triwulan')
 
 @section('content')
 <div class="max-w-4xl mx-auto space-y-6" x-data="skmForm()">

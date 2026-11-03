@@ -1,7 +1,8 @@
-@extends('admin.layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Pengaturan Website')
-@section('page_title', 'Pengaturan Website')
+@section('header_title', 'Pengaturan Website')
+@section('header_subtitle', 'Kelola informasi profil instansi, logo, kontak, dan tautan sosial media')
 
 @section('content')
 <div class="max-w-4xl mx-auto space-y-6">

@@ -1,7 +1,8 @@
-@extends('admin.layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Tambah Kategori')
-@section('page_title', 'Tambah Kategori')
+@section('header_title', 'Tambah Kategori Berita')
+@section('header_subtitle', 'Buat kategori baru untuk pengelompokan konten berita')
 
 @section('content')
 <div class="max-w-2xl mx-auto space-y-6">

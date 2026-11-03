@@ -1,28 +1,18 @@
-@extends('admin.layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Manajemen Pengumuman')
-@section('page_title', 'Pengumuman')
+@section('header_title', 'Pengumuman')
+@section('header_subtitle', 'Kelola informasi atau pengumuman penting untuk publik')
+
+@section('header_action')
+    <a href="{{ route('admin.announcements.create') }}" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl shadow-md transition-all inline-flex items-center gap-1.5">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+        <span>+ Buat Pengumuman</span>
+    </a>
+@endsection
 
 @section('content')
 <div class="space-y-6">
-
-    @if(session('success'))
-        <div class="bg-emerald-50 text-emerald-700 p-4 rounded-xl text-sm font-medium border border-emerald-100 flex items-center gap-3">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-            {{ session('success') }}
-        </div>
-    @endif
-
-    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex flex-wrap items-center justify-between gap-4">
-        <div>
-            <h1 class="text-base font-bold text-slate-800">Daftar Pengumuman</h1>
-            <p class="text-xs text-slate-500 mt-1">Kelola informasi atau pengumuman penting untuk publik</p>
-        </div>
-        <a href="{{ route('admin.announcements.create') }}" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-colors flex items-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-            Buat Pengumuman
-        </a>
-    </div>
 
     <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
         <div class="overflow-x-auto">

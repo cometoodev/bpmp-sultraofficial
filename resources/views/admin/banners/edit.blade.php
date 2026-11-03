@@ -1,7 +1,8 @@
-@extends('admin.layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Edit Banner')
-@section('page_title', 'Edit Banner')
+@section('header_title', 'Edit Banner')
+@section('header_subtitle', 'Perbarui detail banner hero beranda website')
 
 @section('content')
 <div class="max-w-4xl mx-auto space-y-6">

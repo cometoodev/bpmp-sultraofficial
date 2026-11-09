@@ -264,119 +264,133 @@
     </section>
 
     <!-- 4. Layanan & Aplikasi Internal (The Icon Grid) -->
-    <section id="layanan" class="pt-32 pb-20 bg-slate-50 relative z-10">
-        <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <span class="text-blue-600 font-bold tracking-wider text-sm uppercase mb-2 block">Akses Cepat</span>
-                <h2 class="font-display text-3xl md:text-4xl font-extrabold text-blue-900 mb-4">Layanan & Aplikasi <span class="text-blue-600">Internal</span></h2>
-                <div class="w-20 h-1.5 bg-blue-600 mx-auto rounded-full"></div>
+    <section id="layanan" class="w-full pt-32 pb-16 md:pb-24 bg-slate-50 relative border-t border-slate-100 font-sans overflow-hidden">
+        <!-- Subtle decorative background blurs -->
+        <div class="absolute top-1/4 -left-32 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-1/4 -right-32 w-96 h-96 bg-sky-300/15 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="container mx-auto px-4 max-w-7xl relative z-10">
+            <!-- Section Header -->
+            <div class="text-center md:text-left mb-12 flex flex-col md:flex-row justify-between items-center md:items-end gap-6">
+                <div>
+                    <div class="flex items-center justify-center md:justify-start gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0 shadow-sm">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                            </svg>
+                        </div>
+                        <h2 class="font-display text-3xl md:text-4xl font-extrabold text-blue-900">Akses Cepat & Layanan Internal</h2>
+                    </div>
+                    <div class="w-20 h-1.5 bg-blue-600 rounded-full mx-auto md:mx-0 mb-4"></div>
+                    <p class="text-slate-600 text-sm md:text-base">Akses cepat portal aplikasi, pengaduan, dan sistem layanan terpadu BPMP Sultra</p>
+                </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Card 1: SINONGGI -->
-                <div class="bg-white rounded-[2rem] p-8 shadow-sm border border-gray-100 hover:shadow-xl transition-all flex flex-col items-center text-center h-full">
-                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-5 bg-blue-50 text-blue-600">
+                <div class="group relative flex flex-col items-center text-center p-8 bg-white/60 hover:bg-white/95 backdrop-blur-md border border-white/80 hover:border-blue-300/60 shadow-lg shadow-slate-200/50 hover:shadow-xl rounded-2xl transition-all duration-300 hover:-translate-y-1 h-full">
+                    <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-5 bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white group-hover:scale-105 transition-all duration-300 shadow-sm">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                     </div>
-                    <h3 class="font-display text-xl font-bold text-gray-800 mb-2">SINONGGI</h3>
-                    <p class="text-sm text-gray-500 font-medium mb-6">Sistem Informasi Online BPMP Sultra.</p>
-                    <a href="#" class="mt-auto inline-flex items-center gap-2 border px-5 py-2 rounded-full text-sm font-semibold transition-colors border-blue-600 text-blue-600 hover:bg-blue-50">
+                    <h3 class="font-display text-xl font-bold text-slate-800 group-hover:text-blue-600 transition-colors mb-2">SINONGGI</h3>
+                    <p class="text-sm text-slate-500 font-medium mb-6">Sistem Informasi Online BPMP Sultra.</p>
+                    <a href="#" class="mt-auto inline-flex items-center gap-2 border px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white shadow-xs">
                         Buka Aplikasi &rarr;
                     </a>
                 </div>
 
                 <!-- Card 2: LAPOR! -->
-                <div class="bg-white rounded-[2rem] p-8 shadow-sm border border-gray-100 hover:shadow-xl transition-all flex flex-col items-center text-center h-full">
-                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-5 bg-red-50 text-red-600">
+                <div class="group relative flex flex-col items-center text-center p-8 bg-white/60 hover:bg-white/95 backdrop-blur-md border border-white/80 hover:border-blue-300/60 shadow-lg shadow-slate-200/50 hover:shadow-xl rounded-2xl transition-all duration-300 hover:-translate-y-1 h-full">
+                    <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-5 bg-red-50 text-red-600 group-hover:bg-red-600 group-hover:text-white group-hover:scale-105 transition-all duration-300 shadow-sm">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
                     </div>
-                    <h3 class="font-display text-xl font-bold text-gray-800 mb-2">LAPOR!</h3>
-                    <p class="text-sm text-gray-500 font-medium mb-6">SP4N Lapor - Layanan Aspirasi dan Pengaduan.</p>
-                    <a href="#" class="mt-auto inline-flex items-center gap-2 border px-5 py-2 rounded-full text-sm font-semibold transition-colors border-red-600 text-red-600 hover:bg-red-50">
+                    <h3 class="font-display text-xl font-bold text-slate-800 group-hover:text-red-600 transition-colors mb-2">LAPOR!</h3>
+                    <p class="text-sm text-slate-500 font-medium mb-6">SP4N Lapor - Layanan Aspirasi dan Pengaduan.</p>
+                    <a href="#" class="mt-auto inline-flex items-center gap-2 border px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 border-red-600 text-red-600 hover:bg-red-600 hover:text-white shadow-xs">
                         Buat Laporan &rarr;
                     </a>
                 </div>
 
                 <!-- Card 3: Unit Layanan Terpadu -->
-                <div class="bg-white rounded-[2rem] p-8 shadow-sm border border-gray-100 hover:shadow-xl transition-all flex flex-col items-center text-center h-full">
-                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-5 bg-purple-50 text-purple-600">
+                <div class="group relative flex flex-col items-center text-center p-8 bg-white/60 hover:bg-white/95 backdrop-blur-md border border-white/80 hover:border-blue-300/60 shadow-lg shadow-slate-200/50 hover:shadow-xl rounded-2xl transition-all duration-300 hover:-translate-y-1 h-full">
+                    <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-5 bg-purple-50 text-purple-600 group-hover:bg-purple-600 group-hover:text-white group-hover:scale-105 transition-all duration-300 shadow-sm">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path></svg>
                     </div>
-                    <h3 class="font-display text-xl font-bold text-gray-800 mb-2">Unit Layanan Terpadu</h3>
-                    <p class="text-sm text-gray-500 font-medium mb-6">Layanan informasi dan pengaduan terpadu satu pintu.</p>
-                    <a href="#" class="mt-auto inline-flex items-center gap-2 border px-5 py-2 rounded-full text-sm font-semibold transition-colors border-purple-600 text-purple-600 hover:bg-purple-50">
+                    <h3 class="font-display text-xl font-bold text-slate-800 group-hover:text-purple-600 transition-colors mb-2">Unit Layanan Terpadu</h3>
+                    <p class="text-sm text-slate-500 font-medium mb-6">Layanan informasi dan pengaduan terpadu satu pintu.</p>
+                    <a href="#" class="mt-auto inline-flex items-center gap-2 border px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white shadow-xs">
                         Akses Layanan &rarr;
                     </a>
                 </div>
 
                 <!-- Card 4: Rumah Pendidikan -->
-                <div class="bg-white rounded-[2rem] p-8 shadow-sm border border-gray-100 hover:shadow-xl transition-all flex flex-col items-center text-center h-full">
-                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-5 bg-green-50 text-green-600">
+                <div class="group relative flex flex-col items-center text-center p-8 bg-white/60 hover:bg-white/95 backdrop-blur-md border border-white/80 hover:border-blue-300/60 shadow-lg shadow-slate-200/50 hover:shadow-xl rounded-2xl transition-all duration-300 hover:-translate-y-1 h-full">
+                    <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-5 bg-green-50 text-green-600 group-hover:bg-green-600 group-hover:text-white group-hover:scale-105 transition-all duration-300 shadow-sm">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                     </div>
-                    <h3 class="font-display text-xl font-bold text-gray-800 mb-2">Rumah Pendidikan</h3>
-                    <p class="text-sm text-gray-500 font-medium mb-6">Portal edukasi dan informasi daerah Sulawesi Tenggara.</p>
-                    <a href="#" class="mt-auto inline-flex items-center gap-2 border px-5 py-2 rounded-full text-sm font-semibold transition-colors border-green-600 text-green-600 hover:bg-green-50">
+                    <h3 class="font-display text-xl font-bold text-slate-800 group-hover:text-green-600 transition-colors mb-2">Rumah Pendidikan</h3>
+                    <p class="text-sm text-slate-500 font-medium mb-6">Portal edukasi dan informasi daerah Sulawesi Tenggara.</p>
+                    <a href="#" class="mt-auto inline-flex items-center gap-2 border px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 border-green-600 text-green-600 hover:bg-green-600 hover:text-white shadow-xs">
                         Eksplorasi &rarr;
                     </a>
                 </div>
 
                 <!-- Card 5: Konsultasi Online -->
-                <div class="bg-white rounded-[2rem] p-8 shadow-sm border border-gray-100 hover:shadow-xl transition-all flex flex-col items-center text-center h-full">
-                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-5 bg-orange-50 text-orange-500">
+                <div class="group relative flex flex-col items-center text-center p-8 bg-white/60 hover:bg-white/95 backdrop-blur-md border border-white/80 hover:border-blue-300/60 shadow-lg shadow-slate-200/50 hover:shadow-xl rounded-2xl transition-all duration-300 hover:-translate-y-1 h-full">
+                    <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-5 bg-orange-50 text-orange-500 group-hover:bg-orange-500 group-hover:text-white group-hover:scale-105 transition-all duration-300 shadow-sm">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
                     </div>
-                    <h3 class="font-display text-xl font-bold text-gray-800 mb-2">Konsultasi Online</h3>
-                    <p class="text-sm text-gray-500 font-medium mb-6">Layanan konsultasi virtual untuk publik dan instansi.</p>
-                    <a href="#" class="mt-auto inline-flex items-center gap-2 border px-5 py-2 rounded-full text-sm font-semibold transition-colors border-orange-500 text-orange-500 hover:bg-orange-50">
+                    <h3 class="font-display text-xl font-bold text-slate-800 group-hover:text-orange-500 transition-colors mb-2">Konsultasi Online</h3>
+                    <p class="text-sm text-slate-500 font-medium mb-6">Layanan konsultasi virtual untuk publik dan instansi.</p>
+                    <a href="#" class="mt-auto inline-flex items-center gap-2 border px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white shadow-xs">
                         Mulai Konsultasi &rarr;
                     </a>
                 </div>
 
                 <!-- Card 6: Peminjaman Sarpras -->
-                <div class="bg-white rounded-[2rem] p-8 shadow-sm border border-gray-100 hover:shadow-xl transition-all flex flex-col items-center text-center h-full">
-                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-5 bg-teal-50 text-teal-600">
+                <div class="group relative flex flex-col items-center text-center p-8 bg-white/60 hover:bg-white/95 backdrop-blur-md border border-white/80 hover:border-blue-300/60 shadow-lg shadow-slate-200/50 hover:shadow-xl rounded-2xl transition-all duration-300 hover:-translate-y-1 h-full">
+                    <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-5 bg-teal-50 text-teal-600 group-hover:bg-teal-600 group-hover:text-white group-hover:scale-105 transition-all duration-300 shadow-sm">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                     </div>
-                    <h3 class="font-display text-xl font-bold text-gray-800 mb-2">Peminjaman Sarpras</h3>
-                    <p class="text-sm text-gray-500 font-medium mb-6">Layanan peminjaman fasilitas, sarana dan prasarana BPMP.</p>
-                    <a href="#" class="mt-auto inline-flex items-center gap-2 border px-5 py-2 rounded-full text-sm font-semibold transition-colors border-teal-600 text-teal-600 hover:bg-teal-50">
+                    <h3 class="font-display text-xl font-bold text-slate-800 group-hover:text-teal-600 transition-colors mb-2">Peminjaman Sarpras</h3>
+                    <p class="text-sm text-slate-500 font-medium mb-6">Layanan peminjaman fasilitas, sarana dan prasarana BPMP.</p>
+                    <a href="#" class="mt-auto inline-flex items-center gap-2 border px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 border-teal-600 text-teal-600 hover:bg-teal-600 hover:text-white shadow-xs">
                         Ajukan Peminjaman &rarr;
                     </a>
                 </div>
 
                 <!-- Card 7: OMSABRI -->
-                <div class="bg-white rounded-[2rem] p-8 shadow-sm border border-gray-100 hover:shadow-xl transition-all flex flex-col items-center text-center h-full">
-                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-5 bg-indigo-50 text-indigo-600">
+                <div class="group relative flex flex-col items-center text-center p-8 bg-white/60 hover:bg-white/95 backdrop-blur-md border border-white/80 hover:border-blue-300/60 shadow-lg shadow-slate-200/50 hover:shadow-xl rounded-2xl transition-all duration-300 hover:-translate-y-1 h-full">
+                    <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-5 bg-indigo-50 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white group-hover:scale-105 transition-all duration-300 shadow-sm">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
                     </div>
-                    <h3 class="font-display text-xl font-bold text-gray-800 mb-2">OMSABRI</h3>
-                    <p class="text-sm text-gray-500 font-medium mb-6">Online Management Sistem Aset Barang dengan Rekam Identitas.</p>
-                    <a href="#" class="mt-auto inline-flex items-center gap-2 border px-5 py-2 rounded-full text-sm font-semibold transition-colors border-indigo-600 text-indigo-600 hover:bg-indigo-50">
+                    <h3 class="font-display text-xl font-bold text-slate-800 group-hover:text-indigo-600 transition-colors mb-2">OMSABRI</h3>
+                    <p class="text-sm text-slate-500 font-medium mb-6">Online Management Sistem Aset Barang dengan Rekam Identitas.</p>
+                    <a href="#" class="mt-auto inline-flex items-center gap-2 border px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 border-indigo-600 text-indigo-600 hover:bg-indigo-600 hover:text-white shadow-xs">
                         Akses Sistem &rarr;
                     </a>
                 </div>
 
                 <!-- Card 8: SIPPN -->
-                <div class="bg-white rounded-[2rem] p-8 shadow-sm border border-gray-100 hover:shadow-xl transition-all flex flex-col items-center text-center h-full">
-                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-5 bg-pink-50 text-pink-600">
+                <div class="group relative flex flex-col items-center text-center p-8 bg-white/60 hover:bg-white/95 backdrop-blur-md border border-white/80 hover:border-blue-300/60 shadow-lg shadow-slate-200/50 hover:shadow-xl rounded-2xl transition-all duration-300 hover:-translate-y-1 h-full">
+                    <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-5 bg-pink-50 text-pink-600 group-hover:bg-pink-600 group-hover:text-white group-hover:scale-105 transition-all duration-300 shadow-sm">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
                     </div>
-                    <h3 class="font-display text-xl font-bold text-gray-800 mb-2">SIPPN</h3>
-                    <p class="text-sm text-gray-500 font-medium mb-6">Sistem Informasi Pelayanan Publik Nasional.</p>
-                    <a href="#" class="mt-auto inline-flex items-center gap-2 border px-5 py-2 rounded-full text-sm font-semibold transition-colors border-pink-600 text-pink-600 hover:bg-pink-50">
+                    <h3 class="font-display text-xl font-bold text-slate-800 group-hover:text-pink-600 transition-colors mb-2">SIPPN</h3>
+                    <p class="text-sm text-slate-500 font-medium mb-6">Sistem Informasi Pelayanan Publik Nasional.</p>
+                    <a href="#" class="mt-auto inline-flex items-center gap-2 border px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 border-pink-600 text-pink-600 hover:bg-pink-600 hover:text-white shadow-xs">
                         Buka SIPPN &rarr;
                     </a>
                 </div>
 
                 <!-- Card 9: Goes To School -->
-                <div class="bg-white rounded-[2rem] p-8 shadow-sm border border-gray-100 hover:shadow-xl transition-all flex flex-col items-center text-center h-full">
-                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-5 bg-sky-50 text-sky-600">
+                <div class="group relative flex flex-col items-center text-center p-8 bg-white/60 hover:bg-white/95 backdrop-blur-md border border-white/80 hover:border-blue-300/60 shadow-lg shadow-slate-200/50 hover:shadow-xl rounded-2xl transition-all duration-300 hover:-translate-y-1 h-full">
+                    <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-5 bg-sky-50 text-sky-600 group-hover:bg-sky-600 group-hover:text-white group-hover:scale-105 transition-all duration-300 shadow-sm">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                     </div>
-                    <h3 class="font-display text-xl font-bold text-gray-800 mb-2">Goes To School</h3>
-                    <p class="text-sm text-gray-500 font-medium mb-6">Kunjungan edukasi sekolah membangun kebersamaan dan karakter.</p>
-                    <a href="#" class="mt-auto inline-flex items-center gap-2 border px-5 py-2 rounded-full text-sm font-semibold transition-colors border-sky-600 text-sky-600 hover:bg-sky-50">
+                    <h3 class="font-display text-xl font-bold text-slate-800 group-hover:text-sky-600 transition-colors mb-2">Goes To School</h3>
+                    <p class="text-sm text-slate-500 font-medium mb-6">Kunjungan edukasi sekolah membangun kebersamaan dan karakter.</p>
+                    <a href="#" class="mt-auto inline-flex items-center gap-2 border px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 border-sky-600 text-sky-600 hover:bg-sky-600 hover:text-white shadow-xs">
                         Lihat Program &rarr;
                     </a>
                 </div>
@@ -567,151 +581,211 @@
     </section>
 
     <!-- ========================================================== -->
-    <!-- SECTION EVENTS & WEBINAR (BERANDA - 2 CARD PER SLIDE) -->
+    <!-- SECTION EVENTS & WEBINAR (TEPAT 2 CARD BERDAMPINGAN) -->
     <!-- ========================================================== -->
-    <div id="events" style="width: 100%; background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%); padding: 5rem 1.5rem; display: flex; flex-direction: column; align-items: center; position: relative; overflow: hidden;" x-data="{
-        scrollSlider(direction) {
-            const container = document.getElementById('eventsHomeSlider');
-            const scrollAmount = 600;
-            if (direction === 'next') {
-                container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-            } else {
-                container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    @php
+        $eventsList = ($events && $events->count() > 0) ? $events : collect();
+        $eventChunks = $eventsList->chunk(2);
+        $totalSlides = max(1, $eventChunks->count());
+    @endphp
+    <section id="events" class="py-12 md:py-16 bg-white relative font-sans overflow-hidden" x-data="{
+        currentSlide: 0,
+        totalSlides: {{ $totalSlides }},
+        next() {
+            if (this.currentSlide < this.totalSlides - 1) {
+                this.currentSlide++;
+            }
+        },
+        prev() {
+            if (this.currentSlide > 0) {
+                this.currentSlide--;
             }
         }
     }">
-
-        <!-- Efek Cahaya Blur Background Glassmorphic -->
-        <div style="position: absolute; width: 400px; height: 400px; background: rgba(79, 70, 229, 0.05); filter: blur(90px); border-radius: 50%; top: 10%; left: 5%; pointer-events: none;"></div>
-        <div style="position: absolute; width: 350px; height: 350px; background: rgba(59, 130, 246, 0.05); filter: blur(80px); border-radius: 50%; bottom: 10%; right: 5%; pointer-events: none;"></div>
-
-        <div style="max-width: 1200px; width: 100%; display: flex; flex-direction: column; gap: 2.5rem; position: relative; z-index: 10;">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <!-- Header Section -->
-            <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1.5rem;">
-                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                    <div style="display: flex; align-items: center; gap: 0.75rem;">
-                        <div style="color: #4f46e5; width: 2.5rem; height: 2.5rem; display: flex; align-items: center; justify-content: center;">
-                            <svg style="width: 2rem; height: 2rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                        </div>
-                        <h2 style="color: #0f172a; font-weight: 900; font-size: clamp(1.75rem, 3vw, 2.5rem); margin: 0; letter-spacing: -0.02em;">
-                            Events dan Webinar
-                        </h2>
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+                <div>
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold uppercase tracking-wider mb-2 border border-blue-100">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                        Events dan Webinar
                     </div>
-                    <div style="width: 3.5rem; height: 0.3rem; background-color: #eab308; border-radius: 9999px; margin-bottom: 0.25rem;"></div>
-                    <p style="color: #64748b; font-size: 0.95rem; margin: 0; font-weight: 500;">
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight" style="font-family: 'Plus Jakarta Sans', sans-serif;">
+                        Jadwal &amp; Agenda Daring
+                    </h2>
+                    <p class="text-slate-500 text-xs sm:text-sm mt-1">
                         Jadwal dan informasi sesi daring pengembangan kompetensi pendidikan.
                     </p>
                 </div>
 
-                <div style="display: flex; align-items: center; gap: 0.75rem;">
-                    <button type="button" @click="scrollSlider('prev')" aria-label="Sebelumnya" class="w-10 h-10 rounded-full bg-white border border-slate-200 text-slate-700 flex items-center justify-center shadow-md hover:bg-slate-50 hover:text-indigo-600 transition-all cursor-pointer">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
-                    </button>
-                    <button type="button" @click="scrollSlider('next')" aria-label="Selanjutnya" class="w-10 h-10 rounded-full bg-white border border-slate-200 text-slate-700 flex items-center justify-center shadow-md hover:bg-slate-50 hover:text-indigo-600 transition-all cursor-pointer">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
-                    </button>
-                    <a href="{{ route('events.index') }}" class="hover:bg-blue-700 transition-all duration-300 shadow-lg shadow-blue-600/30" style="background: #0284c7; color: white; padding: 0.75rem 1.75rem; border-radius: 9999px; font-weight: 700; font-size: 0.9rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; margin-left: 0.5rem;">
-                        Lihat Semua
+                <!-- Tombol Navigasi / Lihat Semua -->
+                <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-1.5" x-show="totalSlides > 1">
+                        <button type="button" @click="prev()" aria-label="Sebelumnya" :disabled="currentSlide === 0" :class="currentSlide === 0 ? 'opacity-40 cursor-not-allowed' : 'hover:bg-slate-50 text-slate-600 cursor-pointer'" class="w-9 h-9 rounded-full bg-white border border-slate-200 flex items-center justify-center shadow-xs transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                        </button>
+                        <button type="button" @click="next()" aria-label="Selanjutnya" :disabled="currentSlide === totalSlides - 1" :class="currentSlide === totalSlides - 1 ? 'opacity-40 cursor-not-allowed' : 'hover:bg-slate-50 text-slate-600 cursor-pointer'" class="w-9 h-9 rounded-full bg-white border border-slate-200 flex items-center justify-center shadow-xs transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </button>
+                    </div>
+                    <a href="{{ route('events.index') }}" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md transition inline-flex items-center gap-1.5">
+                        <span>Lihat Semua</span>
+                        <span>&rarr;</span>
                     </a>
                 </div>
             </div>
 
-            <!-- Wadah Slider (2 Card per Tampilan) -->
-            <div id="eventsHomeSlider" style="display: flex; gap: 2rem; overflow-x: auto; scroll-behavior: smooth; padding: 0.5rem 0.25rem 1.5rem 0.25rem; scrollbar-width: none;">
-                @forelse($events ?? [] as $item)
-                    <!-- Card Horizontal Style (Gambar Kiri, Teks Kanan) -->
-                    <div style="min-width: min(540px, 88vw); max-width: 570px; flex: 1 0 auto; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.9); border-radius: 2rem; padding: 1.75rem; box-shadow: 0 20px 40px -15px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 1.5rem;">
-                        
-                        <!-- Kiri: Poster / Gambar -->
-                        <div style="width: 170px; height: 210px; border-radius: 1rem; overflow: hidden; background: #f1f5f9; flex-shrink: 0; box-shadow: 0 10px 20px rgba(0,0,0,0.08);">
-                            @if($item->image)
-                                <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->title }}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='https://via.placeholder.com/400x500/e2e8f0/475569?text=Event'">
-                            @else
-                                <div class="w-full h-full bg-gradient-to-br from-indigo-500/10 via-blue-500/10 to-purple-500/10 flex flex-col items-center justify-center p-3 text-center">
-                                    <div class="w-10 h-10 rounded-xl bg-indigo-600/10 text-indigo-600 flex items-center justify-center mb-1.5">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+            <!-- CONTAINER SLIDER / CAROUSEL DENGAN TEPAT 2 CARD PER SLIDE -->
+            <div class="overflow-hidden w-full">
+                <div class="flex transition-transform duration-500 ease-out" :style="'transform: translateX(-' + (currentSlide * 100) + '%)'">
+                    @forelse($eventChunks as $chunk)
+                        <div class="w-full shrink-0 grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            @foreach($chunk as $item)
+                                <!-- KARTU EVENT / WEBINAR DINAMIS -->
+                                <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm hover:shadow-md transition flex flex-col sm:flex-row gap-6 items-center">
+                                    <div class="w-full sm:w-44 h-48 flex-shrink-0 rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center border border-blue-100/60 relative overflow-hidden">
+                                        @if($item->image)
+                                            <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->title }}" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentElement.innerHTML='<svg class=\'w-16 h-16 text-blue-600/40\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z\'/></svg>';">
+                                        @else
+                                            <svg class="w-16 h-16 text-blue-600/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                                        @endif
                                     </div>
-                                    <span class="text-[11px] font-extrabold text-indigo-900 line-clamp-2">{{ $item->title }}</span>
+                                    <div class="flex-grow space-y-3 w-full min-w-0">
+                                        <div class="flex items-center gap-2 flex-wrap">
+                                            <span class="px-2.5 py-0.5 rounded-md {{ strtolower($item->type ?? '') === 'webinar' ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-purple-50 text-purple-700 border-purple-200' }} text-[10px] font-bold uppercase tracking-wider border">
+                                                {{ $item->type ?? 'Event' }}
+                                            </span>
+                                            @php $status = $item->status ?? 'Coming Soon'; @endphp
+                                            <span class="px-2.5 py-0.5 rounded-md {{ $status === 'Selesai' ? 'bg-slate-100 text-slate-600 border-slate-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200' }} text-[10px] font-bold uppercase tracking-wider border">
+                                                {{ $status }}
+                                            </span>
+                                        </div>
+                                        <div class="text-[11px] font-semibold text-slate-400 flex items-center gap-1.5">
+                                            <span>📅 {{ $item->event_date ? \Carbon\Carbon::parse($item->event_date)->translatedFormat('d M Y, H:i') . ' WITA' : '-' }}</span>
+                                        </div>
+                                        <h3 class="text-base sm:text-lg font-extrabold text-slate-900 leading-snug line-clamp-2" title="{{ $item->title }}">
+                                            {{ $item->title }}
+                                        </h3>
+                                        <p class="text-xs text-slate-500 truncate">
+                                            Oleh: <strong class="text-slate-700 font-semibold">{{ $item->organizer ?? 'BPMP Provinsi Sulawesi Tenggara' }}</strong>
+                                        </p>
+                                        <div class="pt-2">
+                                            <a href="{{ $item->instagram_url ?: route('events.index') }}" target="{{ $item->instagram_url ? '_blank' : '_self' }}" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-sm transition">
+                                                <span>Info Selengkapnya</span>
+                                                <span>&rarr;</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+
+                            {{-- Jika dalam satu chunk hanya ada 1 event (ganjil), isi placeholder kartu pelengkap --}}
+                            @if($chunk->count() === 1)
+                                <div class="bg-white/60 rounded-3xl p-6 sm:p-8 border border-dashed border-slate-200 flex flex-col items-center justify-center text-center gap-2">
+                                    <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                                    </div>
+                                    <h4 class="text-sm font-bold text-slate-700">Agenda Lainnya Segera Hadir</h4>
+                                    <p class="text-xs text-slate-400 max-w-xs">Nantikan jadwal seminar daring dan kegiatan edukatif berikutnya dari BPMP Sultra.</p>
                                 </div>
                             @endif
                         </div>
-
-                        <!-- Kanan: Informasi (Badge, Waktu, Judul, Penyelenggara, Tombol) -->
-                        <div style="flex: 1; display: flex; flex-direction: column; gap: 0.75rem; min-width: 0;">
-                            <div style="display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;">
-                                <span style="background: #e0e7ff; color: #4338ca; padding: 0.25rem 0.65rem; border-radius: 0.5rem; font-weight: 800; font-size: 0.65rem; text-transform: uppercase;">{{ $item->type }}</span>
-                                
-                                @php $status = $item->status; @endphp
-                                <span style="background: {{ $status == 'Selesai' ? '#f1f5f9' : '#dcfce7' }}; color: {{ $status == 'Selesai' ? '#64748b' : '#15803d' }}; padding: 0.25rem 0.65rem; border-radius: 0.5rem; font-weight: 800; font-size: 0.65rem; text-transform: uppercase;">{{ $status }}</span>
+                    @empty
+                        <!-- FALLBACK JIKA BELUM ADA EVENT DI DATABASE (2 CARD SAMPLE RESMI) -->
+                        <div class="w-full shrink-0 grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <!-- KARTU 1 -->
+                            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm hover:shadow-md transition flex flex-col sm:flex-row gap-6 items-center">
+                                <div class="w-full sm:w-44 h-48 flex-shrink-0 rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center border border-blue-100/60 relative overflow-hidden">
+                                    <svg class="w-16 h-16 text-blue-600/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                                </div>
+                                <div class="flex-grow space-y-3 w-full min-w-0">
+                                    <div class="flex items-center gap-2">
+                                        <span class="px-2.5 py-0.5 rounded-md bg-purple-50 text-purple-700 text-[10px] font-bold uppercase tracking-wider border border-purple-200">Event</span>
+                                        <span class="px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase tracking-wider border border-emerald-200">Coming Soon</span>
+                                    </div>
+                                    <div class="text-[11px] font-semibold text-slate-400 flex items-center gap-1.5">
+                                        <span>📅 17 Nov 2026, 08:30 WITA</span>
+                                    </div>
+                                    <h3 class="text-base sm:text-lg font-extrabold text-slate-900 leading-snug line-clamp-2">
+                                        Gelar Karya Praktik Baik &amp; Temu Inovasi Guru Penggerak
+                                    </h3>
+                                    <p class="text-xs text-slate-500">
+                                        Oleh: <strong class="text-slate-700 font-semibold">Kemendikdasmen &amp; BPMP Sultra</strong>
+                                    </p>
+                                    <div class="pt-2">
+                                        <a href="{{ route('events.index') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-sm transition">
+                                            <span>Info Selengkapnya</span>
+                                            <span>&rarr;</span>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div style="display: flex; align-items: center; gap: 0.3rem; color: #64748b; font-size: 0.75rem; font-weight: 600;">
-                                <span>📅</span> {{ \Carbon\Carbon::parse($item->event_date)->translatedFormat('d M Y, H:i') }} WITA
-                            </div>
-
-                            <h3 style="color: #1e293b; font-weight: 900; font-size: 1.05rem; margin: 0; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{{ $item->title }}</h3>
-                            
-                            <div style="color: #475569; font-size: 0.8rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                Oleh: <strong style="color: #1e293b;">{{ $item->organizer }}</strong>
-                            </div>
-
-                            <div style="margin-top: 0.5rem;">
-                                <a href="{{ $item->instagram_url }}" target="_blank" rel="noopener noreferrer" class="hover:bg-blue-700 transition-colors" style="background: #0284c7; color: white; padding: 0.6rem 1rem; border-radius: 0.85rem; font-weight: 700; font-size: 0.8rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);">
-                                    <svg style="width: 0.95rem; height: 0.95rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                    <span>Info selengkapnya &rarr;</span>
-                                </a>
+                            <!-- KARTU 2 -->
+                            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm hover:shadow-md transition flex flex-col sm:flex-row gap-6 items-center">
+                                <div class="w-full sm:w-44 h-48 flex-shrink-0 rounded-2xl bg-gradient-to-br from-indigo-50 to-blue-100 flex items-center justify-center border border-indigo-100/60 relative overflow-hidden">
+                                    <svg class="w-16 h-16 text-indigo-600/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                                </div>
+                                <div class="flex-grow space-y-3 w-full min-w-0">
+                                    <div class="flex items-center gap-2">
+                                        <span class="px-2.5 py-0.5 rounded-md bg-blue-50 text-blue-700 text-[10px] font-bold uppercase tracking-wider border border-blue-200">Webinar</span>
+                                        <span class="px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase tracking-wider border border-emerald-200">Coming Soon</span>
+                                    </div>
+                                    <div class="text-[11px] font-semibold text-slate-400 flex items-center gap-1.5">
+                                        <span>📅 10 Nov 2026, 09:00 WITA</span>
+                                    </div>
+                                    <h3 class="text-base sm:text-lg font-extrabold text-slate-900 leading-snug line-clamp-2">
+                                        Webinar Nasional: Transformasi Pembelajaran Berbasis Rapor Pendidikan
+                                    </h3>
+                                    <p class="text-xs text-slate-500">
+                                        Oleh: <strong class="text-slate-700 font-semibold">BPMP Provinsi Sulawesi Tenggara</strong>
+                                    </p>
+                                    <div class="pt-2">
+                                        <a href="{{ route('events.index') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-sm transition">
+                                            <span>Info Selengkapnya</span>
+                                            <span>&rarr;</span>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
-                    </div>
-                @empty
-                    <div style="width: 100%; text-align: center; padding: 4rem; color: #94a3b8; font-size: 1rem; background: rgba(255,255,255,0.8); border-radius: 2rem;">
-                        Belum ada jadwal Event atau Webinar yang aktif saat ini.
-                    </div>
-                @endforelse
+                    @endforelse
+                </div>
             </div>
 
         </div>
-    </div>
+    </section>
 
     <!-- ========================================================== -->
     <!-- SECTION JADWAL & KEGIATAN AGENDA BPMP SULTRA (GLASSMORPHISM) -->
     <!-- ========================================================== -->
-    <div id="agenda" style="width: 100%; background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%); padding: 5rem 1.5rem; display: flex; flex-direction: column; align-items: center; position: relative; overflow: hidden;">
+    <section id="agenda" class="w-full py-16 md:py-24 bg-slate-50 relative border-t border-slate-100 font-sans overflow-hidden">
         
-        <!-- Efek Cahaya Blur Background Glassmorphic -->
-        <div style="position: absolute; width: 400px; height: 400px; background: rgba(79, 70, 229, 0.05); filter: blur(90px); border-radius: 50%; top: 10%; left: 5%; pointer-events: none;"></div>
-        <div style="position: absolute; width: 350px; height: 350px; background: rgba(59, 130, 246, 0.05); filter: blur(80px); border-radius: 50%; bottom: 10%; right: 5%; pointer-events: none;"></div>
+        <!-- Subtle decorative background blurs -->
+        <div class="absolute top-1/4 -left-32 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-1/4 -right-32 w-96 h-96 bg-sky-300/15 rounded-full blur-3xl pointer-events-none"></div>
 
-        <div style="max-width: 1100px; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 2.5rem; position: relative; z-index: 10;">
+        <div class="container mx-auto px-4 max-w-7xl relative z-10 flex flex-col items-center">
             
-            <!-- Header Judul & Deskripsi Singkat -->
-            <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 1rem;">
-                
-                <!-- Badge / Logo Penanda Keren -->
-                <div style="background: rgba(79, 70, 229, 0.1); border: 1px solid rgba(79, 70, 229, 0.2); padding: 0.4rem 1.25rem; border-radius: 9999px; display: inline-flex; align-items: center; gap: 0.6rem; backdrop-filter: blur(10px);">
-                    <div style="width: 1.5rem; height: 1.5rem; border-radius: 50%; background: #4f46e5; display: flex; align-items: center; justify-content: center; color: white;">
-                        <svg style="width: 0.9rem; height: 0.9rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            <!-- Section Header -->
+            <div class="text-center mb-12 flex flex-col items-center">
+                <div class="flex items-center justify-center gap-3 mb-3">
+                    <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0 shadow-sm">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                     </div>
-                    <span style="color: #4338ca; font-weight: 800; font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase;">Informasi Terpadu</span>
+                    <h2 class="font-display text-3xl md:text-4xl font-extrabold text-blue-900">
+                        Jadwal & Kegiatan Agenda BPMP Sultra
+                    </h2>
                 </div>
-
-                <!-- Judul Utama -->
-                <h2 style="color: #1e293b; font-weight: 900; font-size: clamp(2rem, 3.5vw, 2.75rem); margin: 0; letter-spacing: -0.02em;">
-                    Jadwal & Kegiatan <span style="color: #4f46e5;">Agenda BPMP Sultra</span>
-                </h2>
-
-                <!-- Deskripsi Singkat -->
-                <p style="color: #64748b; font-size: 1.05rem; line-height: 1.6; max-width: 650px; margin: 0; font-weight: 500;">
+                <div class="w-20 h-1.5 bg-blue-600 rounded-full mx-auto mb-4"></div>
+                <p class="text-slate-600 text-sm md:text-base max-w-2xl text-center">
                     Pantau agenda kegiatan, rapat koordinasi, serta linimasa program kerja resmi secara real-time di lingkungan BPMP Provinsi Sulawesi Tenggara.
                 </p>
-
             </div>
 
             <!-- Wadah Utama Kalender / Agenda (Glassmorphic Card Penuh & Elegan) -->
-            <div style="width: 100%; max-width: 1050px; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.9); border-radius: 2.5rem; box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05);"
-                 class="p-6 sm:p-8 md:p-10"
+            <div class="w-full max-w-5xl bg-white/60 backdrop-blur-md border border-white/80 shadow-lg shadow-slate-200/50 hover:shadow-xl rounded-3xl p-6 sm:p-8 md:p-10 transition-all duration-300"
                  x-data="calendarData()">
                 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -816,7 +890,7 @@
             </div>
 
         </div>
-    </div>
+    </section>
     <!-- Alpine.js Calendar Data Script -->
     <script>
         function calendarData() {
@@ -1090,25 +1164,29 @@
     </section>
 
     <!-- 6.5 Survei Kepuasan Masyarakat -->
-    <section class="py-24 bg-slate-50 relative border-t border-slate-100 font-sans scroll-mt-10" id="section-skm">
+    <section class="w-full py-16 md:py-24 bg-slate-50 relative border-t border-slate-100 font-sans overflow-hidden scroll-mt-10" id="section-skm">
+        <!-- Subtle decorative background blurs -->
+        <div class="absolute top-1/4 -left-32 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-1/4 -right-32 w-96 h-96 bg-sky-300/15 rounded-full blur-3xl pointer-events-none"></div>
+
         <div id="survei-kepuasan"></div>
-        <div class="container mx-auto px-4 max-w-7xl">
+        <div class="container mx-auto px-4 max-w-7xl relative z-10">
             
             <!-- Section Header -->
             <div class="mb-10 text-center md:text-left flex flex-col md:flex-row justify-between items-center md:items-end gap-6">
                 <div>
                     <div class="flex items-center justify-center md:justify-start gap-3 mb-3">
-                        <div class="w-10 h-10 rounded-xl bg-orange-100 text-orange-500 flex items-center justify-center shrink-0">
+                        <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0 shadow-sm">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
                         </div>
                         <h2 class="font-display text-3xl md:text-4xl font-extrabold text-blue-900">Survei Kepuasan Masyarakat</h2>
                     </div>
-                    <div class="w-20 h-1.5 bg-orange-500 rounded-full mx-auto md:mx-0 mb-4"></div>
-                    <p class="text-slate-600 text-base">Indeks Kepuasan Masyarakat (IKM) BPMP Provinsi Sulawesi Tenggara</p>
+                    <div class="w-20 h-1.5 bg-blue-600 rounded-full mx-auto md:mx-0 mb-4"></div>
+                    <p class="text-slate-600 text-sm md:text-base">Indeks Kepuasan Masyarakat (IKM) BPMP Provinsi Sulawesi Tenggara</p>
                 </div>
                 
                 <!-- Pills Filter Tahun -->
-                <div class="flex items-center gap-2 bg-white p-1.5 rounded-full border border-slate-200 shadow-sm">
+                <div class="flex items-center gap-2 bg-white/80 backdrop-blur-md p-1.5 rounded-full border border-slate-200/80 shadow-sm">
                     @foreach($availableSkmYears as $yr)
                         <a href="{{ request()->fullUrlWithQuery(['skm_tahun' => $yr]) }}#section-skm"
                            class="px-6 py-2.5 rounded-full text-sm font-bold transition-all {{ $tahunSkm == $yr ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">
@@ -1121,7 +1199,7 @@
             <!-- Selector Periode Triwulan -->
             <div class="mb-6 flex flex-wrap items-center justify-center md:justify-start gap-2.5">
                 <span class="text-xs font-bold text-slate-500 uppercase tracking-wider mr-1 flex items-center gap-1.5">
-                    <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                     Pilih Triwulan:
                 </span>
                 @for($tw = 1; $tw <= 4; $tw++)
@@ -1130,7 +1208,7 @@
                         $twScore = $skmTabs[$tw] ?? 0;
                     @endphp
                     <a href="{{ request()->fullUrlWithQuery(['skm_triwulan' => $tw]) }}#section-skm"
-                       class="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 {{ $isTwActive ? 'bg-blue-600 text-white shadow-sm ring-2 ring-blue-500/30' : 'bg-white text-slate-700 hover:text-blue-600 hover:bg-blue-50 border border-slate-200 shadow-xs' }}">
+                       class="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 {{ $isTwActive ? 'bg-blue-600 text-white shadow-sm ring-2 ring-blue-500/30' : 'bg-white/80 backdrop-blur-md text-slate-700 hover:text-blue-600 hover:bg-white border border-slate-200/80 shadow-xs' }}">
                         <span>Triwulan {{ $tw }}</span>
                         <span class="text-[10px] px-1.5 py-0.5 rounded-md {{ $isTwActive ? 'bg-white/20 text-white font-extrabold' : 'bg-blue-50 text-blue-700 font-extrabold' }}">
                             {{ number_format($twScore, 2, ',', '.') }}
@@ -1140,7 +1218,7 @@
             </div>
 
             <!-- Main Content Container -->
-            <div class="bg-white rounded-[2rem] shadow-xl border border-slate-100 overflow-hidden">
+            <div class="bg-white/60 backdrop-blur-md rounded-3xl shadow-lg shadow-slate-200/50 border border-white/80 overflow-hidden">
                 
                 <!-- Blue Banner Hero Card -->
                 <div class="bg-blue-600 px-6 py-8 md:px-12 md:py-10 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
@@ -1190,12 +1268,12 @@
                 </div>
 
                 <!-- Grid Indikator -->
-                <div class="p-6 md:p-10 bg-slate-50/50">
+                <div class="p-6 md:p-10 bg-white/40 backdrop-blur-xs">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         
                         <!-- Card 1 -->
-                        <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                        <div class="bg-white/80 hover:bg-white backdrop-blur-md rounded-2xl p-5 border border-white/80 hover:border-blue-300/60 shadow-md shadow-slate-200/40 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 shadow-xs">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                             </div>
                             <div>
@@ -1206,8 +1284,8 @@
                         </div>
 
                         <!-- Card 2 -->
-                        <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                        <div class="bg-white/80 hover:bg-white backdrop-blur-md rounded-2xl p-5 border border-white/80 hover:border-blue-300/60 shadow-md shadow-slate-200/40 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 shadow-xs">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                             </div>
                             <div>
@@ -1218,8 +1296,8 @@
                         </div>
 
                         <!-- Card 3 -->
-                        <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                        <div class="bg-white/80 hover:bg-white backdrop-blur-md rounded-2xl p-5 border border-white/80 hover:border-blue-300/60 shadow-md shadow-slate-200/40 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 shadow-xs">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                             </div>
                             <div>
@@ -1230,8 +1308,8 @@
                         </div>
 
                         <!-- Card 4 -->
-                        <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                        <div class="bg-white/80 hover:bg-white backdrop-blur-md rounded-2xl p-5 border border-white/80 hover:border-blue-300/60 shadow-md shadow-slate-200/40 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 shadow-xs">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                             </div>
                             <div>
@@ -1242,8 +1320,8 @@
                         </div>
 
                         <!-- Card 5 -->
-                        <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                        <div class="bg-white/80 hover:bg-white backdrop-blur-md rounded-2xl p-5 border border-white/80 hover:border-blue-300/60 shadow-md shadow-slate-200/40 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 shadow-xs">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
                             </div>
                             <div>
@@ -1254,8 +1332,8 @@
                         </div>
 
                         <!-- Card 6 -->
-                        <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                        <div class="bg-white/80 hover:bg-white backdrop-blur-md rounded-2xl p-5 border border-white/80 hover:border-blue-300/60 shadow-md shadow-slate-200/40 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 shadow-xs">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                             </div>
                             <div>
@@ -1266,8 +1344,8 @@
                         </div>
 
                         <!-- Card 7 -->
-                        <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                        <div class="bg-white/80 hover:bg-white backdrop-blur-md rounded-2xl p-5 border border-white/80 hover:border-blue-300/60 shadow-md shadow-slate-200/40 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 shadow-xs">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                             </div>
                             <div>
@@ -1278,8 +1356,8 @@
                         </div>
 
                         <!-- Card 8 -->
-                        <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                        <div class="bg-white/80 hover:bg-white backdrop-blur-md rounded-2xl p-5 border border-white/80 hover:border-blue-300/60 shadow-md shadow-slate-200/40 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 shadow-xs">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                             </div>
                             <div>
@@ -1290,8 +1368,8 @@
                         </div>
 
                         <!-- Card 9 -->
-                        <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                        <div class="bg-white/80 hover:bg-white backdrop-blur-md rounded-2xl p-5 border border-white/80 hover:border-blue-300/60 shadow-md shadow-slate-200/40 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 shadow-xs">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path></svg>
                             </div>
                             <div>
@@ -1698,297 +1776,294 @@
         </div>
     </section>
 
-    <!-- 7. Media Sosial Section -->
-    <section class="py-24 bg-slate-50 relative border-t border-gray-100" x-data="{ platform: 'instagram' }">
+    <!-- 7. Media Sosial Section (Modern Glassmorphism & Futuristic Design) -->
+    @php
+        $activeSocials = $socialIntegrations ?? collect();
+        if ($activeSocials->isEmpty()) {
+            $activeSocials = collect([
+                (object) ['platform' => 'instagram', 'name' => 'Instagram', 'username' => '@bpmpsultra', 'formatted_username' => '@bpmpsultra', 'profile_url' => 'https://www.instagram.com/bpmpsultra/', 'embed_code' => null, 'hasEmbedCode' => fn () => false],
+                (object) ['platform' => 'tiktok', 'name' => 'TikTok', 'username' => '@bpmp.sulawesitenggara', 'formatted_username' => '@bpmp.sulawesitenggara', 'profile_url' => 'https://www.tiktok.com/@bpmp.sulawesitenggara', 'embed_code' => null, 'hasEmbedCode' => fn () => false],
+                (object) ['platform' => 'youtube', 'name' => 'YouTube', 'username' => '@bpmpsultra', 'formatted_username' => '@bpmpsultra', 'profile_url' => 'https://www.youtube.com/@bpmpsultra', 'embed_code' => null, 'hasEmbedCode' => fn () => false],
+            ]);
+        }
+        $initialPlatform = $activeSocials->first()->platform ?? 'instagram';
+    @endphp
+
+    <section id="media-sosial" class="py-24 bg-white relative border-t border-slate-100" x-data="{ platform: '{{ $initialPlatform }}' }">
         <script src="https://elfsightcdn.com/platform.js" async></script>
-        <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             
-            <!-- Section Header (Centered) -->
+            <!-- Section Header (Centered with Clean High Contrast) -->
             <div class="text-center mb-12 flex flex-col items-center">
-                <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-pink-100 text-pink-600 font-bold tracking-wider text-xs uppercase mb-4 border border-pink-200 shadow-sm">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"></path></svg>
-                    MEDIA SOSIAL
-                </span>
-                <h2 class="font-display text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Terhubung dengan Kami</h2>
-                <div class="w-20 h-1.5 bg-pink-500 rounded-full mb-6"></div>
-                <p class="text-gray-500 max-w-2xl mx-auto leading-relaxed text-sm md:text-base">
+                <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-slate-50 border border-slate-200/80 shadow-2xs mb-4">
+                    <span class="flex h-2.5 w-2.5 rounded-full bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 animate-pulse"></span>
+                    <span class="text-xs font-extrabold uppercase tracking-widest text-slate-900">Media Sosial Resmi</span>
+                </div>
+                <h2 class="font-display text-3xl md:text-5xl font-black text-slate-900 tracking-tight mb-4">Terhubung dengan Kami</h2>
+                <div class="w-20 h-1.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-pink-600 rounded-full mb-5"></div>
+                <p class="text-slate-600 max-w-2xl mx-auto leading-relaxed text-sm md:text-base font-medium">
                     Ikuti akun media sosial BPMP Provinsi Sulawesi Tenggara dan dapatkan informasi terbaru, kegiatan, serta konten edukatif menarik.
                 </p>
             </div>
 
-            <!-- Platform Tabs (Toggle Buttons) -->
+            <!-- Platform Tabs (Clean Glassmorphism Pill Selector) -->
             <div class="flex justify-center mb-10">
-                <div class="inline-flex bg-white p-1.5 rounded-full shadow-sm border border-gray-100 gap-1 overflow-x-auto max-w-full">
-                    <button @click="platform = 'instagram'" :class="platform === 'instagram' ? 'bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 text-white shadow-md' : 'text-gray-600 hover:bg-gray-50'" class="flex items-center gap-2 px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-300 whitespace-nowrap">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"></path></svg>
-                        Instagram
-                    </button>
-                    <button @click="platform = 'tiktok'" :class="platform === 'tiktok' ? 'bg-black text-white shadow-md' : 'text-gray-600 hover:bg-gray-50'" class="flex items-center gap-2 px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-300 whitespace-nowrap">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.28 6.28 0 005.4 15.6a6.28 6.28 0 0012.06 3.05 6.29 6.29 0 002.13-4.69V10.6a8.2 8.2 0 003.81 1.13V8.28a5 5 0 01-3.81-1.59z"/></svg>
-                        TikTok
-                    </button>
-                    <button @click="platform = 'youtube'" :class="platform === 'youtube' ? 'bg-red-600 text-white shadow-md' : 'text-gray-600 hover:bg-gray-50'" class="flex items-center gap-2 px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-300 whitespace-nowrap">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                        YouTube
-                    </button>
+                <div class="inline-flex bg-slate-50/90 p-1.5 rounded-2xl shadow-sm border border-slate-200/80 gap-1.5 overflow-x-auto max-w-full">
+                    @foreach($activeSocials as $socTab)
+                        @php
+                            $isInsta = $socTab->platform === 'instagram';
+                            $isTik = $socTab->platform === 'tiktok';
+                            $isYt = $socTab->platform === 'youtube';
+
+                            $activeClass = match($socTab->platform) {
+                                'instagram' => 'bg-gradient-to-r from-pink-500 via-rose-500 to-amber-500 text-white shadow-md shadow-pink-500/25',
+                                'tiktok' => 'bg-slate-950 text-white shadow-md shadow-slate-950/25 border border-cyan-400/30',
+                                'youtube' => 'bg-gradient-to-r from-red-600 via-rose-600 to-red-700 text-white shadow-md shadow-red-600/25',
+                                default => 'bg-blue-600 text-white shadow-md',
+                            };
+                        @endphp
+                        <button @click="platform = '{{ $socTab->platform }}'" 
+                                :class="platform === '{{ $socTab->platform }}' ? '{{ $activeClass }} font-black scale-102' : 'text-slate-700 hover:text-slate-950 hover:bg-white font-bold'" 
+                                class="flex items-center gap-2.5 px-6 py-3 rounded-xl text-xs sm:text-sm transition-all duration-300 whitespace-nowrap">
+                            @if($isInsta)
+                                <div class="w-5 h-5 flex items-center justify-center shrink-0">
+                                    <svg class="w-full h-full fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                                </div>
+                            @elseif($isTik)
+                                <div class="w-5 h-5 flex items-center justify-center shrink-0">
+                                    <svg class="w-full h-full" viewBox="0 0 24 24" fill="none">
+                                        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.29 0 .58.04.88.13V9.4a6.84 6.84 0 0 0-1-.05A6.28 6.28 0 0 0 3.08 15.6a6.28 6.28 0 0 0 9.16 5.57 6.29 6.29 0 0 0 3.2-5.5V10.6a8.2 8.2 0 0 0 3.81 1.13V8.28a5 5 0 0 1-3.81-1.59z" fill="#FE2C55" transform="translate(0.5, 0.5)"/>
+                                        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.29 0 .58.04.88.13V9.4a6.84 6.84 0 0 0-1-.05A6.28 6.28 0 0 0 3.08 15.6a6.28 6.28 0 0 0 9.16 5.57 6.29 6.29 0 0 0 3.2-5.5V10.6a8.2 8.2 0 0 0 3.81 1.13V8.28a5 5 0 0 1-3.81-1.59z" fill="#25F4EE" transform="translate(-0.5, -0.5)"/>
+                                        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.29 0 .58.04.88.13V9.4a6.84 6.84 0 0 0-1-.05A6.28 6.28 0 0 0 3.08 15.6a6.28 6.28 0 0 0 9.16 5.57 6.29 6.29 0 0 0 3.2-5.5V10.6a8.2 8.2 0 0 0 3.81 1.13V8.28a5 5 0 0 1-3.81-1.59z" fill="currentColor"/>
+                                    </svg>
+                                </div>
+                            @elseif($isYt)
+                                <div class="w-5 h-5 flex items-center justify-center shrink-0">
+                                    <svg class="w-full h-full fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                                </div>
+                            @endif
+                            <span>{{ $socTab->name }}</span>
+                        </button>
+                    @endforeach
                 </div>
             </div>
 
-            <!-- Main Content Card (Instagram Feed Container) -->
-            <div x-show="platform === 'instagram'" x-transition.opacity.duration.500ms class="bg-white rounded-3xl shadow-lg border border-gray-100 p-6 md:p-8 lg:p-10 w-full mx-auto w-full overflow-hidden">
-                
-                <!-- Instagram Profile Header Top Row -->
-                <div class="flex items-center justify-between mb-8 pb-6 border-b border-gray-100">
-                    <div class="flex items-center gap-4">
-                        <!-- Instagram gradient ring avatar -->
-                        <div class="w-12 h-12 rounded-full p-[2px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 flex-shrink-0">
-                            <div class="w-full h-full bg-white rounded-full p-[2px]">
-                                <img src="{{ asset('tutwurihandayani.png') }}" alt="Avatar" class="w-full h-full rounded-full object-contain">
-                            </div>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-gray-900 text-base md:text-lg">BPMP Sultra di Instagram</h3>
-                            <p class="text-gray-500 text-sm">@bpmpsultra</p>
-                        </div>
-                    </div>
-                    <a href="https://www.instagram.com/bpmpsultra/" target="_blank" class="px-5 py-2 bg-gradient-to-r from-pink-500 to-rose-500 text-white text-sm font-bold rounded-full shadow-sm hover:shadow-md hover:scale-105 transition-all flex-shrink-0">
-                        Follow Kami
-                    </a>
-                </div>
+            <!-- Panels Content (Clean Glassmorphism Card) -->
+            @foreach($activeSocials as $socPanel)
+                @php
+                    $isInsta = $socPanel->platform === 'instagram';
+                    $isTik = $socPanel->platform === 'tiktok';
+                    $isYt = $socPanel->platform === 'youtube';
 
-                <!-- Instagram Stats Middle Row -->
-                <div class="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-10 mb-10 px-0 md:px-4">
-                    <div class="w-24 h-24 md:w-32 md:h-32 rounded-full p-1 bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 flex-shrink-0">
-                        <div class="w-full h-full bg-white rounded-full p-1">
-                            <img src="{{ asset('tutwurihandayani.png') }}" alt="Profile" class="w-full h-full rounded-full object-contain bg-gray-50">
-                        </div>
-                    </div>
-                    <div class="flex flex-col gap-4 flex-grow w-full text-center md:text-left">
-                        <div class="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
-                            <h2 class="text-xl md:text-2xl font-medium text-gray-900">bpmpsultra</h2>
-                            <div class="flex gap-2 justify-center">
-                                <a href="https://www.instagram.com/bpmpsultra/" target="_blank" class="px-6 py-1.5 bg-[#0095f6] hover:bg-[#1877f2] text-white font-bold text-sm rounded-lg transition-colors">Follow</a>
-                                <button class="px-6 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold text-sm rounded-lg transition-colors">Message</button>
-                            </div>
-                        </div>
-                        <div class="flex gap-6 justify-center md:justify-start">
-                            <span class="text-gray-900"><span class="font-bold">814</span> posts</span>
-                            <span class="text-gray-900"><span class="font-bold">6K</span> followers</span>
-                            <span class="text-gray-900"><span class="font-bold">217</span> following</span>
-                        </div>
-                        <div>
-                            <span class="font-bold text-gray-900 text-sm block">BPMP SULTRA</span>
-                            <p class="text-gray-800 text-sm">Kementerian Pendidikan Dasar dan Menengah</p>
-                            <p class="text-blue-900 text-sm font-medium">www.bpmpsultra.kemdikbud.go.id</p>
-                        </div>
-                    </div>
-                </div>
+                    $hasEmbed = is_callable([$socPanel, 'hasEmbedCode']) ? $socPanel->hasEmbedCode() : (!empty(trim($socPanel->embed_code ?? '')));
 
-                <!-- Grid Layout for Posts -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <!-- Post 1 -->
-                    <div class="border border-gray-100 rounded-xl overflow-hidden hover:shadow-lg transition-shadow bg-white flex flex-col">
-                        <!-- Top bar -->
-                        <div class="flex items-center justify-between p-3">
-                            <div class="flex items-center gap-2">
-                                <div class="w-7 h-7 rounded-full p-[1.5px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600">
-                                    <div class="w-full h-full bg-white rounded-full p-[1px]">
-                                        <img src="{{ asset('tutwurihandayani.png') }}" alt="Avatar" class="w-full h-full rounded-full object-contain">
-                                    </div>
+                    $brandAvatarBorder = match($socPanel->platform) {
+                        'instagram' => 'p-[2.5px] bg-gradient-to-tr from-amber-400 via-pink-500 to-purple-600',
+                        'tiktok' => 'p-[2.5px] bg-gradient-to-tr from-cyan-400 via-slate-900 to-pink-500',
+                        'youtube' => 'p-[2.5px] bg-gradient-to-tr from-red-500 via-rose-600 to-red-700',
+                        default => 'p-[2.5px] bg-blue-600',
+                    };
+
+                    $brandBtn = match($socPanel->platform) {
+                        'instagram' => 'bg-gradient-to-r from-pink-500 via-rose-500 to-amber-500 hover:from-pink-600 hover:to-amber-600 text-white shadow-md shadow-pink-500/20',
+                        'tiktok' => 'bg-slate-950 hover:bg-slate-900 text-white border border-slate-800 shadow-md shadow-slate-950/20',
+                        'youtube' => 'bg-gradient-to-r from-red-600 via-rose-600 to-red-700 hover:from-red-700 hover:to-rose-700 text-white shadow-md shadow-red-600/20',
+                        default => 'bg-blue-600 hover:bg-blue-700 text-white shadow-md',
+                    };
+
+                    $btnLabel = $isYt ? 'Subscribe' : 'Follow Kami';
+                @endphp
+
+                <div x-show="platform === '{{ $socPanel->platform }}'" 
+                     x-transition:enter="transition ease-out duration-300"
+                     x-transition:enter-start="opacity-0 translate-y-3"
+                     x-transition:enter-end="opacity-100 translate-y-0"
+                     class="bg-white/90 backdrop-blur-xl rounded-3xl shadow-xl shadow-slate-200/60 border border-slate-100 p-6 sm:p-8 lg:p-10 w-full mx-auto relative overflow-hidden">
+
+                    <!-- Platform Profile Header Top Bar -->
+                    <div class="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-slate-100">
+                        <div class="flex items-center gap-4">
+                            <div class="w-14 h-14 rounded-2xl {{ $brandAvatarBorder }} shrink-0 shadow-sm">
+                                <div class="w-full h-full bg-white rounded-[14px] p-2 flex items-center justify-center">
+                                    <img src="{{ asset('tutwurihandayani.png') }}" alt="Avatar BPMP" class="w-full h-full object-contain">
                                 </div>
-                                <span class="text-xs font-bold text-gray-900">bpmpsultra</span>
                             </div>
-                            <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"></path></svg>
-                        </div>
-                        <!-- Image area -->
-                        <div class="relative w-full aspect-[4/5] bg-gray-100">
-                            <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Post Image" class="w-full h-full object-cover">
-                        </div>
-                        <!-- Bottom bar -->
-                        <div class="p-3">
-                            <div class="flex items-center gap-3 mb-2">
-                                <svg class="w-5 h-5 text-gray-800 hover:text-gray-500 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                                <svg class="w-5 h-5 text-gray-800 hover:text-gray-500 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-                                <svg class="w-5 h-5 text-gray-800 hover:text-gray-500 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
-                            </div>
-                            <p class="text-xs font-bold text-gray-900 mb-1">124 likes</p>
-                            <p class="text-xs text-gray-800 line-clamp-2"><span class="font-bold">bpmpsultra</span> Kegiatan Evaluasi Implementasi Rapor Pendidikan tingkat provinsi Sulawesi Tenggara...</p>
-                        </div>
-                    </div>
-
-                    <!-- Post 2 -->
-                    <div class="border border-gray-100 rounded-xl overflow-hidden hover:shadow-lg transition-shadow bg-white flex flex-col">
-                        <!-- Top bar -->
-                        <div class="flex items-center justify-between p-3">
-                            <div class="flex items-center gap-2">
-                                <div class="w-7 h-7 rounded-full p-[1.5px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600">
-                                    <div class="w-full h-full bg-white rounded-full p-[1px]">
-                                        <img src="{{ asset('tutwurihandayani.png') }}" alt="Avatar" class="w-full h-full rounded-full object-contain">
-                                    </div>
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <h3 class="font-display font-black text-slate-900 text-lg sm:text-xl tracking-tight">BPMP Sultra di {{ $socPanel->name }}</h3>
+                                    <span class="inline-flex items-center text-blue-600">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                        </svg>
+                                    </span>
                                 </div>
-                                <span class="text-xs font-bold text-gray-900">bpmpsultra</span>
+                                <span class="inline-block mt-1 px-2.5 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-slate-800 text-xs font-mono font-bold">
+                                    {{ $socPanel->formatted_username ?? ($socPanel->username ?? '@bpmpsultra') }}
+                                </span>
                             </div>
-                            <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"></path></svg>
                         </div>
-                        <!-- Image area -->
-                        <div class="relative w-full aspect-[4/5] bg-gray-100">
-                            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Post Image" class="w-full h-full object-cover">
-                        </div>
-                        <!-- Bottom bar -->
-                        <div class="p-3">
-                            <div class="flex items-center gap-3 mb-2">
-                                <svg class="w-5 h-5 text-gray-800 hover:text-gray-500 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                                <svg class="w-5 h-5 text-gray-800 hover:text-gray-500 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-                                <svg class="w-5 h-5 text-gray-800 hover:text-gray-500 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
-                            </div>
-                            <p class="text-xs font-bold text-gray-900 mb-1">98 likes</p>
-                            <p class="text-xs text-gray-800 line-clamp-2"><span class="font-bold">bpmpsultra</span> Sinergi BPMP bersama Dinas Pendidikan dalam menyukseskan program prioritas nasional.</p>
-                        </div>
+
+                        @if(!empty($socPanel->profile_url))
+                            <a href="{{ $socPanel->profile_url }}" target="_blank" rel="noopener noreferrer" 
+                               class="px-6 py-2.5 {{ $brandBtn }} text-xs sm:text-sm font-bold rounded-xl hover:scale-105 active:scale-95 transition-all shrink-0 inline-flex items-center gap-2">
+                                <span>{{ $btnLabel }}</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                            </a>
+                        @endif
                     </div>
 
-                    <!-- Post 3 -->
-                    <div class="border border-gray-100 rounded-xl overflow-hidden hover:shadow-lg transition-shadow bg-white flex flex-col">
-                        <!-- Top bar -->
-                        <div class="flex items-center justify-between p-3">
-                            <div class="flex items-center gap-2">
-                                <div class="w-7 h-7 rounded-full p-[1.5px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600">
-                                    <div class="w-full h-full bg-white rounded-full p-[1px]">
-                                        <img src="{{ asset('tutwurihandayani.png') }}" alt="Avatar" class="w-full h-full rounded-full object-contain">
+                    <!-- KONDISI 1: JIKA KODE EMBED ADA (TAMPILKAN WIDGET FULL) -->
+                    @if($hasEmbed)
+                        <div class="relative z-10 w-full min-h-[380px] overflow-x-auto py-2 rounded-2xl bg-slate-50/50 p-2 sm:p-4 border border-slate-100">
+                            {!! $socPanel->embed_code !!}
+                        </div>
+
+                    <!-- KONDISI 2: JIKA KODE EMBED KOSONG (TAMPILKAN FALLBACK CARD RESMI ELEGAN & FUTURISTIK) -->
+                    @else
+                        <div class="relative z-10 py-10 sm:py-14 px-4 sm:px-8 text-center max-w-2xl mx-auto flex flex-col items-center">
+                            
+                            <!-- Glowing Icon Badge (Platform Spesifik & Menawan) -->
+                            <div class="relative mb-6 group">
+                                @if($isInsta)
+                                    <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 flex items-center justify-center text-white shadow-xl shadow-pink-500/20 transform group-hover:scale-105 transition-all duration-300 p-5">
+                                        <svg class="w-full h-full fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
                                     </div>
-                                </div>
-                                <span class="text-xs font-bold text-gray-900">bpmpsultra</span>
-                            </div>
-                            <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"></path></svg>
-                        </div>
-                        <!-- Image area -->
-                        <div class="relative w-full aspect-[4/5] bg-gray-100">
-                            <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Post Image" class="w-full h-full object-cover">
-                        </div>
-                        <!-- Bottom bar -->
-                        <div class="p-3">
-                            <div class="flex items-center gap-3 mb-2">
-                                <svg class="w-5 h-5 text-gray-800 hover:text-gray-500 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                                <svg class="w-5 h-5 text-gray-800 hover:text-gray-500 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-                                <svg class="w-5 h-5 text-gray-800 hover:text-gray-500 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
-                            </div>
-                            <p class="text-xs font-bold text-gray-900 mb-1">210 likes</p>
-                            <p class="text-xs text-gray-800 line-clamp-2"><span class="font-bold">bpmpsultra</span> Sosialisasi peningkatkan literasi numerasi bersama komunitas guru penggerak.</p>
-                        </div>
-                    </div>
-
-                    <!-- Post 4 -->
-                    <div class="border border-gray-100 rounded-xl overflow-hidden hover:shadow-lg transition-shadow bg-white flex flex-col">
-                        <!-- Top bar -->
-                        <div class="flex items-center justify-between p-3">
-                            <div class="flex items-center gap-2">
-                                <div class="w-7 h-7 rounded-full p-[1.5px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600">
-                                    <div class="w-full h-full bg-white rounded-full p-[1px]">
-                                        <img src="{{ asset('tutwurihandayani.png') }}" alt="Avatar" class="w-full h-full rounded-full object-contain">
+                                @elseif($isTik)
+                                    <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-slate-950 border border-slate-800 flex items-center justify-center text-white shadow-xl shadow-slate-900/20 transform group-hover:scale-105 transition-all duration-300 p-5">
+                                        <svg class="w-full h-full" viewBox="0 0 24 24" fill="none">
+                                            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.29 0 .58.04.88.13V9.4a6.84 6.84 0 0 0-1-.05A6.28 6.28 0 0 0 3.08 15.6a6.28 6.28 0 0 0 9.16 5.57 6.29 6.29 0 0 0 3.2-5.5V10.6a8.2 8.2 0 0 0 3.81 1.13V8.28a5 5 0 0 1-3.81-1.59z" fill="#FE2C55" transform="translate(0.8, 0.8)"/>
+                                            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.29 0 .58.04.88.13V9.4a6.84 6.84 0 0 0-1-.05A6.28 6.28 0 0 0 3.08 15.6a6.28 6.28 0 0 0 9.16 5.57 6.29 6.29 0 0 0 3.2-5.5V10.6a8.2 8.2 0 0 0 3.81 1.13V8.28a5 5 0 0 1-3.81-1.59z" fill="#25F4EE" transform="translate(-0.8, -0.8)"/>
+                                            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.29 0 .58.04.88.13V9.4a6.84 6.84 0 0 0-1-.05A6.28 6.28 0 0 0 3.08 15.6a6.28 6.28 0 0 0 9.16 5.57 6.29 6.29 0 0 0 3.2-5.5V10.6a8.2 8.2 0 0 0 3.81 1.13V8.28a5 5 0 0 1-3.81-1.59z" fill="#FFFFFF"/>
+                                        </svg>
                                     </div>
-                                </div>
-                                <span class="text-xs font-bold text-gray-900">bpmpsultra</span>
+                                @elseif($isYt)
+                                    <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-gradient-to-tr from-red-600 via-rose-600 to-red-700 flex items-center justify-center text-white shadow-xl shadow-red-600/20 transform group-hover:scale-105 transition-all duration-300 p-5">
+                                        <svg class="w-full h-full fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                                    </div>
+                                @endif
                             </div>
-                            <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"></path></svg>
-                        </div>
-                        <!-- Image area -->
-                        <div class="relative w-full aspect-[4/5] bg-gray-100">
-                            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Post Image" class="w-full h-full object-cover">
-                        </div>
-                        <!-- Bottom bar -->
-                        <div class="p-3">
-                            <div class="flex items-center gap-3 mb-2">
-                                <svg class="w-5 h-5 text-gray-800 hover:text-gray-500 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                                <svg class="w-5 h-5 text-gray-800 hover:text-gray-500 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-                                <svg class="w-5 h-5 text-gray-800 hover:text-gray-500 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
-                            </div>
-                            <p class="text-xs font-bold text-gray-900 mb-1">156 likes</p>
-                            <p class="text-xs text-gray-800 line-clamp-2"><span class="font-bold">bpmpsultra</span> Kunjungan lapangan di wilayah 3T untuk memastikan akses pendidikan yang merata.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- TikTok Panel -->
-            <div x-show="platform === 'tiktok'" x-transition.opacity.duration.500ms style="display: none;" class="bg-white rounded-3xl shadow-lg border border-gray-100 p-6 md:p-8 lg:p-10 w-full mx-auto">
-                <div class="flex items-center justify-between mb-8 pb-6 border-b border-gray-100">
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-full p-[2px] bg-black flex-shrink-0">
-                            <div class="w-full h-full bg-white rounded-full p-[2px]">
-                                <img src="{{ asset('tutwurihandayani.png') }}" alt="Avatar" class="w-full h-full rounded-full object-contain">
-                            </div>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-gray-900 text-base md:text-lg">BPMP Sultra di TikTok</h3>
-                            <p class="text-gray-500 text-sm">@bpmp.sulawesitenggara</p>
-                        </div>
-                    </div>
-                    <a href="https://www.tiktok.com/@bpmp.sulawesitenggara" target="_blank" class="px-5 py-2 bg-black text-white text-sm font-bold rounded-full shadow-sm hover:shadow-md hover:scale-105 transition-all flex-shrink-0">
-                        Follow Kami
-                    </a>
-                </div>
-                
-                <!-- Elfsight TikTok Widget -->
-                <div class="elfsight-app-5f5a5923-4bd1-4aaa-a109-7680e293f81a" data-elfsight-app-lazy></div>
-            </div>
 
-            <!-- YouTube Panel -->
-            <div x-show="platform === 'youtube'" x-transition.opacity.duration.500ms style="display: none;" class="bg-white rounded-3xl shadow-lg border border-gray-100 p-6 md:p-8 lg:p-10 w-full mx-auto">
-                <div class="flex items-center justify-between mb-8 pb-6 border-b border-gray-100">
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-full p-[2px] bg-red-600 flex-shrink-0">
-                            <div class="w-full h-full bg-white rounded-full p-[2px]">
-                                <img src="{{ asset('tutwurihandayani.png') }}" alt="Avatar" class="w-full h-full rounded-full object-contain">
+                            <!-- High Contrast Username Pill -->
+                            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900 text-white text-xs sm:text-sm font-mono font-bold mb-4 shadow-sm">
+                                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                <span>{{ $socPanel->formatted_username ?? ($socPanel->username ?? '@bpmpsultra') }}</span>
+                            </div>
+
+                            <!-- Heading & Text (Sharp, High Contrast text-slate-900 & text-slate-600) -->
+                            <h3 class="font-display text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mb-3">
+                                Lihat Konten Terbaru Kami di {{ $socPanel->name }}
+                            </h3>
+                            <p class="text-slate-600 text-xs sm:text-sm md:text-base leading-relaxed mb-8 max-w-lg font-medium">
+                                @if($isYt)
+                                    Saksikan tayangan kegiatan resmi, webinar pendidikan, podcast, dan video sosialisasi program BPMP Sulawesi Tenggara langsung di YouTube.
+                                @elseif($isTik)
+                                    Nikmati video pendek edukatif, liputan kegiatan inspiratif, dan keseruan aktivitas mutu pendidikan BPMP Sulawesi Tenggara di TikTok.
+                                @else
+                                    Dapatkan dokumentasi foto, infografis terkini, dan kabar terbaru seputar pendidikan dasar dan menengah di Instagram kami.
+                                @endif
+                            </p>
+
+                            <!-- CTA Buttons (Gradient, Glow & Action) -->
+                            <div class="flex flex-col sm:flex-row items-center justify-center gap-3.5 w-full">
+                                <a href="{{ $socPanel->profile_url ?? '#' }}" target="_blank" rel="noopener noreferrer" 
+                                   class="inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-2xl text-white font-extrabold text-xs sm:text-sm shadow-lg {{ $brandBtn }} hover:scale-105 active:scale-95 transition-all duration-300 w-full sm:w-auto">
+                                    <span>{{ $isYt ? 'Buka Channel YouTube' : ($isTik ? 'Lihat Konten di TikTok' : 'Buka Akun Instagram') }}</span>
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                    </svg>
+                                </a>
+
+                                @if(!empty($socPanel->profile_url))
+                                    <a href="{{ $socPanel->profile_url }}" target="_blank" rel="noopener noreferrer" 
+                                       class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-slate-50 hover:bg-slate-100 text-slate-800 font-bold text-xs sm:text-sm transition-all duration-300 w-full sm:w-auto border border-slate-200 shadow-2xs">
+                                        <span>{{ $btnLabel }}</span>
+                                    </a>
+                                @endif
                             </div>
                         </div>
-                        <div>
-                            <h3 class="font-bold text-gray-900 text-base md:text-lg">BPMP Sultra di YouTube</h3>
-                            <p class="text-gray-500 text-sm">@bpmpsultra</p>
-                        </div>
-                    </div>
-                    <a href="https://www.youtube.com/@bpmpsultra" target="_blank" class="px-5 py-2 bg-red-600 text-white text-sm font-bold rounded-full shadow-sm hover:shadow-md hover:scale-105 transition-all flex-shrink-0">
-                        Subscribe
-                    </a>
+                    @endif
                 </div>
-                
-                <!-- Elfsight YouTube Widget -->
-                <div class="elfsight-app-0bbc46c3-7224-4e01-804d-243726b1c183" data-elfsight-app-lazy></div>
-            </div>
+            @endforeach
 
         </div>
     </section>
 
     <!-- 8. Statistik Kinerja (Dark Section) -->
     <section class="py-24 bg-blue-950 relative overflow-hidden">
+        <!-- Subtle Glow Effects -->
+        <div class="absolute -top-24 -left-24 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-sky-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
         <!-- Subtle Pattern -->
-        <div class="absolute inset-0 opacity-10" style="background-image: linear-gradient(30deg, #1d4ed8 12%, transparent 12.5%, transparent 87%, #1d4ed8 87.5%, #1d4ed8), linear-gradient(150deg, #1d4ed8 12%, transparent 12.5%, transparent 87%, #1d4ed8 87.5%, #1d4ed8), linear-gradient(30deg, #1d4ed8 12%, transparent 12.5%, transparent 87%, #1d4ed8 87.5%, #1d4ed8), linear-gradient(150deg, #1d4ed8 12%, transparent 12.5%, transparent 87%, #1d4ed8 87.5%, #1d4ed8), linear-gradient(60deg, #1d4ed877 25%, transparent 25.5%, transparent 75%, #1d4ed877 75%, #1d4ed877), linear-gradient(60deg, #1d4ed877 25%, transparent 25.5%, transparent 75%, #1d4ed877 75%, #1d4ed877); background-size: 80px 140px; background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;"></div>
+        <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: linear-gradient(30deg, #1d4ed8 12%, transparent 12.5%, transparent 87%, #1d4ed8 87.5%, #1d4ed8), linear-gradient(150deg, #1d4ed8 12%, transparent 12.5%, transparent 87%, #1d4ed8 87.5%, #1d4ed8), linear-gradient(30deg, #1d4ed8 12%, transparent 12.5%, transparent 87%, #1d4ed8 87.5%, #1d4ed8), linear-gradient(150deg, #1d4ed8 12%, transparent 12.5%, transparent 87%, #1d4ed8 87.5%, #1d4ed8), linear-gradient(60deg, #1d4ed877 25%, transparent 25.5%, transparent 75%, #1d4ed877 75%, #1d4ed877), linear-gradient(60deg, #1d4ed877 25%, transparent 25.5%, transparent 75%, #1d4ed877 75%, #1d4ed877); background-size: 80px 140px; background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;"></div>
         
         <div class="container mx-auto px-4 relative z-10">
             <div class="text-center mb-16">
-                <span class="text-blue-400 font-bold tracking-wider text-sm uppercase mb-2 block">Dampak & Capaian</span>
+                <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-900/70 border border-blue-700/60 text-blue-300 font-semibold tracking-wider text-xs uppercase mb-3 shadow-inner">
+                    <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+                    Transparansi & Keterbukaan Informasi
+                </span>
                 <h2 class="font-display text-3xl md:text-4xl font-extrabold text-white mb-4">Statistik <span class="text-blue-400">Kinerja</span></h2>
+                <p class="text-blue-200/80 text-sm md:text-base max-w-2xl mx-auto mb-4">Rekapitulasi capaian mutu pelayanan publik, keterbukaan informasi, dan tingkat kepuasan masyarakat BPMP Provinsi Sulawesi Tenggara secara real-time.</p>
                 <div class="w-20 h-1.5 bg-blue-500 mx-auto rounded-full"></div>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8">
-                <!-- Stat 1 -->
-                <div class="bg-blue-900/50 backdrop-blur-md rounded-3xl p-8 text-center border border-blue-800 shadow-[0_0_30px_rgba(37,99,235,0.15)] hover:bg-blue-800/60 transition-colors">
-                    <h3 class="font-display text-4xl md:text-5xl font-extrabold text-white mb-3 drop-shadow-md">17</h3>
-                    <p class="text-blue-300 text-xs md:text-sm font-bold uppercase tracking-wider">Kab/Kota Terjangkau</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+                <!-- Stat 1: Total Dokumen / Standar Publik -->
+                <div class="group relative bg-gradient-to-b from-blue-900/60 to-slate-900/70 backdrop-blur-xl rounded-3xl p-7 text-center border border-blue-800/80 shadow-[0_10px_30px_rgba(15,23,42,0.4)] hover:border-blue-500/60 hover:-translate-y-1.5 transition-all duration-300">
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500/20 to-sky-500/10 border border-blue-400/30 flex items-center justify-center mx-auto mb-4 text-blue-400 group-hover:scale-110 group-hover:border-blue-400/60 transition-all shadow-inner">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-4xl md:text-5xl font-extrabold text-white mb-2 drop-shadow-md tracking-tight">
+                        {{ number_format($totalDokumenStandar ?? 0) }}
+                    </h3>
+                    <p class="text-white font-bold text-sm tracking-wide mb-1">Standar Pelayanan</p>
+                    <p class="text-blue-300/80 text-xs font-medium">Dokumen Publik Resmi</p>
                 </div>
-                <!-- Stat 2 -->
-                <div class="bg-blue-900/50 backdrop-blur-md rounded-3xl p-8 text-center border border-blue-800 shadow-[0_0_30px_rgba(37,99,235,0.15)] hover:bg-blue-800/60 transition-colors">
-                    <h3 class="font-display text-4xl md:text-5xl font-extrabold text-white mb-3 drop-shadow-md">4.5K</h3>
-                    <p class="text-blue-300 text-xs md:text-sm font-bold uppercase tracking-wider">Sekolah Sasaran</p>
+
+                <!-- Stat 2: Aspirasi & Pengaduan Selesai / Resolved Rate -->
+                <div class="group relative bg-gradient-to-b from-blue-900/60 to-slate-900/70 backdrop-blur-xl rounded-3xl p-7 text-center border border-blue-800/80 shadow-[0_10px_30px_rgba(15,23,42,0.4)] hover:border-emerald-500/60 hover:-translate-y-1.5 transition-all duration-300">
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-teal-500/10 border border-emerald-400/30 flex items-center justify-center mx-auto mb-4 text-emerald-400 group-hover:scale-110 group-hover:border-emerald-400/60 transition-all shadow-inner">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-4xl md:text-5xl font-extrabold text-white mb-2 drop-shadow-md tracking-tight">
+                        {{ number_format($resolvedRate ?? 100, 1) }}%
+                    </h3>
+                    <p class="text-white font-bold text-sm tracking-wide mb-1">Penyelesaian Aduan</p>
+                    <p class="text-emerald-300/80 text-xs font-medium">SPMB & Aspirasi Tuntas</p>
                 </div>
-                <!-- Stat 3 -->
-                <div class="bg-blue-900/50 backdrop-blur-md rounded-3xl p-8 text-center border border-blue-800 shadow-[0_0_30px_rgba(37,99,235,0.15)] hover:bg-blue-800/60 transition-colors">
-                    <h3 class="font-display text-4xl md:text-5xl font-extrabold text-white mb-3 drop-shadow-md">98%</h3>
-                    <p class="text-blue-300 text-xs md:text-sm font-bold uppercase tracking-wider">Kepuasan Layanan</p>
+
+                <!-- Stat 3: Total Kunjungan Buku Tamu / Layanan ULT -->
+                <div class="group relative bg-gradient-to-b from-blue-900/60 to-slate-900/70 backdrop-blur-xl rounded-3xl p-7 text-center border border-blue-800/80 shadow-[0_10px_30px_rgba(15,23,42,0.4)] hover:border-amber-500/60 hover:-translate-y-1.5 transition-all duration-300">
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500/20 to-orange-500/10 border border-amber-400/30 flex items-center justify-center mx-auto mb-4 text-amber-400 group-hover:scale-110 group-hover:border-amber-400/60 transition-all shadow-inner">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-4xl md:text-5xl font-extrabold text-white mb-2 drop-shadow-md tracking-tight">
+                        {{ number_format($totalKunjunganUlt ?? 0, 0, ',', '.') }}+
+                    </h3>
+                    <p class="text-white font-bold text-sm tracking-wide mb-1">Layanan ULT</p>
+                    <p class="text-amber-300/80 text-xs font-medium">Buku Tamu & Tamu Terlayani</p>
                 </div>
-                <!-- Stat 4 -->
-                <div class="bg-blue-900/50 backdrop-blur-md rounded-3xl p-8 text-center border border-blue-800 shadow-[0_0_30px_rgba(37,99,235,0.15)] hover:bg-blue-800/60 transition-colors">
-                    <h3 class="font-display text-4xl md:text-5xl font-extrabold text-white mb-3 drop-shadow-md">24h</h3>
-                    <p class="text-blue-300 text-xs md:text-sm font-bold uppercase tracking-wider">Waktu Respon</p>
+
+                <!-- Stat 4: Indeks Kepuasan SKM Aktif -->
+                <div class="group relative bg-gradient-to-b from-blue-900/60 to-slate-900/70 backdrop-blur-xl rounded-3xl p-7 text-center border border-blue-800/80 shadow-[0_10px_30px_rgba(15,23,42,0.4)] hover:border-sky-400/60 hover:-translate-y-1.5 transition-all duration-300">
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-sky-500/20 to-indigo-500/10 border border-sky-400/30 flex items-center justify-center mx-auto mb-4 text-sky-400 group-hover:scale-110 group-hover:border-sky-400/60 transition-all shadow-inner">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-4xl md:text-5xl font-extrabold text-white mb-2 drop-shadow-md tracking-tight">
+                        {{ number_format($indeksKepuasanSkm ?? 0, 1) }}%
+                    </h3>
+                    <p class="text-white font-bold text-sm tracking-wide mb-1">Indeks Kepuasan SKM</p>
+                    <p class="text-sky-300/80 text-xs font-medium">Mutu Pelayanan Sangat Baik</p>
                 </div>
             </div>
         </div>

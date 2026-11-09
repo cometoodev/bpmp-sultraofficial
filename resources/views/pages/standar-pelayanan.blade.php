@@ -1,19 +1,47 @@
 @extends('layouts.app')
 
 @php
-    $dokumens = $dokumens ?? \App\Models\StandarPelayanan::orderBy('id', 'asc')->get();
+    $dokumens = $dokumens ?? \App\Models\StandarPelayanan::where('is_active', true)->orderBy('order_position', 'asc')->orderBy('id', 'asc')->get();
+    $categories = $dokumens->pluck('category')->filter()->unique()->values();
 @endphp
 
 @section('title', isset($page) ? $page->getSeoTitle() : 'Standar Pelayanan - BPMP Provinsi Sulawesi Tenggara')
 @section('meta_description', isset($page) ? $page->getSeoDescription() : 'Tolok ukur pedoman penyelenggaraan pelayanan dan acuan penilaian kualitas pelayanan BPMP Provinsi Sulawesi Tenggara.')
 
 @section('content')
+<style>
+    /* Smooth Scroll & Anchor Target Highlight */
+    html {
+        scroll-behavior: smooth;
+    }
+    div[id^="document-"]:target {
+        animation: documentTargetGlow 2.5s ease-out;
+    }
+    @keyframes documentTargetGlow {
+        0% {
+            outline: 3px solid #4f46e5;
+            outline-offset: 4px;
+            box-shadow: 0 10px 30px -5px rgba(79, 70, 229, 0.3);
+            transform: scale(1.01);
+        }
+        70% {
+            outline: 3px solid rgba(79, 70, 229, 0.6);
+            outline-offset: 4px;
+        }
+        100% {
+            outline: 3px solid transparent;
+            outline-offset: 0;
+            transform: scale(1);
+        }
+    }
+</style>
+
 <!-- HEADER UNIVERSAL (BIRU SOLID / BG-BLUE-900) -->
 <div class="relative pt-28 pb-40 overflow-hidden bg-blue-900">
     <div class="relative z-10 text-center px-4 max-w-4xl mx-auto flex flex-col items-center">
         <!-- Badge Kategori / Label -->
         <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-white font-extrabold text-[10px] sm:text-xs uppercase tracking-widest shadow-sm mb-6">
-            <div class="w-2 h-2 rounded-full bg-blue-400"></div>
+            <div class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></div>
             Sistem Informasi Publik
         </div>
 
@@ -45,16 +73,24 @@
                 pdfTitle: '', 
                 pdfUrl: '', 
                 fileInfo: '',
+                searchKeyword: '',
+                activeCategory: 'all',
                 openModal(title, url, info) {
                     this.pdfTitle = title;
                     this.pdfUrl = url;
                     this.fileInfo = info;
                     this.showModal = true;
                 },
-                copyLink(url) {
-                    navigator.clipboard.writeText(url).then(() => {
-                        alert('Tautan dokumen berhasil disalin!');
+                copyLink(docId, directUrl) {
+                    const fullAnchorUrl = window.location.origin + window.location.pathname + '#document-' + docId;
+                    navigator.clipboard.writeText(fullAnchorUrl).then(() => {
+                        alert('Tautan langsung ke section dokumen ini berhasil disalin!');
                     });
+                },
+                isMatch(title, category) {
+                    const matchSearch = !this.searchKeyword || title.toLowerCase().includes(this.searchKeyword.toLowerCase().trim());
+                    const matchCat = this.activeCategory === 'all' || category === this.activeCategory;
+                    return matchSearch && matchCat;
                 }
             }">
 
@@ -64,47 +100,122 @@
                     <div class="shadow-lg" style="background-color: #4f46e5; color: white; width: 4rem; height: 4rem; border-radius: 1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                         <svg style="width: 2rem; height: 2rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                     </div>
-                    <p style="color: #475569; font-size: 1.1rem; line-height: 1.6; flex: 1; min-width: 250px; margin: 0;">
+                    <p style="color: #475569; font-size: 1.05rem; line-height: 1.6; flex: 1; min-width: 250px; margin: 0;">
                         Tolok ukur yang dipergunakan sebagai pedoman penyelenggaraan pelayanan dan acuan penilaian kualitas pelayanan sebagai kewajiban dan janji penyelenggara kepada masyarakat.
                     </p>
                 </div>
             </div>
 
-            <!-- DAFTAR KARTU LIST DOKUMEN PDF DINAMIS DARI BACKEND -->
+            <!-- SEARCH BAR & FILTER KATEGORI UNTUK MASYARAKAT -->
+            <div style="width: 100%; max-width: 950px; margin: 0 auto; display: flex; flex-direction: column; gap: 1rem;">
+                <div class="relative w-full">
+                    <input type="text" x-model="searchKeyword" placeholder="Cari nama standar pelayanan / dokumen..."
+                           class="w-full bg-slate-50/80 border border-slate-200 rounded-2xl pl-11 pr-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:bg-white outline-none shadow-xs text-slate-800 transition-all font-medium">
+                    <svg class="w-5 h-5 text-slate-400 absolute left-4 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    <button type="button" x-show="searchKeyword" @click="searchKeyword = ''" class="absolute right-3.5 top-3 text-slate-400 hover:text-slate-600 text-sm">✕</button>
+                </div>
+
+                @if($categories->count() > 1)
+                <!-- Category Pills -->
+                <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+                    <button type="button" @click="activeCategory = 'all'"
+                            :class="activeCategory === 'all' ? 'bg-indigo-600 text-white font-bold shadow-xs' : 'bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold'"
+                            class="px-4 py-1.5 rounded-xl text-xs whitespace-nowrap transition-all">
+                        Semua Kategori ({{ $dokumens->count() }})
+                    </button>
+                    @foreach($categories as $cat)
+                        <button type="button" @click="activeCategory = '{{ $cat }}'"
+                                :class="activeCategory === '{{ $cat }}' ? 'bg-indigo-600 text-white font-bold shadow-xs' : 'bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold'"
+                                class="px-4 py-1.5 rounded-xl text-xs whitespace-nowrap transition-all">
+                            {{ $cat }} ({{ $dokumens->where('category', $cat)->count() }})
+                        </button>
+                    @endforeach
+                </div>
+                @endif
+            </div>
+
+            <!-- DAFTAR KARTU LIST DOKUMEN DINAMIS DARI BACKEND -->
             <div style="width: 100%; max-width: 950px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.25rem;">
                 
                 @forelse($dokumens as $item)
-                <div class="bg-white hover:shadow-xl transition-all duration-300" style="border-radius: 1.25rem; padding: 1.25rem 1.75rem; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); flex-wrap: wrap;">
-                    <div style="display: flex; align-items: center; gap: 1.25rem; flex: 1; min-width: 280px;">
-                        <div style="background-color: #fee2e2; color: #dc2626; width: 3.5rem; height: 3.5rem; border-radius: 0.85rem; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 900; font-size: 0.75rem; flex-shrink: 0;">
-                            PDF
+                <div id="document-{{ $item->id }}"
+                     class="scroll-mt-32 bg-white hover:shadow-xl transition-all duration-300 rounded-[1.25rem] p-5 sm:p-6 border border-slate-200/90 flex items-center justify-between gap-5 flex-wrap"
+                     x-show="isMatch('{{ addslashes($item->title) }}', '{{ $item->category ?: 'Umum' }}')">
+                    
+                    <div class="flex items-center gap-4 flex-1 min-w-[280px]">
+                        <!-- Auto-detected Document Icon Badge -->
+                        <div class="w-14 h-14 rounded-2xl flex flex-col items-center justify-center font-black text-xs shrink-0 border shadow-xs {{ $item->badge_color_class }}">
+                            @if($item->isDriveLink())
+                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM19 18H6c-2.21 0-4-1.79-4-4 0-2.05 1.53-3.76 3.56-3.97l1.07-.11.5-.95C8.08 7.14 9.94 6 12 6c2.62 0 4.88 1.86 5.39 4.43l.3 1.5 1.53.11c1.56.1 2.78 1.41 2.78 2.96 0 1.65-1.35 3-3 3z"/>
+                                </svg>
+                                <span class="text-[9px] font-extrabold uppercase mt-0.5">DRIVE</span>
+                            @elseif($item->isWord())
+                                <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                <span class="text-[9px] font-extrabold uppercase">WORD</span>
+                            @elseif($item->isExcel())
+                                <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                <span class="text-[9px] font-extrabold uppercase">EXCEL</span>
+                            @else
+                                <span class="text-sm font-black tracking-tight">PDF</span>
+                            @endif
                         </div>
+
                         <div>
-                            <!-- Judul Dokumen dari Backend -->
-                            <h3 style="color: #1e293b; font-weight: 800; font-size: 1.05rem; margin: 0 0 0.35rem 0;">{{ $item->title }}</h3>
-                            <div style="display: flex; align-items: center; gap: 1rem; color: #64748b; font-size: 0.8rem; font-weight: 500;">
-                                <!-- Tanggal Upload Murni dari Backend -->
-                                <span style="display: flex; align-items: center; gap: 0.3rem;">📅 {{ \Carbon\Carbon::parse($item->uploaded_at)->translatedFormat('d F Y') }}</span>
+                            <!-- Judul Dokumen -->
+                            <div class="flex items-center gap-2 flex-wrap mb-1">
+                                <h3 class="text-slate-800 font-extrabold text-base sm:text-lg leading-snug">{{ $item->title }}</h3>
+                                <span class="px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 text-[10px] font-bold uppercase tracking-wider border border-indigo-100">
+                                    {{ $item->category ?: 'Umum' }}
+                                </span>
+                            </div>
+
+                            <div class="flex items-center gap-3 text-xs text-slate-500 font-medium flex-wrap">
+                                <span>📅 {{ \Carbon\Carbon::parse($item->uploaded_at)->translatedFormat('d F Y') }}</span>
                                 <span>•</span>
-                                <!-- Ukuran File (KB/MB) Murni dari Backend -->
-                                <span>📁 {{ $item->file_size }}</span>
+                                @if($item->isDriveLink())
+                                    <span class="text-amber-700 font-semibold flex items-center gap-1">🔗 Google Drive Cloud</span>
+                                @else
+                                    <span>📁 {{ $item->file_size }}</span>
+                                @endif
                             </div>
                         </div>
                     </div>
                     
-                    <div style="display: flex; align-items: center; gap: 0.75rem;">
-                        <!-- Tombol Preview Membuka Pop-up PDF Viewer -->
-                        <button @click="openModal('{{ $item->title }}', '{{ $item->file_path }}', 'Diperbarui: {{ \Carbon\Carbon::parse($item->uploaded_at)->translatedFormat('d M Y') }} • {{ $item->file_size }}')" class="hover:bg-indigo-700 transition-colors" style="background-color: #4f46e5; color: white; padding: 0.6rem 1.25rem; border-radius: 0.75rem; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; border: none; cursor: pointer;">
-                            <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                            Preview
-                        </button>
-                        <button @click="copyLink('{{ $item->file_path }}')" class="hover:bg-slate-100 transition-colors" style="background-color: #f8fafc; color: #475569; padding: 0.6rem; border-radius: 0.75rem; border: 1px solid #cbd5e1; cursor: pointer;" title="Salin Tautan">
-                            <svg style="width: 1.15rem; height: 1.15rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                    <div class="flex items-center gap-2.5">
+                        @if($item->isPdf())
+                            <!-- Tombol Preview Membuka Pop-up PDF Viewer -->
+                            <button type="button" @click="openModal('{{ $item->title }}', '{{ $item->file_path }}', 'Diperbarui: {{ \Carbon\Carbon::parse($item->uploaded_at)->translatedFormat('d M Y') }} • {{ $item->file_size }}')"
+                                    class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs flex items-center gap-2 shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98]">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                <span>Preview</span>
+                            </button>
+                        @elseif($item->isDriveLink())
+                            <!-- Tombol Buka Link Google Drive -->
+                            <a href="{{ $item->file_path }}" target="_blank"
+                               class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs flex items-center gap-2 shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98]">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                                <span>Buka Drive</span>
+                            </a>
+                        @else
+                            <!-- Tombol Download Dokumen Word / Excel -->
+                            <a href="{{ $item->file_path }}" target="_blank" download
+                               class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-2 shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98]">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                <span>Download</span>
+                            </a>
+                        @endif
+
+                        <!-- Tombol Salin Tautan Langsung ke Section Dokumen Ini -->
+                        <button type="button" @click="copyLink({{ $item->id }}, '{{ $item->file_path }}')"
+                                class="p-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition-colors border border-slate-200" title="Salin Tautan Langsung ke Section Dokumen Ini">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
                         </button>
                     </div>
                 </div>
                 @empty
-                <div class="text-center py-12 bg-slate-50 rounded-2xl border border-slate-200 text-slate-500">
+                <div class="text-center py-16 bg-slate-50/70 rounded-3xl border border-slate-200 text-slate-500">
+                    <svg class="w-12 h-12 mx-auto mb-3 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                     Belum ada dokumen standar pelayanan yang tersedia.
                 </div>
                 @endforelse
@@ -138,10 +249,6 @@
                             </div>
                             
                             <div class="flex items-center gap-2 w-full sm:w-auto">
-                                <button @click="copyLink(pdfUrl)" title="Salin Tautan" class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-slate-700/50 text-slate-200 hover:bg-slate-700 transition-colors text-xs font-semibold border border-slate-600">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
-                                    <span class="hidden sm:inline">Salin Tautan</span>
-                                </button>
                                 <a :href="pdfUrl" target="_blank" class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-500 transition-colors text-xs font-bold shadow-lg shadow-emerald-900/20">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                                     Download
@@ -166,4 +273,3 @@
     </div>
 </div>
 @endsection
-

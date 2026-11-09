@@ -33,7 +33,17 @@ class User extends Authenticatable
 
     public function isAdmin(): bool
     {
-        return in_array($this->role, ['admin', 'superadmin']);
+        return in_array($this->role, ['superadmin', 'admin', 'editor']);
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return in_array($this->role, ['superadmin', 'admin']);
+    }
+
+    public function isEditor(): bool
+    {
+        return $this->role === 'editor';
     }
 
     public function posts(): HasMany

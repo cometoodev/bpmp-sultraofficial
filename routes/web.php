@@ -6,14 +6,18 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\MenuController;
+use App\Http\Controllers\Admin\PageAttachmentController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\PageTemplateController;
 use App\Http\Controllers\Admin\PostController;
+use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\SeoController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\SocialIntegrationController;
 use App\Http\Controllers\Admin\StandarPelayananController;
 use App\Http\Controllers\Admin\SurveyController;
 use App\Http\Controllers\Admin\UltRequestController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\AwardController;
@@ -21,6 +25,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\GratificationController;
 use App\Http\Controllers\GuestbookController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PublicPageController;
 use App\Http\Controllers\SkmDashboardController;
@@ -28,17 +33,10 @@ use App\Http\Controllers\SpmbAdminController;
 use App\Http\Controllers\UltPublicController;
 use App\Http\Controllers\UltSurveyController;
 use App\Models\Agenda;
-use App\Models\Announcement;
-use App\Models\Award;
-use App\Models\Banner;
 use App\Models\Category;
-use App\Models\Event;
 use App\Models\Guestbook;
 use App\Models\Post;
-use App\Models\Survey;
-use App\Services\UltSkmService;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
@@ -47,201 +45,7 @@ use Illuminate\Support\Str;
 | Existing Public Routes
 |--------------------------------------------------------------------------
 */
-Route::get('/', function () {
-    $banners = Banner::where('status', true)->orderBy('order', 'asc')->get();
-    $announcements = Announcement::where('status', 'published')->latest('published_at')->take(5)->get();
-
-    $featuredPosts = Post::with('category', 'author')
-        ->where('status', 'published')
-        ->latest('published_at')
-        ->take(3)
-        ->get();
-
-    $sidePosts = Post::with('category', 'author')
-        ->where('status', 'published')
-        ->latest('published_at')
-        ->skip(3)
-        ->take(3)
-        ->get();
-
-    $settings = DB::table('settings')->where('group', 'general')->pluck('value', 'key');
-    $totalGuestbook = Guestbook::count();
-    $totalPosts = Post::where('status', 'published')->count();
-    $awards = Award::orderBy('order', 'asc')->orderBy('created_at', 'desc')->get();
-    $events = Event::orderBy('event_date', 'desc')->take(6)->get();
-    $agendas = Agenda::orderBy('agenda_date', 'asc')->orderBy('time_start', 'asc')->get();
-
-    $agendaJsonList = $agendas->map(function ($item) {
-        $date = Carbon::parse($item->agenda_date);
-
-        return [
-            'id' => $item->id,
-            'day' => (int) $date->format('j'),
-            'month' => (int) $date->format('n') - 1,
-            'year' => (int) $date->format('Y'),
-            'title' => $item->title,
-            'time' => $item->time_start.' - '.$item->time_end.' WITA',
-            'description' => $item->description ?? 'Agenda kegiatan resmi BPMP Sultra.',
-            'type' => 'primary',
-        ];
-    });
-
-    if ($agendaJsonList->isEmpty()) {
-        $agendaJsonList = collect([
-            [
-                'id' => 0,
-                'day' => (int) date('j'),
-                'month' => (int) date('n') - 1,
-                'year' => (int) date('Y'),
-                'title' => 'Rapat Koordinasi Mingguan BPMP Sultra',
-                'time' => '09.00 - 11.30 WITA',
-                'description' => 'Koordinasi berkala evaluasi capaian program dan layanan BPMP Sultra.',
-                'type' => 'primary',
-            ],
-        ]);
-    }
-
-    $surveys = Survey::orderBy('year', 'desc')->orderBy('period', 'asc')->get();
-    $activeSurvey = null;
-    if (request()->filled('survey_id')) {
-        $activeSurvey = Survey::find(request('survey_id'));
-    } else {
-        $reqYear = request('skm_tahun', request('survey_year'));
-        $reqTwNum = request('skm_triwulan');
-        $reqPeriod = $reqTwNum ? ('Triwulan '.$reqTwNum) : request('survey_period');
-
-        if ($reqYear && $reqPeriod) {
-            $activeSurvey = Survey::where('year', $reqYear)->where('period', $reqPeriod)->first();
-        } elseif ($reqYear) {
-            $activeSurvey = Survey::where('year', $reqYear)->where('is_active', true)->first()
-                ?? Survey::where('year', $reqYear)->first();
-        }
-    }
-    if (! $activeSurvey) {
-        $activeSurvey = Survey::where('is_active', true)->first() ?? $surveys->first();
-    }
-
-    // 1. Tangkap Parameter Filter dari URL (Default: Tahun ini, Triwulan 1)
-    $tahunSkm = (int) request('skm_tahun', request('survey_year', date('Y')));
-    $triwulanSkm = (int) request('skm_triwulan', 1);
-    if (! in_array($triwulanSkm, [1, 2, 3, 4], true)) {
-        $triwulanSkm = 1;
-    }
-
-    // 2. Helper untuk query berdasarkan Triwulan
-    $getSurveyByTriwulan = function ($tahun, $triwulan) {
-        $query = Guestbook::with('ultSurveyResponse')->whereYear('created_at', $tahun);
-        if ($triwulan == 1) {
-            $query->whereMonth('created_at', '>=', 1)->whereMonth('created_at', '<=', 3);
-        }
-        if ($triwulan == 2) {
-            $query->whereMonth('created_at', '>=', 4)->whereMonth('created_at', '<=', 6);
-        }
-        if ($triwulan == 3) {
-            $query->whereMonth('created_at', '>=', 7)->whereMonth('created_at', '<=', 9);
-        }
-        if ($triwulan == 4) {
-            $query->whereMonth('created_at', '>=', 10)->whereMonth('created_at', '<=', 12);
-        }
-
-        // Ambil data yang memiliki relasi kuisioner saja
-        return $query->whereHas('ultSurveyResponse')->get()->pluck('ultSurveyResponse');
-    };
-
-    // 4. Hitung juga nilai IKM untuk ke-4 Triwulan (untuk preview angka di tombol tab)
-    $skmTabs = [];
-    $activeWithData = null;
-    $ultSkmService = app(UltSkmService::class);
-
-    for ($i = 1; $i <= 4; $i++) {
-        $tabResponses = $getSurveyByTriwulan($tahunSkm, $i);
-        $tabCalc = $ultSkmService->calculateSkm($tabResponses);
-        $tabScore = $tabCalc['nilai_konversi'];
-
-        // Jika kuisioner buku tamu kosong pada periode ini, fallback ke data survei manual jika tersedia
-        if ($tabScore == 0 && isset($surveys)) {
-            $matchManualSurvey = $surveys->first(function ($s) use ($tahunSkm, $i) {
-                return (int) $s->year === (int) $tahunSkm && (string) $s->period === ('Triwulan '.$i);
-            });
-            if ($matchManualSurvey && $matchManualSurvey->ikm_score > 0) {
-                $tabScore = (float) $matchManualSurvey->ikm_score;
-            }
-        }
-
-        $skmTabs[$i] = $tabScore;
-        if ($tabCalc['total_responden'] > 0 && $activeWithData === null) {
-            $activeWithData = $i;
-        }
-    }
-
-    // Jika user belum memilih triwulan secara spesifik dan triwulan default kosong, pilih triwulan yang memiliki data
-    if (! request()->filled('skm_triwulan') && ($skmTabs[$triwulanSkm] ?? 0) == 0 && $activeWithData !== null) {
-        $triwulanSkm = $activeWithData;
-    }
-
-    // 3. Ambil data utama sesuai filter yang aktif
-    $surveyResponses = $getSurveyByTriwulan($tahunSkm, $triwulanSkm);
-    $dataSkmUtama = $ultSkmService->calculateSkm($surveyResponses);
-
-    // Fallback harmonis: Jika buku tamu pada periode ini belum ada responden, gunakan record survei manual
-    if ($dataSkmUtama['total_responden'] === 0 && $activeSurvey && ! empty($activeSurvey->nrr_elements)) {
-        $nrrConverted = [];
-        for ($k = 1; $k <= 9; $k++) {
-            $uKey = 'u'.$k;
-            $qKey = 'q'.$k;
-            $val = (float) ($activeSurvey->nrr_elements[$uKey] ?? $activeSurvey->nrr_elements[$qKey] ?? 0);
-            $nrrConverted[$qKey] = $val;
-            $nrrConverted[$k] = $val;
-        }
-
-        $dataSkmUtama = [
-            'total_responden' => (int) $activeSurvey->total_respondents,
-            'nrr_per_unsur' => $nrrConverted,
-            'nilai_ikm' => (float) ($activeSurvey->total_nrt ?? round(($activeSurvey->ikm_score / 25), 3)),
-            'nilai_konversi' => (float) $activeSurvey->ikm_score,
-            'mutu' => $activeSurvey->ikm_service_quality ?? 'B',
-            'kinerja' => $activeSurvey->ikm_performance_category ?? 'Baik',
-            'unsur_terbaik' => null,
-            'unsur_terendah' => null,
-        ];
-    }
-
-    // Ambil daftar tahun unik dari buku tamu untuk selector tahun dinamis
-    $availableSkmYears = Guestbook::selectRaw('YEAR(created_at) as year')
-        ->distinct()
-        ->pluck('year')
-        ->filter()
-        ->map(fn ($y) => (int) $y)
-        ->toArray();
-
-    if (empty($availableSkmYears)) {
-        $availableSkmYears = [(int) date('Y'), (int) date('Y') - 1, (int) date('Y') - 2];
-    } elseif (! in_array((int) date('Y'), $availableSkmYears, true)) {
-        array_unshift($availableSkmYears, (int) date('Y'));
-    }
-    rsort($availableSkmYears);
-
-    return view('welcome', compact(
-        'banners',
-        'announcements',
-        'featuredPosts',
-        'sidePosts',
-        'settings',
-        'activeSurvey',
-        'surveys',
-        'tahunSkm',
-        'triwulanSkm',
-        'dataSkmUtama',
-        'skmTabs',
-        'availableSkmYears',
-        'totalGuestbook',
-        'totalPosts',
-        'awards',
-        'events',
-        'agendas',
-        'agendaJsonList'
-    ));
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/berita', [NewsController::class, 'index'])->name('berita.index');
 Route::get('/berita/{slug}', [NewsController::class, 'show'])->name('berita.show');
@@ -315,12 +119,29 @@ Route::prefix('admin')
         Route::get('/', fn () => redirect()->route('admin.dashboard'));
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+        // Profile & Akun Admin
+        Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
+
+        // Modul Khusus Super Admin / Admin Utama
+        Route::middleware('superadmin')->group(function () {
+            Route::resource('users', UserController::class);
+        });
+
         // Pages Management
         Route::get('pages/{page}/preview', [PageController::class, 'preview'])->name('pages.preview');
         Route::get('pages/{page}/builder', [PageController::class, 'builder'])->name('pages.builder');
         Route::post('pages/{page}/builder', [PageController::class, 'saveBuilder'])->name('pages.builder.save');
         Route::post('pages/builder/upload-image', [PageController::class, 'uploadImage'])->name('pages.builder.upload_image');
         Route::resource('pages', PageController::class);
+
+        // Page Attachments / Dokumen Terlampir
+        Route::get('pages/{page}/attachments', [PageAttachmentController::class, 'index'])->name('pages.attachments');
+        Route::post('pages/{page}/attachments', [PageAttachmentController::class, 'store'])->name('pages.attachments.store');
+        Route::put('pages/{page}/attachments/{attachment}', [PageAttachmentController::class, 'update'])->name('pages.attachments.update');
+        Route::delete('pages/{page}/attachments/{attachment}', [PageAttachmentController::class, 'destroy'])->name('pages.attachments.destroy');
+        Route::post('pages/{page}/attachments/reorder', [PageAttachmentController::class, 'reorder'])->name('pages.attachments.reorder');
+        Route::patch('pages/{page}/attachments/{attachment}/toggle-status', [PageAttachmentController::class, 'toggleStatus'])->name('pages.attachments.toggle-status');
 
         // Page Templates API
         Route::prefix('api/templates')->name('api.templates.')->group(function () {
@@ -346,6 +167,10 @@ Route::prefix('admin')
         // Banners
         Route::resource('banners', BannerController::class);
 
+        // Integrasi Media Sosial
+        Route::get('social-integrations', [SocialIntegrationController::class, 'index'])->name('social.index');
+        Route::put('social-integrations/{socialIntegration}', [SocialIntegrationController::class, 'update'])->name('social.update');
+
         // Announcements
         Route::resource('announcements', AnnouncementController::class);
 
@@ -364,8 +189,10 @@ Route::prefix('admin')
         Route::put('awards/{award}', [AwardController::class, 'update'])->name('awards.update');
         Route::delete('awards/{award}', [AwardController::class, 'destroy'])->name('awards.destroy');
 
-        // Standar Pelayanan (Dokumen PDF)
-        Route::resource('standar-pelayanan', StandarPelayananController::class)->only(['index', 'store', 'destroy']);
+        // Standar Pelayanan (Dokumen Fleksibel: PDF, Word, & Google Drive)
+        Route::post('standar-pelayanan/reorder', [StandarPelayananController::class, 'reorder'])->name('standar-pelayanan.reorder');
+        Route::patch('standar-pelayanan/{standarPelayanan}/toggle-status', [StandarPelayananController::class, 'toggleStatus'])->name('standar-pelayanan.toggle-status');
+        Route::resource('standar-pelayanan', StandarPelayananController::class)->only(['index', 'store', 'update', 'destroy']);
 
         // Manajemen Pengaduan Masyarakat (SPMB)
         Route::get('spmb', [SpmbAdminController::class, 'index'])->name('spmb.index');
@@ -534,6 +361,9 @@ Route::post('/hubungi-kami/store', [ContactController::class, 'store'])->name('c
 Route::post('/hubungi-kami', [ContactController::class, 'store']);
 Route::post('/kontak/store', [ContactController::class, 'store']);
 Route::post('/kontak', [ContactController::class, 'store']);
+
+// Route untuk Download / Akses Lampiran Halaman Publik
+Route::get('/unduh-lampiran/{attachment}', [PublicPageController::class, 'downloadAttachment'])->name('pages.attachments.download');
 
 /*
 |--------------------------------------------------------------------------

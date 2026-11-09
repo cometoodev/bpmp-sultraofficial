@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Page extends Model
 {
@@ -73,5 +74,15 @@ class Page extends Model
         }
 
         return str($this->content ? strip_tags($this->content) : '')->limit(160)->toString();
+    }
+
+    public function attachments(): HasMany
+    {
+        return $this->hasMany(PageAttachment::class)->orderBy('order_position', 'asc')->orderBy('id', 'asc');
+    }
+
+    public function activeAttachments(): HasMany
+    {
+        return $this->hasMany(PageAttachment::class)->where('is_active', true)->orderBy('order_position', 'asc')->orderBy('id', 'asc');
     }
 }

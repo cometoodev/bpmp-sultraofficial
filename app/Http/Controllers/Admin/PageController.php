@@ -18,7 +18,7 @@ class PageController extends Controller
 {
     public function index(Request $request): View
     {
-        $query = Page::query()->latest();
+        $query = Page::query()->withCount('attachments')->latest();
 
         if ($request->filled('search')) {
             $search = $request->input('search');

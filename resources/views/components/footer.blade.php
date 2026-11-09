@@ -74,9 +74,76 @@
             </div>
         </div>
 
-        <div class="pt-8 border-t border-blue-900/50 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-blue-200/60 font-medium">
+        <!-- Glassmorphism Live Visitor Stats Bar -->
+        <div class="my-10 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-blue-900/60 via-slate-900/70 to-blue-950/80 backdrop-blur-xl border border-white/10 shadow-2xl relative overflow-hidden">
+            <!-- Glow background decoration -->
+            <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -left-10 -top-10 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-6">
+                <!-- Left Title & Live Indicator -->
+                <div class="flex items-center gap-3.5 text-center lg:text-left">
+                    <div class="relative flex h-3.5 w-3.5 shrink-0">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-500 shadow-sm shadow-emerald-500/50"></span>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 justify-center lg:justify-start">
+                            <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Live Traffic Monitor</span>
+                            <span class="px-2 py-0.5 text-[10px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-full">Aktif</span>
+                        </div>
+                        <h5 class="text-sm sm:text-base font-bold text-white tracking-tight mt-0.5">Statistik Pengunjung Portal BPMP Sultra</h5>
+                    </div>
+                </div>
+
+                <!-- Right 3 Stats Metric Items -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-4 w-full lg:w-auto">
+                    <!-- Metric 1: Sedang Online -->
+                    <div class="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 backdrop-blur-md hover:bg-white/10 transition-all">
+                        <div class="w-9 h-9 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/30">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.636 18.364a9 9 0 010-12.728m12.728 0a9 9 0 010 12.728m-9.9-2.829a5 5 0 010-7.07m7.072 0a5 5 0 010 7.07M13 12a1 1 0 11-2 0 1 1 0 012 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="min-w-0">
+                            <p class="text-[11px] font-medium text-slate-300">Sedang Online</p>
+                            <p class="text-lg font-extrabold text-white leading-tight font-heading">{{ number_format($liveVisitors ?? 1) }} <span class="text-[10px] font-normal text-emerald-300">user</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Metric 2: Hari Ini -->
+                    <div class="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 backdrop-blur-md hover:bg-white/10 transition-all">
+                        <div class="w-9 h-9 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center shrink-0 border border-sky-500/30">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <div class="min-w-0">
+                            <p class="text-[11px] font-medium text-slate-300">Hari Ini</p>
+                            <p class="text-lg font-extrabold text-white leading-tight font-heading">{{ number_format($visitorsToday ?? 1) }} <span class="text-[10px] font-normal text-sky-300">kunjungan</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Metric 3: Total Pengunjung -->
+                    <div class="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 backdrop-blur-md hover:bg-white/10 transition-all">
+                        <div class="w-9 h-9 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center shrink-0 border border-indigo-500/30">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="min-w-0">
+                            <p class="text-[11px] font-medium text-slate-300">Total Kunjungan</p>
+                            <p class="text-lg font-extrabold text-white leading-tight font-heading">{{ number_format($totalVisitors ?? 52480) }} <span class="text-[10px] font-normal text-indigo-300">total</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Copyright & Navigasi Bawah -->
+        <div class="pt-8 pb-4 border-t border-blue-900/50 flex flex-col md:flex-row justify-between items-center gap-6 text-xs text-blue-200/70 font-medium">
             <p>&copy; {{ date('Y') }} {{ $siteName }}. Hak Cipta Dilindungi.</p>
-            <div class="flex gap-6">
+            <div class="flex items-center gap-6 sm:gap-8">
                 <a href="{{ url('/') }}" class="hover:text-white transition-colors">Beranda</a>
                 <a href="{{ url('/berita') }}" class="hover:text-white transition-colors">Berita</a>
                 <a href="{{ url('/profil-lembaga') }}" class="hover:text-white transition-colors">Profil Lembaga</a>

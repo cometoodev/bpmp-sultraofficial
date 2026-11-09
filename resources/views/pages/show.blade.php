@@ -102,6 +102,168 @@
             </div>
         @endif
 
+        {{-- DOKUMEN & LAMPIRAN TERKAIT HALAMAN (Jika ada lampiran aktif) --}}
+        @if(isset($page) && $page->activeAttachments && $page->activeAttachments->isNotEmpty())
+            <div id="dokumen-lampiran" class="mt-16 pt-12 border-t border-slate-100" x-data="{
+                searchQuery: '',
+                activeCategory: 'all',
+                matchesFilter(title, category) {
+                    const matchSearch = this.searchQuery === '' || title.toLowerCase().includes(this.searchQuery.toLowerCase());
+                    const matchCategory = this.activeCategory === 'all' || category === this.activeCategory;
+                    return matchSearch && matchCategory;
+                }
+            }">
+                <!-- Section Header -->
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold uppercase tracking-wider mb-2">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                            Unduhan &amp; Berkas Resmi
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight" style="font-family: 'Plus Jakarta Sans', sans-serif;">
+                            Dokumen &amp; Lampiran Terkait
+                        </h2>
+                        <p class="text-sm text-slate-500 mt-1">
+                            Akses dan unduh berkas publik, regulasi, atau materi pendukung untuk halaman ini.
+                        </p>
+                    </div>
+
+                    <!-- Search Input Filter -->
+                    <div class="relative w-full md:w-72">
+                        <input type="text" x-model="searchQuery" placeholder="Cari nama dokumen..."
+                            class="w-full bg-slate-50 border border-slate-200 rounded-2xl pl-10 pr-4 py-2.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:bg-white transition-all">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        </div>
+                    </div>
+                </div>
+
+                @php
+                    $attachmentCategories = $page->activeAttachments->pluck('category')->filter()->unique()->values();
+                @endphp
+
+                <!-- Kategori Filter Chips (Jika ada kategori) -->
+                @if($attachmentCategories->isNotEmpty())
+                    <div class="flex flex-wrap items-center gap-2 mb-6">
+                        <button type="button" @click="activeCategory = 'all'"
+                            :class="activeCategory === 'all' ? 'bg-emerald-600 text-white shadow-sm font-bold' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 font-medium'"
+                            class="px-4 py-1.5 rounded-full text-xs transition-all">
+                            Semua Berkas ({{ $page->activeAttachments->count() }})
+                        </button>
+                        @foreach($attachmentCategories as $cat)
+                            <button type="button" @click="activeCategory = '{{ $cat }}'"
+                                :class="activeCategory === '{{ $cat }}' ? 'bg-emerald-600 text-white shadow-sm font-bold' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 font-medium'"
+                                class="px-4 py-1.5 rounded-full text-xs transition-all">
+                                {{ $cat }} ({{ $page->activeAttachments->where('category', $cat)->count() }})
+                            </button>
+                        @endforeach
+                    </div>
+                @endif
+
+                <!-- Daftar Dokumen Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    @foreach($page->activeAttachments as $doc)
+                        <div id="document-{{ $doc->id }}"
+                            x-show="matchesFilter('{{ addslashes($doc->title) }}', '{{ addslashes($doc->category ?? '') }}')"
+                            x-transition
+                            class="document-item scroll-mt-32 bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs hover:shadow-md hover:border-emerald-200 transition-all group flex flex-col justify-between">
+                            
+                            <div>
+                                <div class="flex items-start justify-between gap-3 mb-3">
+                                    <div class="flex items-center gap-3">
+                                        <!-- Ikon Dokumen -->
+                                        @if($doc->isDriveLink())
+                                            <div class="w-11 h-11 rounded-2xl bg-amber-50 text-amber-600 border border-amber-200/80 flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+                                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                                            </div>
+                                        @elseif($doc->isWord())
+                                            <div class="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 border border-blue-200/80 flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+                                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zM6 20V4h7v5h5v11H6z"/></svg>
+                                            </div>
+                                        @elseif($doc->isExcel())
+                                            <div class="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-200/80 flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+                                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                            </div>
+                                        @else
+                                            <div class="w-11 h-11 rounded-2xl bg-red-50 text-red-600 border border-red-200/80 flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+                                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                                            </div>
+                                        @endif
+
+                                        <div>
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-black border uppercase {{ $doc->badge_color_class }}">
+                                                {{ $doc->badge_label }}
+                                            </span>
+                                            @if($doc->category)
+                                                <span class="ml-1.5 inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-100 text-slate-600 border border-slate-200/60">
+                                                    {{ $doc->category }}
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    <!-- Tombol Salin Anchor Link -->
+                                    <button type="button"
+                                        @click="navigator.clipboard.writeText('{{ url($page->slug) }}#document-{{ $doc->id }}'); $el.setAttribute('title', 'Tersalin!'); setTimeout(() => $el.setAttribute('title', 'Salin Tautan Dokumen'), 2000)"
+                                        class="p-1.5 rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 transition-colors"
+                                        title="Salin Tautan Dokumen">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                                    </button>
+                                </div>
+
+                                <h3 class="text-base font-bold text-slate-800 group-hover:text-emerald-700 transition-colors mb-2 leading-snug">
+                                    {{ $doc->title }}
+                                </h3>
+
+                                <div class="flex items-center gap-2 text-xs text-slate-400 font-medium mb-4">
+                                    <span>{{ $doc->formatted_size }}</span>
+                                    <span>&bull;</span>
+                                    <span>Diunduh {{ number_format($doc->download_count) }}x</span>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
+                                @if($doc->isDriveLink())
+                                    <a href="{{ route('pages.attachments.download', $doc) }}" target="_blank"
+                                        class="w-full inline-flex items-center justify-center gap-2 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-bold shadow-xs hover:shadow transition-all">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                                        <span>Buka di Google Drive</span>
+                                    </a>
+                                @elseif($doc->isPdf())
+                                    <a href="{{ route('pages.attachments.download', $doc) }}" target="_blank"
+                                        class="w-full inline-flex items-center justify-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-xs hover:shadow transition-all">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.264 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                        <span>Lihat / Unduh Dokumen</span>
+                                    </a>
+                                @else
+                                    <a href="{{ route('pages.attachments.download', $doc) }}"
+                                        class="w-full inline-flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow-xs hover:shadow transition-all">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                        <span>Unduh Berkas</span>
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- Target Highlight Styling -->
+            <style>
+                [id^="document-"]:target {
+                    outline: 3px solid #10b981;
+                    outline-offset: 4px;
+                    border-radius: 1rem;
+                    animation: documentHighlight 2s ease-in-out;
+                }
+                @keyframes documentHighlight {
+                    0% { transform: scale(1.02); box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.3); }
+                    100% { transform: scale(1); }
+                }
+            </style>
+        @endif
+
         <!-- TOMBOL BAGIKAN HALAMAN (GLASSMORPHISM WRAPPER) -->
         <div class="mt-12 pt-8 border-t border-slate-100" x-data="{ copied: false }">
             <div class="flex items-center gap-2 mb-4 text-blue-800 font-bold">

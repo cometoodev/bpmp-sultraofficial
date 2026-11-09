@@ -10,8 +10,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
+        [x-cloak] { display: none !important; }
         /* Mengaktifkan native smooth scrolling pada seluruh halaman */
         html {
             scroll-behavior: smooth;
@@ -67,142 +69,400 @@
             </div>
 
             <!-- Menu Sidebar Navigation -->
-            <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-1 text-xs font-medium">
-                
-                <div class="px-3 pb-2 pt-1 text-[11px] font-bold uppercase tracking-wider text-gray-500">
-                    Menu Utama
+            <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-3 text-xs font-medium">
+                @php
+                    $pendingUltCount = \App\Models\UltRequest::where('status', 'pending')->count();
+                    $spmbPendingCount = \App\Models\SpmbReport::where('status', 'pending')->count();
+                    $gratPendingCount = \App\Models\GratificationReport::where('status', 'pending')->count();
+                    $contactCount = \App\Models\ContactMessage::count();
+                    $totalAduanBadge = $spmbPendingCount + $gratPendingCount + $contactCount;
+                @endphp
+
+                <!-- SECTION 1: MENU UTAMA -->
+                <div class="space-y-1">
+                    <div class="px-3 pb-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                        Menu Utama
+                    </div>
+
+                    <!-- Dashboard -->
+                    <a href="{{ route('admin.dashboard') }}"
+                       class="flex items-center gap-3 px-3 py-2 rounded-xl transition-all {{ request()->routeIs('admin.dashboard') ? 'bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30' : 'text-slate-700 hover:bg-slate-50 hover:text-blue-600' }}">
+                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                        </svg>
+                        <span>Dashboard</span>
+                    </a>
                 </div>
 
-                <!-- Dashboard -->
-                <a href="{{ route('admin.dashboard') }}"
-                   class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.dashboard') ? 'bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30' : 'text-gray-700 hover:bg-slate-50 hover:text-blue-600 hover:shadow-xs' }}">
-                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                    <span>Dashboard</span>
-                </a>
+                <!-- SECTION 2: PUBLIKASI & KONTEN -->
+                <div class="space-y-1 pt-1">
+                    <div class="px-3 pb-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                        Publikasi & Konten
+                    </div>
 
-                <!-- Pages -->
-                <a href="{{ route('admin.pages.index') }}"
-                   class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.pages.*') ? 'bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30' : 'text-gray-700 hover:bg-slate-50 hover:text-blue-600 hover:shadow-xs' }}">
-                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    <span>Pages (Halaman)</span>
-                </a>
+                    @if(Auth::user()?->isSuperAdmin())
+                    <!-- Dropdown: Homepage -->
+                    <div x-data="{ open: {{ request()->routeIs('admin.awards.*', 'admin.agendas.*', 'admin.events.*', 'admin.social.*') ? 'true' : 'false' }} }" class="space-y-1">
+                        <button type="button" 
+                                @click="open = !open" 
+                                class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all group {{ request()->routeIs('admin.awards.*', 'admin.agendas.*', 'admin.events.*', 'admin.social.*') ? 'text-blue-700 bg-blue-50/70 font-semibold' : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900' }}">
+                            <div class="flex items-center gap-3 min-w-0">
+                                <svg class="w-4 h-4 shrink-0 transition-colors {{ request()->routeIs('admin.awards.*', 'admin.agendas.*', 'admin.events.*', 'admin.social.*') ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                                </svg>
+                                <span class="truncate">Homepage</span>
+                            </div>
+                            <svg class="w-3.5 h-3.5 text-slate-400 transition-transform duration-200 shrink-0 ml-2" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div x-show="open" x-collapse x-cloak class="ml-4 pl-3 border-l border-slate-200/80 space-y-0.5 py-0.5">
+                            <a href="{{ route('admin.awards.index') }}"
+                               class="group flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-colors {{ request()->routeIs('admin.awards.*') ? 'bg-blue-600 text-white font-medium shadow-xs' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">
+                                <div class="flex items-center gap-2 min-w-0">
+                                    <span class="w-1.5 h-1.5 rounded-full shrink-0 transition-colors {{ request()->routeIs('admin.awards.*') ? 'bg-white' : 'bg-slate-300 group-hover:bg-blue-500' }}"></span>
+                                    <span class="truncate">Maklumat & Penghargaan</span>
+                                </div>
+                            </a>
+                            <a href="{{ route('admin.agendas.index') }}"
+                               class="group flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-colors {{ request()->routeIs('admin.agendas.*') ? 'bg-blue-600 text-white font-medium shadow-xs' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">
+                                <div class="flex items-center gap-2 min-w-0">
+                                    <span class="w-1.5 h-1.5 rounded-full shrink-0 transition-colors {{ request()->routeIs('admin.agendas.*') ? 'bg-white' : 'bg-slate-300 group-hover:bg-blue-500' }}"></span>
+                                    <span class="truncate">Agenda Kegiatan</span>
+                                </div>
+                            </a>
+                            <a href="{{ route('admin.events.index') }}"
+                               class="group flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-colors {{ request()->routeIs('admin.events.*') ? 'bg-blue-600 text-white font-medium shadow-xs' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">
+                                <div class="flex items-center gap-2 min-w-0">
+                                    <span class="w-1.5 h-1.5 rounded-full shrink-0 transition-colors {{ request()->routeIs('admin.events.*') ? 'bg-white' : 'bg-slate-300 group-hover:bg-blue-500' }}"></span>
+                                    <span class="truncate">Events & Webinar</span>
+                                </div>
+                            </a>
+                            <a href="{{ route('admin.social.index') }}"
+                               class="group flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-colors {{ request()->routeIs('admin.social.*') ? 'bg-blue-600 text-white font-medium shadow-xs' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">
+                                <div class="flex items-center gap-2 min-w-0">
+                                    <span class="w-1.5 h-1.5 rounded-full shrink-0 transition-colors {{ request()->routeIs('admin.social.*') ? 'bg-white' : 'bg-slate-300 group-hover:bg-blue-500' }}"></span>
+                                    <span class="truncate">Integrasi Media Sosial</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
 
-                <!-- Berita -->
-                <a href="{{ route('admin.posts.index') }}"
-                   class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.posts.*') ? 'bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30' : 'text-gray-700 hover:bg-slate-50 hover:text-blue-600 hover:shadow-xs' }}">
-                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15"></path></svg>
-                    <span>Berita & Artikel</span>
-                </a>
-
-                <!-- Kategori Berita -->
-                <a href="{{ route('admin.categories.index') }}"
-                   class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.categories.*') ? 'bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30' : 'text-gray-700 hover:bg-slate-50 hover:text-blue-600 hover:shadow-xs' }}">
-                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
-                    <span>Kategori Berita</span>
-                </a>
-
-                <!-- Media -->
-                <a href="{{ route('admin.media.index') }}"
-                   class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.media.*') ? 'bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30' : 'text-gray-700 hover:bg-slate-50 hover:text-blue-600 hover:shadow-xs' }}">
-                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                    <span>Media Library</span>
-                </a>
-
-                <div class="px-3 pb-2 pt-3 text-[11px] font-bold uppercase tracking-wider text-gray-500">
-                    Navigasi & Tampilan
-                </div>
-
-                <!-- Menu Navigasi -->
-                <a href="{{ route('admin.menus.index') }}"
-                   class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.menus.*') ? 'bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30' : 'text-gray-700 hover:bg-slate-50 hover:text-blue-600 hover:shadow-xs' }}">
-                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                    <span>Menu Navigasi</span>
-                </a>
-
-                <!-- Banner / Hero -->
-                <a href="{{ route('admin.banners.index') }}"
-                   class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.banners.*') ? 'bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30' : 'text-gray-700 hover:bg-slate-50 hover:text-blue-600 hover:shadow-xs' }}">
-                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path></svg>
-                    <span>Banner / Hero</span>
-                </a>
-
-                <!-- Pengumuman -->
-                <a href="{{ route('admin.announcements.index') }}"
-                   class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.announcements.*') ? 'bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30' : 'text-gray-700 hover:bg-slate-50 hover:text-blue-600 hover:shadow-xs' }}">
-                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
-                    <span>Pengumuman</span>
-                </a>
-
-                <!-- Survei Kepuasan Masyarakat (SKM) -->
-                <a href="{{ route('admin.surveys.index') }}"
-                   class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.surveys.*') ? 'bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30' : 'text-gray-700 hover:bg-slate-50 hover:text-blue-600 hover:shadow-xs' }}">
-                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-                    <span>Survei SKM</span>
-                </a>
-
-                <div class="px-3 pb-2 pt-3 text-[11px] font-bold uppercase tracking-wider text-gray-500">
-                    Layanan ULT & SKM
-                </div>
-
-                <!-- Permohonan & Tiket Layanan ULT -->
-                <a href="{{ route('admin.ult.index') }}"
-                   class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.ult.*') ? 'bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30' : 'text-gray-700 hover:bg-slate-50 hover:text-blue-600 hover:shadow-xs' }}">
-                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
-                    <span>Permohonan ULT</span>
-                    @php
-                        $pendingUltCount = \App\Models\UltRequest::where('status', 'pending')->count();
-                    @endphp
-                    @if($pendingUltCount > 0)
-                        <span class="ml-auto text-[10px] px-2 py-0.5 rounded-full font-bold {{ request()->routeIs('admin.ult.*') ? 'bg-white text-blue-700' : 'bg-amber-500 text-white' }}">{{ $pendingUltCount }}</span>
+                    <!-- Pages (Halaman) - Standalone Menu -->
+                    <a href="{{ route('admin.pages.index') }}"
+                       class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs transition-all {{ request()->routeIs('admin.pages.*') ? 'bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30' : 'text-slate-700 hover:bg-slate-50 hover:text-blue-600' }}">
+                        <svg class="w-4 h-4 shrink-0 transition-colors {{ request()->routeIs('admin.pages.*') ? 'text-white' : 'text-slate-400 group-hover:text-blue-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        <span class="truncate">Pages (Halaman)</span>
+                    </a>
                     @endif
-                </a>
 
-                <!-- Buku Tamu & Kuisioner ULT -->
-                <a href="{{ route('admin.guestbook.index') }}"
-                   class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.guestbook.*') ? 'bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30' : 'text-gray-700 hover:bg-slate-50 hover:text-blue-600 hover:shadow-xs' }}">
-                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                    <span>Buku Tamu ULT</span>
-                </a>
+                    <!-- Dropdown: Elemen & Unggahan Page -->
+                    <div x-data="{ open: {{ request()->routeIs('admin.standar-pelayanan.*') ? 'true' : 'false' }} }" class="space-y-1">
+                        <button type="button" 
+                                @click="open = !open" 
+                                class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all group {{ request()->routeIs('admin.standar-pelayanan.*') ? 'text-blue-700 bg-blue-50/70 font-semibold' : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900' }}">
+                            <div class="flex items-center gap-3 min-w-0">
+                                <svg class="w-4 h-4 shrink-0 transition-colors {{ request()->routeIs('admin.standar-pelayanan.*') ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                                </svg>
+                                <span class="truncate">Elemen & Unggahan Page</span>
+                            </div>
+                            <svg class="w-3.5 h-3.5 text-slate-400 transition-transform duration-200 shrink-0 ml-2" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div x-show="open" x-collapse x-cloak class="ml-4 pl-3 border-l border-slate-200/80 space-y-0.5 py-0.5">
+                            <a href="{{ route('admin.standar-pelayanan.index') }}"
+                               class="group flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-colors {{ request()->routeIs('admin.standar-pelayanan.*') ? 'bg-blue-600 text-white font-medium shadow-xs' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">
+                                <div class="flex items-center gap-2 min-w-0">
+                                    <span class="w-1.5 h-1.5 rounded-full shrink-0 transition-colors {{ request()->routeIs('admin.standar-pelayanan.*') ? 'bg-white' : 'bg-slate-300 group-hover:bg-blue-500' }}"></span>
+                                    <span class="truncate">Standar Pelayanan</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
 
-                <!-- Dashboard Analitik SKM ULT -->
-                <a href="{{ route('admin.skm.dashboard') }}"
-                   class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.skm.dashboard') ? 'bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30' : 'text-gray-700 hover:bg-slate-50 hover:text-blue-600 hover:shadow-xs' }}">
-                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-                    <span>Analitik SKM ULT</span>
-                    <span class="ml-auto flex items-center gap-0.5 text-[10px] px-1.5 py-0.5 rounded-full {{ request()->routeIs('admin.skm.dashboard') ? 'bg-white/20 text-white' : 'bg-blue-50 text-blue-600 border border-blue-200' }} font-bold">NEW</span>
-                </a>
+                    <!-- Dropdown: Kabar & Informasi -->
+                    <div x-data="{ open: {{ request()->routeIs('admin.posts.*', 'admin.categories.*', 'admin.announcements.*') ? 'true' : 'false' }} }" class="space-y-1">
+                        <button type="button" 
+                                @click="open = !open" 
+                                class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all group {{ request()->routeIs('admin.posts.*', 'admin.categories.*', 'admin.announcements.*') ? 'text-blue-700 bg-blue-50/70 font-semibold' : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900' }}">
+                            <div class="flex items-center gap-3 min-w-0">
+                                <svg class="w-4 h-4 shrink-0 transition-colors {{ request()->routeIs('admin.posts.*', 'admin.categories.*', 'admin.announcements.*') ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15"></path>
+                                </svg>
+                                <span class="truncate">Kabar & Informasi</span>
+                            </div>
+                            <svg class="w-3.5 h-3.5 text-slate-400 transition-transform duration-200 shrink-0 ml-2" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div x-show="open" x-collapse x-cloak class="ml-4 pl-3 border-l border-slate-200/80 space-y-0.5 py-0.5">
+                            <a href="{{ route('admin.posts.index') }}"
+                               class="group flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-colors {{ request()->routeIs('admin.posts.*') ? 'bg-blue-600 text-white font-medium shadow-xs' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">
+                                <div class="flex items-center gap-2 min-w-0">
+                                    <span class="w-1.5 h-1.5 rounded-full shrink-0 transition-colors {{ request()->routeIs('admin.posts.*') ? 'bg-white' : 'bg-slate-300 group-hover:bg-blue-500' }}"></span>
+                                    <span class="truncate">Berita & Artikel</span>
+                                </div>
+                            </a>
+                            <a href="{{ route('admin.categories.index') }}"
+                               class="group flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-colors {{ request()->routeIs('admin.categories.*') ? 'bg-blue-600 text-white font-medium shadow-xs' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">
+                                <div class="flex items-center gap-2 min-w-0">
+                                    <span class="w-1.5 h-1.5 rounded-full shrink-0 transition-colors {{ request()->routeIs('admin.categories.*') ? 'bg-white' : 'bg-slate-300 group-hover:bg-blue-500' }}"></span>
+                                    <span class="truncate">Kategori Berita</span>
+                                </div>
+                            </a>
+                            <a href="{{ route('admin.announcements.index') }}"
+                               class="group flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-colors {{ request()->routeIs('admin.announcements.*') ? 'bg-blue-600 text-white font-medium shadow-xs' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">
+                                <div class="flex items-center gap-2 min-w-0">
+                                    <span class="w-1.5 h-1.5 rounded-full shrink-0 transition-colors {{ request()->routeIs('admin.announcements.*') ? 'bg-white' : 'bg-slate-300 group-hover:bg-blue-500' }}"></span>
+                                    <span class="truncate">Pengumuman</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
 
-                <div class="px-3 pb-2 pt-3 text-[11px] font-bold uppercase tracking-wider text-gray-500">
-                    Konfigurasi
+
+
+                    <!-- Dropdown: Media & Tampilan -->
+                    <div x-data="{ open: {{ request()->routeIs('admin.banners.*', 'admin.media.*') ? 'true' : 'false' }} }" class="space-y-1">
+                        <button type="button" 
+                                @click="open = !open" 
+                                class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all group {{ request()->routeIs('admin.banners.*', 'admin.media.*') ? 'text-blue-700 bg-blue-50/70 font-semibold' : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900' }}">
+                            <div class="flex items-center gap-3 min-w-0">
+                                <svg class="w-4 h-4 shrink-0 transition-colors {{ request()->routeIs('admin.banners.*', 'admin.media.*') ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                                <span class="truncate">Media & Tampilan</span>
+                            </div>
+                            <svg class="w-3.5 h-3.5 text-slate-400 transition-transform duration-200 shrink-0 ml-2" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div x-show="open" x-collapse x-cloak class="ml-4 pl-3 border-l border-slate-200/80 space-y-0.5 py-0.5">
+                            @if(Auth::user()?->isSuperAdmin())
+                            <a href="{{ route('admin.banners.index') }}"
+                               class="group flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-colors {{ request()->routeIs('admin.banners.*') ? 'bg-blue-600 text-white font-medium shadow-xs' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">
+                                <div class="flex items-center gap-2 min-w-0">
+                                    <span class="w-1.5 h-1.5 rounded-full shrink-0 transition-colors {{ request()->routeIs('admin.banners.*') ? 'bg-white' : 'bg-slate-300 group-hover:bg-blue-500' }}"></span>
+                                    <span class="truncate">Banner / Hero</span>
+                                </div>
+                            </a>
+                            @endif
+                            <a href="{{ route('admin.media.index') }}"
+                               class="group flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-colors {{ request()->routeIs('admin.media.*') ? 'bg-blue-600 text-white font-medium shadow-xs' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">
+                                <div class="flex items-center gap-2 min-w-0">
+                                    <span class="w-1.5 h-1.5 rounded-full shrink-0 transition-colors {{ request()->routeIs('admin.media.*') ? 'bg-white' : 'bg-slate-300 group-hover:bg-blue-500' }}"></span>
+                                    <span class="truncate">Media Library</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- SEO -->
-                <a href="{{ route('admin.seo.index') }}"
-                   class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.seo.*') ? 'bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30' : 'text-gray-700 hover:bg-slate-50 hover:text-blue-600 hover:shadow-xs' }}">
-                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    <span>SEO Dasar</span>
-                </a>
+                @if(Auth::user()?->isSuperAdmin())
+                <!-- SECTION 3: LAYANAN & PENGADUAN -->
+                <div class="space-y-1 pt-1">
+                    <div class="px-3 pb-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                        Layanan & Pengaduan
+                    </div>
 
-                <!-- Settings -->
-                <a href="{{ route('admin.settings.index') }}"
-                   class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.settings.*') ? 'bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30' : 'text-gray-700 hover:bg-slate-50 hover:text-blue-600 hover:shadow-xs' }}">
-                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                    <span>Pengaturan Website</span>
-                </a>
+                    <!-- Dropdown: Layanan ULT -->
+                    <div x-data="{ open: {{ request()->routeIs('admin.ult.*', 'admin.guestbook.*', 'admin.skm.*') ? 'true' : 'false' }} }" class="space-y-1">
+                        <button type="button" 
+                                @click="open = !open" 
+                                class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all group {{ request()->routeIs('admin.ult.*', 'admin.guestbook.*', 'admin.skm.*') ? 'text-blue-700 bg-blue-50/70 font-semibold' : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900' }}">
+                            <div class="flex items-center gap-3 min-w-0">
+                                <svg class="w-4 h-4 shrink-0 transition-colors {{ request()->routeIs('admin.ult.*', 'admin.guestbook.*', 'admin.skm.*') ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                                </svg>
+                                <span class="truncate">Layanan ULT</span>
+                            </div>
+                            <div class="flex items-center gap-1.5 shrink-0 ml-2">
+                                @if($pendingUltCount > 0)
+                                     <span class="text-[10px] px-1.5 py-0.5 rounded-full font-bold bg-amber-500 text-white leading-none">{{ $pendingUltCount }}</span>
+                                @endif
+                                <svg class="w-3.5 h-3.5 text-slate-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                        </button>
+                        <div x-show="open" x-collapse x-cloak class="ml-4 pl-3 border-l border-slate-200/80 space-y-0.5 py-0.5">
+                            <a href="{{ route('admin.ult.index') }}"
+                               class="group flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-colors {{ request()->routeIs('admin.ult.*') ? 'bg-blue-600 text-white font-medium shadow-xs' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">
+                                <div class="flex items-center gap-2 min-w-0">
+                                    <span class="w-1.5 h-1.5 rounded-full shrink-0 transition-colors {{ request()->routeIs('admin.ult.*') ? 'bg-white' : 'bg-slate-300 group-hover:bg-blue-500' }}"></span>
+                                    <span class="truncate">Permohonan ULT</span>
+                                </div>
+                                @if($pendingUltCount > 0)
+                                    <span class="text-[10px] px-1.5 py-0.5 rounded-full font-bold ml-1.5 shrink-0 leading-none {{ request()->routeIs('admin.ult.*') ? 'bg-white text-blue-700' : 'bg-amber-500 text-white' }}">{{ $pendingUltCount }}</span>
+                                @endif
+                            </a>
+                            <a href="{{ route('admin.guestbook.index') }}"
+                               class="group flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-colors {{ request()->routeIs('admin.guestbook.*') ? 'bg-blue-600 text-white font-medium shadow-xs' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">
+                                <div class="flex items-center gap-2 min-w-0">
+                                    <span class="w-1.5 h-1.5 rounded-full shrink-0 transition-colors {{ request()->routeIs('admin.guestbook.*') ? 'bg-white' : 'bg-slate-300 group-hover:bg-blue-500' }}"></span>
+                                    <span class="truncate">Buku Tamu ULT</span>
+                                </div>
+                            </a>
+                            <a href="{{ route('admin.skm.dashboard') }}"
+                               class="group flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-colors {{ request()->routeIs('admin.skm.*') ? 'bg-blue-600 text-white font-medium shadow-xs' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">
+                                <div class="flex items-center gap-2 min-w-0">
+                                    <span class="w-1.5 h-1.5 rounded-full shrink-0 transition-colors {{ request()->routeIs('admin.skm.*') ? 'bg-white' : 'bg-slate-300 group-hover:bg-blue-500' }}"></span>
+                                    <span class="truncate">Analitik SKM ULT</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
 
+                    <!-- Dropdown: Aduan & Kontak -->
+                    <div x-data="{ open: {{ request()->routeIs('admin.spmb.*', 'admin.gratification.*', 'admin.contacts.*') ? 'true' : 'false' }} }" class="space-y-1">
+                        <button type="button" 
+                                @click="open = !open" 
+                                class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all group {{ request()->routeIs('admin.spmb.*', 'admin.gratification.*', 'admin.contacts.*') ? 'text-blue-700 bg-blue-50/70 font-semibold' : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900' }}">
+                            <div class="flex items-center gap-3 min-w-0">
+                                <svg class="w-4 h-4 shrink-0 transition-colors {{ request()->routeIs('admin.spmb.*', 'admin.gratification.*', 'admin.contacts.*') ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+                                </svg>
+                                <span class="truncate">Aduan & Kontak</span>
+                            </div>
+                            <div class="flex items-center gap-1.5 shrink-0 ml-2">
+                                @if($totalAduanBadge > 0)
+                                    <span class="text-[10px] px-1.5 py-0.5 rounded-full font-bold bg-amber-500 text-white leading-none">{{ $totalAduanBadge }}</span>
+                                @endif
+                                <svg class="w-3.5 h-3.5 text-slate-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                        </button>
+                        <div x-show="open" x-collapse x-cloak class="ml-4 pl-3 border-l border-slate-200/80 space-y-0.5 py-0.5">
+                            <a href="{{ route('admin.spmb.index') }}"
+                               class="group flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-colors {{ request()->routeIs('admin.spmb.*') ? 'bg-blue-600 text-white font-medium shadow-xs' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">
+                                <div class="flex items-center gap-2 min-w-0">
+                                    <span class="w-1.5 h-1.5 rounded-full shrink-0 transition-colors {{ request()->routeIs('admin.spmb.*') ? 'bg-white' : 'bg-slate-300 group-hover:bg-blue-500' }}"></span>
+                                    <span class="truncate">Pengaduan SPMB</span>
+                                </div>
+                                @if($spmbPendingCount > 0)
+                                    <span class="text-[10px] px-1.5 py-0.5 rounded-full font-bold ml-1.5 shrink-0 leading-none {{ request()->routeIs('admin.spmb.*') ? 'bg-white text-blue-700' : 'bg-amber-500 text-white' }}">{{ $spmbPendingCount }}</span>
+                                @endif
+                            </a>
+                            <a href="{{ route('admin.gratification.index') }}"
+                               class="group flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-colors {{ request()->routeIs('admin.gratification.*') ? 'bg-blue-600 text-white font-medium shadow-xs' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">
+                                <div class="flex items-center gap-2 min-w-0">
+                                    <span class="w-1.5 h-1.5 rounded-full shrink-0 transition-colors {{ request()->routeIs('admin.gratification.*') ? 'bg-white' : 'bg-slate-300 group-hover:bg-blue-500' }}"></span>
+                                    <span class="truncate">Lapor Gratifikasi</span>
+                                </div>
+                                @if($gratPendingCount > 0)
+                                    <span class="text-[10px] px-1.5 py-0.5 rounded-full font-bold ml-1.5 shrink-0 leading-none {{ request()->routeIs('admin.gratification.*') ? 'bg-white text-blue-700' : 'bg-amber-500 text-white' }}">{{ $gratPendingCount }}</span>
+                                @endif
+                            </a>
+                            <a href="{{ route('admin.contacts.index') }}"
+                               class="group flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-colors {{ request()->routeIs('admin.contacts.*') ? 'bg-blue-600 text-white font-medium shadow-xs' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">
+                                <div class="flex items-center gap-2 min-w-0">
+                                    <span class="w-1.5 h-1.5 rounded-full shrink-0 transition-colors {{ request()->routeIs('admin.contacts.*') ? 'bg-white' : 'bg-slate-300 group-hover:bg-blue-500' }}"></span>
+                                    <span class="truncate">Pesan Masuk</span>
+                                </div>
+                                @if($contactCount > 0)
+                                    <span class="text-[10px] px-1.5 py-0.5 rounded-full font-bold ml-1.5 shrink-0 leading-none {{ request()->routeIs('admin.contacts.*') ? 'bg-white text-blue-700' : 'bg-indigo-500 text-white' }}">{{ $contactCount }}</span>
+                                @endif
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 4: SISTEM & IT -->
+                <div class="space-y-1 pt-1">
+                    <div class="px-3 pb-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                        Sistem & IT
+                    </div>
+
+                    <!-- Manajemen Pengguna (Super Admin) -->
+                    <a href="{{ route('admin.users.index') }}"
+                       class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs transition-all {{ request()->routeIs('admin.users.*') ? 'bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30' : 'text-slate-700 hover:bg-slate-50 hover:text-blue-600' }}">
+                        <svg class="w-4 h-4 shrink-0 transition-colors {{ request()->routeIs('admin.users.*') ? 'text-white' : 'text-slate-400 group-hover:text-blue-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                        <span class="truncate">Manajemen Pengguna</span>
+                    </a>
+
+                    <!-- Dropdown: Pengaturan Teknis -->
+                    <div x-data="{ open: {{ request()->routeIs('admin.menus.*', 'admin.seo.*', 'admin.settings.*') ? 'true' : 'false' }} }" class="space-y-1">
+                        <button type="button" 
+                                @click="open = !open" 
+                                class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all group {{ request()->routeIs('admin.menus.*', 'admin.seo.*', 'admin.settings.*') ? 'text-blue-700 bg-blue-50/70 font-semibold' : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900' }}">
+                            <div class="flex items-center gap-3 min-w-0">
+                                <svg class="w-4 h-4 shrink-0 transition-colors {{ request()->routeIs('admin.menus.*', 'admin.seo.*', 'admin.settings.*') ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                <span class="truncate">Pengaturan Teknis</span>
+                            </div>
+                            <svg class="w-3.5 h-3.5 text-slate-400 transition-transform duration-200 shrink-0 ml-2" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div x-show="open" x-collapse x-cloak class="ml-4 pl-3 border-l border-slate-200/80 space-y-0.5 py-0.5">
+                            <a href="{{ route('admin.menus.index') }}"
+                               class="group flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-colors {{ request()->routeIs('admin.menus.*') ? 'bg-blue-600 text-white font-medium shadow-xs' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">
+                                <div class="flex items-center gap-2 min-w-0">
+                                    <span class="w-1.5 h-1.5 rounded-full shrink-0 transition-colors {{ request()->routeIs('admin.menus.*') ? 'bg-white' : 'bg-slate-300 group-hover:bg-blue-500' }}"></span>
+                                    <span class="truncate">Menu Navigasi</span>
+                                </div>
+                            </a>
+                            <a href="{{ route('admin.seo.index') }}"
+                               class="group flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-colors {{ request()->routeIs('admin.seo.*') ? 'bg-blue-600 text-white font-medium shadow-xs' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">
+                                <div class="flex items-center gap-2 min-w-0">
+                                    <span class="w-1.5 h-1.5 rounded-full shrink-0 transition-colors {{ request()->routeIs('admin.seo.*') ? 'bg-white' : 'bg-slate-300 group-hover:bg-blue-500' }}"></span>
+                                    <span class="truncate">SEO Dasar</span>
+                                </div>
+                            </a>
+                            <a href="{{ route('admin.settings.index') }}"
+                               class="group flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-colors {{ request()->routeIs('admin.settings.*') ? 'bg-blue-600 text-white font-medium shadow-xs' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}">
+                                <div class="flex items-center gap-2 min-w-0">
+                                    <span class="w-1.5 h-1.5 rounded-full shrink-0 transition-colors {{ request()->routeIs('admin.settings.*') ? 'bg-white' : 'bg-slate-300 group-hover:bg-blue-500' }}"></span>
+                                    <span class="truncate">Pengaturan Website</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                @endif
+
+                <!-- SECTION: AKUN SAYA (Bisa Diakses Semua Akun) -->
+                <div class="space-y-1 pt-1">
+                    <div class="px-3 pb-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                        Akun Saya
+                    </div>
+                    <a href="{{ route('admin.profile.edit') }}"
+                       class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs transition-all {{ request()->routeIs('admin.profile.*') ? 'bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30' : 'text-slate-700 hover:bg-slate-50 hover:text-blue-600' }}">
+                        <svg class="w-4 h-4 shrink-0 transition-colors {{ request()->routeIs('admin.profile.*') ? 'text-white' : 'text-slate-400 group-hover:text-blue-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                        <span class="truncate">Profil & Keamanan</span>
+                    </a>
+                </div>
             </nav>
 
             <!-- User Info & Logout -->
             <div class="p-3 border-t border-slate-200/50 bg-white/40 backdrop-blur-md flex items-center justify-between">
-                <div class="flex items-center gap-2.5 min-w-0">
-                    <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-sky-500 text-white font-bold flex items-center justify-center text-xs shrink-0 shadow-xs">
+                <a href="{{ route('admin.profile.edit') }}" class="flex items-center gap-2.5 min-w-0 group hover:opacity-90 transition-opacity" title="Kelola Profil & Kredensial">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-sky-500 text-white font-bold flex items-center justify-center text-xs shrink-0 shadow-xs group-hover:ring-2 group-hover:ring-blue-400 transition-all">
                         {{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}
                     </div>
                     <div class="min-w-0">
-                        <p class="text-xs font-semibold text-gray-800 truncate">{{ Auth::user()->name ?? 'Administrator' }}</p>
-                        <p class="text-[10px] text-gray-500 truncate">{{ Auth::user()->email ?? '' }}</p>
+                        <p class="text-xs font-semibold text-gray-800 truncate group-hover:text-blue-600">{{ Auth::user()->name ?? 'Administrator' }}</p>
+                        <p class="text-[10px] text-gray-500 truncate flex items-center gap-1">
+                            <span>{{ Auth::user()->email ?? '' }}</span>
+                            @if(Auth::user()?->isSuperAdmin())
+                                <span class="inline-block px-1 py-0.2 bg-blue-100 text-blue-700 rounded text-[9px] font-bold">Admin Utama</span>
+                            @else
+                                <span class="inline-block px-1 py-0.2 bg-slate-100 text-slate-700 rounded text-[9px] font-semibold">Editor</span>
+                            @endif
+                        </p>
                     </div>
-                </div>
+                </a>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" title="Keluar" class="p-1.5 text-gray-400 hover:text-rose-600 hover:bg-rose-50/80 rounded-lg transition-colors cursor-pointer">
@@ -235,11 +495,16 @@
                 </div>
                 
                 <!-- Slot untuk Tombol Tambah/Aksi Kanan -->
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2.5">
                     @yield('header_action')
                     @yield('header_actions')
+                    <a href="{{ route('admin.profile.edit') }}"
+                       class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-600 hover:text-blue-600 bg-white/80 hover:bg-white backdrop-blur-sm border border-slate-200/80 rounded-xl transition-all shadow-xs hover:shadow-sm" title="Pengaturan Profil & Akun">
+                        <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                        <span>Profil Saya</span>
+                    </a>
                     <a href="{{ url('/') }}" target="_blank"
-                       class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-slate-600 hover:text-blue-600 bg-white/80 hover:bg-white backdrop-blur-sm border border-slate-200/80 rounded-xl transition-all shadow-xs hover:shadow-sm">
+                       class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-600 hover:text-blue-600 bg-white/80 hover:bg-white backdrop-blur-sm border border-slate-200/80 rounded-xl transition-all shadow-xs hover:shadow-sm">
                         <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                         <span>Lihat Website</span>
                     </a>
@@ -303,3 +568,4 @@
     @stack('scripts')
 </body>
 </html>
+

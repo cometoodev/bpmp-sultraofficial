@@ -56,11 +56,59 @@
         @keyframes marquee { 0% { transform: translateX(0%); } 100% { transform: translateX(-50%); } }
         .animate-marquee { display: flex; width: max-content; animation: marquee 30s linear infinite; }
         .animate-marquee:hover { animation-play-state: paused; }
+
+        /* Canva & Figma Interactive Canvas Bounding Box */
+        .canvas-block-section {
+            position: relative;
+            transition: outline 0.15s ease, box-shadow 0.15s ease;
+            cursor: pointer;
+        }
+        .canvas-block-section:hover {
+            outline: 2px dashed #60a5fa !important;
+            outline-offset: -2px !important;
+        }
+        .canvas-block-section.is-selected {
+            outline: 2px solid #2563eb !important;
+            outline-offset: -2px !important;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2) !important;
+            z-index: 35 !important;
+        }
+        .canvas-anchor-handle {
+            position: absolute;
+            width: 9px;
+            height: 9px;
+            background-color: #ffffff;
+            border: 2px solid #2563eb;
+            border-radius: 2px;
+            z-index: 45;
+            pointer-events: none;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        .canvas-handle-tl { top: -4.5px; left: -4.5px; }
+        .canvas-handle-tr { top: -4.5px; right: -4.5px; }
+        .canvas-handle-bl { bottom: -4.5px; left: -4.5px; }
+        .canvas-handle-br { bottom: -4.5px; right: -4.5px; }
+        .canvas-handle-tc { top: -4.5px; left: calc(50% - 4.5px); }
+        .canvas-handle-bc { bottom: -4.5px; left: calc(50% - 4.5px); }
+        .canvas-handle-ml { top: calc(50% - 4.5px); left: -4.5px; }
+        .canvas-handle-mr { top: calc(50% - 4.5px); right: -4.5px; }
+
+        /* Figma / Canva Floating Action Bar Pop Animation */
+        .canvas-action-toolbar {
+            filter: drop-shadow(0 12px 28px rgba(15, 23, 42, 0.35));
+            animation: figmaActionPop 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes figmaActionPop {
+            0% { opacity: 0; transform: translateY(-6px) scale(0.96); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
     </style>
 </head>
 <body class="bg-slate-100 font-sans text-slate-800 h-screen flex flex-col overflow-hidden" x-data="pageBuilder()">
     <!-- Hidden input for state synchronization (JSON) -->
     <input type="hidden" name="builder_data" id="builder_data_input" :value="JSON.stringify(blocks)">
+    <!-- Hidden input for quick canvas image upload -->
+    <input type="file" id="canvas-quick-image-input" accept="image/*" class="hidden" @change="handleCanvasImageUpload($event)">
     
     <!-- Top Navbar -->
     <header class="bg-white border-b border-slate-200 shadow-sm flex items-center justify-between px-6 py-3 shrink-0">
@@ -77,6 +125,12 @@
         </div>
 
         <div class="flex items-center gap-3">
+            <button type="button" @click="openAiModal()" class="px-4 py-2 bg-gradient-to-r from-violet-600 via-indigo-600 to-blue-600 hover:from-violet-700 hover:to-indigo-700 text-white rounded-lg text-sm font-bold transition-all shadow-md shadow-indigo-600/25 flex items-center gap-2 group hover:scale-[1.02] active:scale-[0.98]">
+                <svg class="w-4 h-4 text-amber-300 animate-pulse" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"/>
+                </svg>
+                <span>✨ AI Assistant</span>
+            </button>
             <button type="button" @click="showTemplateModal = true" class="px-4 py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-sm font-bold transition-colors flex items-center gap-2">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                 Template
@@ -757,6 +811,10 @@
                             </span>
                             <span>+ Glass Cards</span>
                         </button>
+                        <button type="button" @click="openAiModal()" class="col-span-2 p-2.5 bg-gradient-to-r from-violet-600 via-indigo-600 to-blue-600 hover:from-violet-700 hover:to-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-600/20 flex items-center justify-center gap-2 group mt-1">
+                            <svg class="w-3.5 h-3.5 text-amber-300 animate-pulse" fill="currentColor" viewBox="0 0 24 24"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"/></svg>
+                            <span>✨ Buat Section dengan AI Assistant</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1044,6 +1102,127 @@
             </div>
             <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end">
                 <button type="button" @click="closeTextSettings()" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition-colors">Terapkan / Selesai</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Generator Assistant Modal -->
+    <div x-show="showAiModal" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-md p-4 sm:p-6" @keydown.escape.window="if (!isGeneratingAi) showAiModal = false">
+        <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden border border-slate-200/80 flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-200" @click.away="if (!isGeneratingAi) showAiModal = false">
+            
+            <!-- Modal Header with gradient glow -->
+            <div class="relative px-6 py-5 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white flex justify-between items-center border-b border-indigo-900/40">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-500 to-pink-500 flex items-center justify-center shadow-lg shadow-indigo-500/30 text-white shrink-0">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h3 class="font-extrabold text-base text-white">AI Page Generator Assistant</h3>
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-500/30 border border-indigo-400/30 text-indigo-200">v2.0 Neural</span>
+                        </div>
+                        <p class="text-xs text-indigo-200/80 mt-0.5">Ketik prompt instruksi layout dan AI akan merancang struktur blok HTML siap pakai secara instan.</p>
+                    </div>
+                </div>
+                <button type="button" @click="showAiModal = false" :disabled="isGeneratingAi" class="p-2 text-slate-400 hover:text-white hover:bg-white/10 rounded-xl transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-6 overflow-y-auto space-y-5">
+                <!-- Textarea Prompt -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center justify-between">
+                        <span>Instruksi Prompt Desain</span>
+                        <span class="text-[11px] font-normal text-indigo-600">Mendukung perintah spesifik (misal: "3 kolom profil")</span>
+                    </label>
+                    <div class="relative">
+                        <textarea x-model="aiPrompt" rows="4" :disabled="isGeneratingAi"
+                            placeholder="Contoh: Buatkan struktur section profil baru dengan 3 kolom lengkap dengan ikon modern, badge tugas pokok, dan tombol aksi..."
+                            class="w-full text-sm rounded-2xl border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 p-4 transition-all shadow-inner text-slate-800 placeholder:text-slate-400 font-sans"></textarea>
+                        
+                        <button type="button" x-show="aiPrompt" @click="aiPrompt = ''" class="absolute top-3 right-3 text-slate-400 hover:text-slate-600 p-1" title="Bersihkan">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quick Preset Chips -->
+                <div>
+                    <span class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">Preset Prompt Siap Pakai:</span>
+                    <div class="flex flex-wrap gap-2">
+                        <button type="button" @click="applyAiPreset('Buatkan struktur section profil baru dengan 3 kolom')" class="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-semibold border border-indigo-200/80 transition-all flex items-center gap-1.5 hover:scale-[1.02]">
+                            <span>🏛️</span> Struktur Profil 3 Kolom
+                        </button>
+                        <button type="button" @click="applyAiPreset('Buatkan struktur section visi, misi, dan sasaran strategis lembaga')" class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl text-xs font-semibold border border-blue-200/80 transition-all flex items-center gap-1.5 hover:scale-[1.02]">
+                            <span>🎯</span> Visi, Misi & Sasaran
+                        </button>
+                        <button type="button" @click="applyAiPreset('Buatkan section statistik 4 indikator kinerja utama dan capaian mutu')" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl text-xs font-semibold border border-emerald-200/80 transition-all flex items-center gap-1.5 hover:scale-[1.02]">
+                            <span>📊</span> Statistik 4 Indikator Kinerja
+                        </button>
+                        <button type="button" @click="applyAiPreset('Buatkan katalog 6 kartu layanan unggulan dan maklumat pelayanan')" class="px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-700 rounded-xl text-xs font-semibold border border-amber-200/80 transition-all flex items-center gap-1.5 hover:scale-[1.02]">
+                            <span>🌟</span> 6 Layanan Unggulan
+                        </button>
+                        <button type="button" @click="applyAiPreset('Buatkan struktur tim pimpinan dan dewan penjamin mutu')" class="px-3 py-1.5 bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-xl text-xs font-semibold border border-purple-200/80 transition-all flex items-center gap-1.5 hover:scale-[1.02]">
+                            <span>👥</span> Struktur Tim Pimpinan
+                        </button>
+                        <button type="button" @click="applyAiPreset('Buatkan kotak kontak terpadu, aduan masyarakat, dan lokasi kantor')" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-xl text-xs font-semibold border border-rose-200/80 transition-all flex items-center gap-1.5 hover:scale-[1.02]">
+                            <span>📍</span> Kontak Terpadu & Aduan
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Style & Positioning Options -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-slate-100">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Gaya Desain Komponen</label>
+                        <select x-model="aiStyle" class="w-full text-xs rounded-xl border-slate-200 bg-slate-50 focus:bg-white">
+                            <option value="glassmorphism">Glassmorphism Modern (Backdrop Blur & Card)</option>
+                            <option value="card">Card Elegan & Kontras (Solid Border & Shadow)</option>
+                            <option value="minimalis">Minimalis Resmi (Standar Kemendikbudristek)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Penempatan di Halaman</label>
+                        <select x-model="aiPosition" class="w-full text-xs rounded-xl border-slate-200 bg-slate-50 focus:bg-white">
+                            <option value="bottom">Tambah di Paling Bawah (Akhir Halaman)</option>
+                            <option value="top">Tambah di Paling Atas (Awal Halaman)</option>
+                            <option value="replace" x-show="activeBlockIndex !== null">Gantikan Blok yang Sedang Dipilih</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Loading State -->
+                <div x-show="isGeneratingAi" style="display: none;" class="p-4 bg-indigo-50/80 rounded-2xl border border-indigo-100 flex items-center gap-3">
+                    <svg class="animate-spin w-5 h-5 text-indigo-600 shrink-0" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                    </svg>
+                    <div class="min-w-0">
+                        <span class="text-xs font-bold text-indigo-900 block" x-text="aiProgressText">Merancang struktur komponen...</span>
+                        <span class="text-[11px] text-indigo-600">Menyusun grid responsif Tailwind CSS dan atribut interaktif...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-between items-center">
+                <button type="button" @click="showAiModal = false" :disabled="isGeneratingAi" class="px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-800 transition-colors">
+                    Batal
+                </button>
+                <button type="button" @click="generateWithAi()" :disabled="!aiPrompt.trim() || isGeneratingAi" class="px-6 py-2.5 bg-gradient-to-r from-violet-600 via-indigo-600 to-blue-600 hover:from-violet-700 hover:to-indigo-700 disabled:opacity-50 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-600/25 flex items-center gap-2">
+                    <span x-show="!isGeneratingAi" class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-amber-300" fill="currentColor" viewBox="0 0 24 24"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg>
+                        <span>Generate Struktur HTML</span>
+                    </span>
+                    <span x-show="isGeneratingAi" class="flex items-center gap-2">
+                        <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
+                        <span>Sedang Merancang...</span>
+                    </span>
+                </button>
             </div>
         </div>
     </div>
@@ -1511,6 +1690,17 @@
             activeTextColor: '#1e293b',
             activeHiliteColor: '#fef08a',
             contextMenuBlockIndex: null,
+
+            // Quick Canvas Action State
+            canvasTargetBlockIndex: null,
+
+            // AI Assistant State
+            showAiModal: false,
+            aiPrompt: '',
+            aiStyle: 'glassmorphism',
+            aiPosition: 'bottom',
+            isGeneratingAi: false,
+            aiProgressText: 'Merancang struktur komponen...',
 
             // Text Settings state
             isTextSettingsOpen: false,
@@ -2190,6 +2380,629 @@
                     this.updatePreview(true);
                     this.initSortable();
                 }
+            },
+
+            selectBlockFromCanvas(bIdx, event) {
+                if (event) {
+                    if (event.target.tagName === 'A') {
+                        event.preventDefault();
+                    }
+                }
+                if (this.activeBlockIndex === bIdx) return;
+                this.activeBlockIndex = bIdx;
+                this.updatePreview(true);
+
+                this.$nextTick(() => {
+                    const sidebarItems = document.querySelectorAll('#blocks-container .block-item');
+                    if (sidebarItems[bIdx]) {
+                        sidebarItems[bIdx].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }
+                });
+            },
+
+            canvasActionEditText(bIdx, event) {
+                if (event) event.stopPropagation();
+                this.activeBlockIndex = bIdx;
+
+                const section = document.querySelector(`[data-block-index="${bIdx}"]`);
+                if (section) {
+                    const editable = section.querySelector('.builder-editable') || section.querySelector('h1, h2, h3, h4, p, span');
+                    if (editable) {
+                        editable.setAttribute('contenteditable', 'true');
+                        editable.focus();
+
+                        try {
+                            const range = document.createRange();
+                            range.selectNodeContents(editable);
+                            const sel = window.getSelection();
+                            sel.removeAllRanges();
+                            sel.addRange(range);
+                        } catch (e) {}
+
+                        Swal.fire({
+                            toast: true,
+                            position: 'top-end',
+                            icon: 'info',
+                            title: 'Mode edit teks aktif! Anda dapat langsung mengetik di teks.',
+                            showConfirmButton: false,
+                            timer: 2500,
+                            customClass: {
+                                popup: 'bg-slate-900/90 text-white rounded-2xl shadow-xl border border-slate-700'
+                            }
+                        });
+                        return;
+                    }
+                }
+
+                this.$nextTick(() => {
+                    const sidebarItems = document.querySelectorAll('#blocks-container .block-item');
+                    if (sidebarItems[bIdx]) {
+                        sidebarItems[bIdx].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        const input = sidebarItems[bIdx].querySelector('input[type="text"], textarea');
+                        if (input) input.focus();
+                    }
+                });
+            },
+
+            canvasActionChangeImage(bIdx, event) {
+                if (event) event.stopPropagation();
+                this.canvasTargetBlockIndex = bIdx;
+                const fileInput = document.getElementById('canvas-quick-image-input');
+                if (fileInput) {
+                    fileInput.click();
+                }
+            },
+
+            async handleCanvasImageUpload(event) {
+                const file = event.target.files[0];
+                if (!file || this.canvasTargetBlockIndex === null) return;
+                const bIdx = this.canvasTargetBlockIndex;
+                const block = this.blocks[bIdx];
+                if (!block) return;
+
+                const formData = new FormData();
+                formData.append('image', file);
+
+                Swal.fire({
+                    title: 'Mengunggah Gambar...',
+                    text: 'Mohon tunggu sebentar',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    },
+                    customClass: {
+                        popup: 'bg-white/95 backdrop-blur-xl border border-slate-200 shadow-2xl rounded-3xl'
+                    }
+                });
+
+                try {
+                    const response = await fetch('{{ route('admin.pages.builder.upload_image') }}', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: formData
+                    });
+
+                    const data = await response.json();
+                    if (response.ok && data.url) {
+                        if (block.type === 'image') {
+                            block.content.image = data.url;
+                        } else if (block.type === 'hero') {
+                            block.content.bg_image = data.url;
+                        } else if (block.type === 'feature') {
+                            block.content.image_url = data.url;
+                        } else if (block.type === 'glass_cards' && block.content && block.content.cards && block.content.cards.length > 0) {
+                            block.content.cards[0].image = data.url;
+                        } else if (block.type === 'html_custom' || block.type === 'html' || block.type === 'text') {
+                            let rawHtml = typeof block.content === 'string' ? block.content : (block.content.html || '');
+                            if (/<img[^>]+src=["'][^"']*["']/i.test(rawHtml)) {
+                                rawHtml = rawHtml.replace(/(<img[^>]+src=["'])[^"']*["']/i, `$1${data.url}"`);
+                            } else {
+                                rawHtml += `<div class="my-6 text-center"><img src="${data.url}" alt="Gambar Komponen" class="max-w-2xl mx-auto rounded-3xl shadow-xl w-full object-cover"></div>`;
+                            }
+                            if (typeof block.content === 'string') {
+                                block.content = rawHtml;
+                            } else {
+                                block.content.html = rawHtml;
+                            }
+                        } else if (block.content && typeof block.content === 'object') {
+                            block.content.image = data.url;
+                        }
+
+                        this.syncState();
+                        this.updatePreview(true);
+                        Swal.fire({
+                            toast: true,
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'Gambar berhasil diperbarui!',
+                            showConfirmButton: false,
+                            timer: 2500,
+                            customClass: {
+                                popup: 'bg-slate-900/90 text-white rounded-2xl shadow-xl border border-slate-700'
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal Mengunggah',
+                            text: data.message || 'Gagal mengunggah gambar ke server.',
+                            customClass: {
+                                popup: 'bg-white/95 backdrop-blur-xl border border-slate-200 shadow-2xl rounded-3xl'
+                            }
+                        });
+                    }
+                } catch (err) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Kesalahan Sistem',
+                        text: 'Terjadi kesalahan jaringan saat mengunggah gambar.',
+                        customClass: {
+                            popup: 'bg-white/95 backdrop-blur-xl border border-slate-200 shadow-2xl rounded-3xl'
+                        }
+                    });
+                } finally {
+                    event.target.value = '';
+                }
+            },
+
+            canvasActionDelete(bIdx, event) {
+                if (event) event.stopPropagation();
+                Swal.fire({
+                    title: 'Hapus Section Ini?',
+                    text: 'Komponen section ini akan dihapus dari halaman.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#e11d48',
+                    cancelButtonColor: '#64748b',
+                    confirmButtonText: 'Ya, Hapus',
+                    cancelButtonText: 'Batal',
+                    customClass: {
+                        popup: 'bg-white/95 backdrop-blur-xl border border-slate-200 shadow-2xl rounded-3xl'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.removeBlock(bIdx);
+                        Swal.fire({
+                            toast: true,
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'Section berhasil dihapus.',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            customClass: {
+                                popup: 'bg-slate-900/90 text-white rounded-2xl shadow-xl border border-slate-700'
+                            }
+                        });
+                    }
+                });
+            },
+
+            openAiModal(defaultPrompt = '') {
+                this.aiPrompt = defaultPrompt || this.aiPrompt;
+                this.showAiModal = true;
+            },
+
+            applyAiPreset(presetText) {
+                this.aiPrompt = presetText;
+            },
+
+            async generateWithAi() {
+                const prompt = (this.aiPrompt || '').trim();
+                if (!prompt) return;
+
+                this.isGeneratingAi = true;
+                this.aiProgressText = 'Menganalisis prompt instruksi tata letak...';
+
+                await new Promise(r => setTimeout(r, 220));
+                this.aiProgressText = 'Menyusun struktur kolom responsif Tailwind CSS...';
+
+                await new Promise(r => setTimeout(r, 220));
+                this.aiProgressText = 'Mengharmonisasikan estetika & elemen interaktif...';
+
+                await new Promise(r => setTimeout(r, 200));
+
+                let cardStyleClass = '';
+                if (this.aiStyle === 'glassmorphism') {
+                    cardStyleClass = 'bg-white/90 backdrop-blur-xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-blue-300 hover:-translate-y-1.5 transition-all duration-300';
+                } else if (this.aiStyle === 'card') {
+                    cardStyleClass = 'bg-white border border-slate-200 shadow-lg hover:shadow-2xl hover:border-indigo-400 hover:-translate-y-1.5 transition-all duration-300';
+                } else {
+                    cardStyleClass = 'bg-slate-50/90 border border-slate-200 hover:bg-white hover:border-slate-300 hover:shadow-md transition-all duration-200';
+                }
+
+                let generatedHtml = '';
+
+                // Pattern 1: Profil / 3 Kolom
+                if (/3\s*kolom|profil|profile|struktur\s*profil|tugas\s*pokok|pilar/i.test(prompt)) {
+                    generatedHtml = `<!-- SECTION: STRUKTUR PROFIL 3 KOLOM BPMP SULTRA -->
+<div class="w-full max-w-6xl mx-auto py-12 px-4 sm:px-6">
+    <!-- Header Section -->
+    <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-widest bg-blue-50 text-blue-700 border border-blue-200/60 mb-3 shadow-xs">
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse"></span>
+            Profil & Pilar Layanan
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight mb-4 builder-editable" contenteditable="true" data-field="title">
+            Struktur Profil & Pilar Transformasi Mutu Pendidikan
+        </h2>
+        <p class="text-base text-slate-600 leading-relaxed builder-editable" contenteditable="true" data-field="subtitle">
+            Balai Penjaminan Mutu Pendidikan (BPMP) Provinsi Sulawesi Tenggara berkomitmen mengawal peningkatan mutu dan pemerataan akses pendidikan di 17 Kabupaten/Kota.
+        </p>
+    </div>
+
+    <!-- 3 Kolom Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Kolom 1 -->
+        <div class="group relative ${cardStyleClass} rounded-3xl p-8 flex flex-col justify-between">
+            <div>
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center mb-6 shadow-md shadow-blue-500/25 group-hover:scale-110 transition-transform">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                </div>
+                <span class="text-[11px] font-bold text-blue-600 uppercase tracking-widest block mb-1">Pilar 01</span>
+                <h3 class="text-xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors builder-editable" contenteditable="true">
+                    Kedudukan & Tugas Pokok
+                </h3>
+                <p class="text-sm text-slate-600 leading-relaxed mb-6 builder-editable" contenteditable="true">
+                    Sebagai Unit Pelaksana Teknis Kementerian Pendidikan Dasar dan Menengah yang menyelenggarakan penjaminan dan fasilitasi peningkatan mutu pendidikan dasar dan menengah.
+                </p>
+                <ul class="space-y-2.5 text-xs text-slate-600 mb-6 border-t border-slate-100 pt-4">
+                    <li class="flex items-center gap-2"><svg class="w-4 h-4 text-emerald-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> <span>Pemetaan Mutu Pendidikan Berkelanjutan</span></li>
+                    <li class="flex items-center gap-2"><svg class="w-4 h-4 text-emerald-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> <span>Supervisi Satuan Pendidikan Daerah</span></li>
+                </ul>
+            </div>
+            <a href="#" class="inline-flex items-center justify-between px-4 py-2.5 bg-slate-50 group-hover:bg-blue-50 text-slate-700 group-hover:text-blue-700 rounded-xl text-xs font-bold transition-colors">
+                <span>Pelajari Selengkapnya</span>
+                <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+
+        <!-- Kolom 2 -->
+        <div class="group relative ${cardStyleClass} rounded-3xl p-8 flex flex-col justify-between">
+            <div>
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-indigo-600 to-purple-600 text-white flex items-center justify-center mb-6 shadow-md shadow-indigo-500/25 group-hover:scale-110 transition-transform">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                </div>
+                <span class="text-[11px] font-bold text-indigo-600 uppercase tracking-widest block mb-1">Pilar 02</span>
+                <h3 class="text-xl font-bold text-slate-900 mb-3 group-hover:text-indigo-600 transition-colors builder-editable" contenteditable="true">
+                    Fasilitasi & Pendampingan Mutu
+                </h3>
+                <p class="text-sm text-slate-600 leading-relaxed mb-6 builder-editable" contenteditable="true">
+                    Mendampingi implementasi kebijakan kurikulum, asesmen nasional, dan digitalisasi pembelajaran untuk seluruh jenjang sekolah di wilayah Sulawesi Tenggara.
+                </p>
+                <ul class="space-y-2.5 text-xs text-slate-600 mb-6 border-t border-slate-100 pt-4">
+                    <li class="flex items-center gap-2"><svg class="w-4 h-4 text-emerald-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> <span>Peningkatan Kapasitas SDM Pendidik</span></li>
+                    <li class="flex items-center gap-2"><svg class="w-4 h-4 text-emerald-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> <span>Pemanfaatan Rapor Pendidikan</span></li>
+                </ul>
+            </div>
+            <a href="#" class="inline-flex items-center justify-between px-4 py-2.5 bg-slate-50 group-hover:bg-indigo-50 text-slate-700 group-hover:text-indigo-700 rounded-xl text-xs font-bold transition-colors">
+                <span>Pelajari Selengkapnya</span>
+                <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+
+        <!-- Kolom 3 -->
+        <div class="group relative ${cardStyleClass} rounded-3xl p-8 flex flex-col justify-between">
+            <div>
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-teal-600 to-emerald-600 text-white flex items-center justify-center mb-6 shadow-md shadow-teal-500/25 group-hover:scale-110 transition-transform">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                </div>
+                <span class="text-[11px] font-bold text-teal-600 uppercase tracking-widest block mb-1">Pilar 03</span>
+                <h3 class="text-xl font-bold text-slate-900 mb-3 group-hover:text-teal-600 transition-colors builder-editable" contenteditable="true">
+                    Kemitraan & Advokasi Pemda
+                </h3>
+                <p class="text-sm text-slate-600 leading-relaxed mb-6 builder-editable" contenteditable="true">
+                    Membangun kolaborasi strategis dengan 17 Pemerintah Daerah untuk mendorong alokasi anggaran dan regulasi yang mendukung Standar Pelayanan Minimal (SPM) Pendidikan.
+                </p>
+                <ul class="space-y-2.5 text-xs text-slate-600 mb-6 border-t border-slate-100 pt-4">
+                    <li class="flex items-center gap-2"><svg class="w-4 h-4 text-emerald-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> <span>Advokasi Kebijakan SPM Pendidikan</span></li>
+                    <li class="flex items-center gap-2"><svg class="w-4 h-4 text-emerald-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> <span>Forum Komunikasi Pemangku Kepentingan</span></li>
+                </ul>
+            </div>
+            <a href="#" class="inline-flex items-center justify-between px-4 py-2.5 bg-slate-50 group-hover:bg-teal-50 text-slate-700 group-hover:text-teal-700 rounded-xl text-xs font-bold transition-colors">
+                <span>Pelajari Selengkapnya</span>
+                <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+    </div>
+</div>`;
+                } else if (/visi|misi|sasaran/i.test(prompt)) {
+                    generatedHtml = `<!-- SECTION: VISI MISI & SASARAN STRATEGIS -->
+<div class="w-full max-w-6xl mx-auto py-12 px-4 sm:px-6">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-widest bg-indigo-50 text-indigo-700 border border-indigo-200/60 mb-3 shadow-xs">
+            Arah & Kebijakan
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight mb-4 builder-editable" contenteditable="true">
+            Visi, Misi & Sasaran Strategis BPMP Sultra
+        </h2>
+        <p class="text-base text-slate-600 leading-relaxed builder-editable" contenteditable="true">
+            Landasan kerja dan komitmen utama dalam mewujudkan layanan penjaminan mutu pendidikan yang berkualitas, transparan, dan berdampak nyata bagi daerah.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <!-- Visi Card (5 Cols) -->
+        <div class="lg:col-span-5 ${cardStyleClass} rounded-3xl p-8 flex flex-col justify-between border-t-4 border-t-indigo-600">
+            <div>
+                <span class="text-xs font-bold text-indigo-600 uppercase tracking-widest block mb-2">Visi Lembaga</span>
+                <h3 class="text-2xl font-extrabold text-slate-900 leading-snug mb-6 builder-editable" contenteditable="true">
+                    "Terwujudnya Penjaminan Mutu Pendidikan yang Unggul, Berkarakter, dan Berkelanjutan di Seluruh Wilayah Sulawesi Tenggara."
+                </h3>
+            </div>
+            <div class="p-4 bg-indigo-50/70 rounded-2xl border border-indigo-100 flex items-center gap-3">
+                <svg class="w-8 h-8 text-indigo-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                <span class="text-xs font-semibold text-indigo-900">Mendorong percepatan mutu berbasis data terpadu asesmen nasional.</span>
+            </div>
+        </div>
+
+        <!-- Misi Cards (7 Cols) -->
+        <div class="lg:col-span-7 space-y-4">
+            <div class="${cardStyleClass} rounded-2xl p-6 flex items-start gap-4">
+                <span class="w-9 h-9 rounded-xl bg-blue-600 text-white font-bold text-sm flex items-center justify-center shrink-0 shadow-sm">1</span>
+                <div>
+                    <h4 class="text-base font-bold text-slate-900 mb-1 builder-editable" contenteditable="true">Pemetaan & Fasilitasi Mutu Terintegrasi</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed builder-editable" contenteditable="true">Melaksanakan pemetaan mutu pendidikan secara komprehensif untuk seluruh jenjang PAUD, SD, SMP, SMA, dan SMK di 17 Kab/Kota.</p>
+                </div>
+            </div>
+            <div class="${cardStyleClass} rounded-2xl p-6 flex items-start gap-4">
+                <span class="w-9 h-9 rounded-xl bg-indigo-600 text-white font-bold text-sm flex items-center justify-center shrink-0 shadow-sm">2</span>
+                <div>
+                    <h4 class="text-base font-bold text-slate-900 mb-1 builder-editable" contenteditable="true">Supervisi & Pendampingan Satuan Pendidikan</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed builder-editable" contenteditable="true">Memberikan pendampingan langsung bagi satuan pendidikan dalam perencanaan berbasis data dan perbaikan iklim pembelajaran.</p>
+                </div>
+            </div>
+            <div class="${cardStyleClass} rounded-2xl p-6 flex items-start gap-4">
+                <span class="w-9 h-9 rounded-xl bg-teal-600 text-white font-bold text-sm flex items-center justify-center shrink-0 shadow-sm">3</span>
+                <div>
+                    <h4 class="text-base font-bold text-slate-900 mb-1 builder-editable" contenteditable="true">Kemitraan Strategis dengan Pemerintah Daerah</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed builder-editable" contenteditable="true">Memperkuat kolaborasi multipihak untuk mendorong capaian Standar Pelayanan Minimal (SPM) Pendidikan di daerah.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>`;
+                } else if (/statistik|indikator|kpi|capaian|metrik/i.test(prompt)) {
+                    generatedHtml = `<!-- SECTION: STATISTIK & INDIKATOR CAPAIAN -->
+<div class="w-full max-w-6xl mx-auto py-12 px-4 sm:px-6">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-widest bg-emerald-50 text-emerald-700 border border-emerald-200/60 mb-3 shadow-xs">
+            Capaian Kinerja
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight mb-4 builder-editable" contenteditable="true">
+            Statistik & Indikator Kinerja Utama
+        </h2>
+        <p class="text-base text-slate-600 leading-relaxed builder-editable" contenteditable="true">
+            Akumulasi capaian pendampingan mutu pendidikan di seluruh wilayah kerja BPMP Sulawesi Tenggara.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="${cardStyleClass} rounded-3xl p-6 text-center group">
+            <span class="text-4xl font-extrabold text-blue-600 block mb-2 builder-editable" contenteditable="true">17</span>
+            <span class="text-sm font-bold text-slate-900 block mb-1 builder-editable" contenteditable="true">Kabupaten / Kota</span>
+            <p class="text-xs text-slate-500 builder-editable" contenteditable="true">Terjangkau advokasi dan supervisi SPM pendidikan.</p>
+        </div>
+        <div class="${cardStyleClass} rounded-3xl p-6 text-center group">
+            <span class="text-4xl font-extrabold text-indigo-600 block mb-2 builder-editable" contenteditable="true">4.250+</span>
+            <span class="text-sm font-bold text-slate-900 block mb-1 builder-editable" contenteditable="true">Satuan Pendidikan</span>
+            <p class="text-xs text-slate-500 builder-editable" contenteditable="true">Sekolah terbina dalam perencanaan berbasis data.</p>
+        </div>
+        <div class="${cardStyleClass} rounded-3xl p-6 text-center group">
+            <span class="text-4xl font-extrabold text-emerald-600 block mb-2 builder-editable" contenteditable="true">98.6%</span>
+            <span class="text-sm font-bold text-slate-900 block mb-1 builder-editable" contenteditable="true">Indeks Kepuasan</span>
+            <p class="text-xs text-slate-500 builder-editable" contenteditable="true">Tingkat kepuasan masyarakat terhadap layanan ULT.</p>
+        </div>
+        <div class="${cardStyleClass} rounded-3xl p-6 text-center group">
+            <span class="text-4xl font-extrabold text-amber-600 block mb-2 builder-editable" contenteditable="true">100%</span>
+            <span class="text-sm font-bold text-slate-900 block mb-1 builder-editable" contenteditable="true">Aduan Tuntas</span>
+            <p class="text-xs text-slate-500 builder-editable" contenteditable="true">Penyelesaian permohonan dan aduan tepat waktu.</p>
+        </div>
+    </div>
+</div>`;
+                } else if (/layanan|program|katalog|maklumat/i.test(prompt)) {
+                    generatedHtml = `<!-- SECTION: 6 LAYANAN UNGGULAN -->
+<div class="w-full max-w-6xl mx-auto py-12 px-4 sm:px-6">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-widest bg-amber-50 text-amber-700 border border-amber-200/60 mb-3 shadow-xs">
+            Katalog Layanan Publik
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight mb-4 builder-editable" contenteditable="true">
+            Daftar Layanan Unggulan BPMP Sultra
+        </h2>
+        <p class="text-base text-slate-600 leading-relaxed builder-editable" contenteditable="true">
+            Akses cepat permohonan layanan publik terpadu, konsultasi, dan fasilitasi mutu pendidikan secara transparan.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="${cardStyleClass} rounded-3xl p-6 flex flex-col justify-between">
+            <div>
+                <span class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center font-bold mb-4">01</span>
+                <h3 class="text-base font-bold text-slate-900 mb-2 builder-editable" contenteditable="true">Konsultasi Rapor Pendidikan</h3>
+                <p class="text-xs text-slate-600 mb-4 builder-editable" contenteditable="true">Pendampingan analisis capaian indikator mutu sekolah dan rekomendasi pembenahan.</p>
+            </div>
+            <a href="#" class="text-xs font-bold text-blue-600 hover:text-blue-800">Ajukan Layanan &rarr;</a>
+        </div>
+        <div class="${cardStyleClass} rounded-3xl p-6 flex flex-col justify-between">
+            <div>
+                <span class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold mb-4">02</span>
+                <h3 class="text-base font-bold text-slate-900 mb-2 builder-editable" contenteditable="true">Fasilitasi Kurikulum Merdeka</h3>
+                <p class="text-xs text-slate-600 mb-4 builder-editable" contenteditable="true">Bimbingan teknis dan workshop penguatan pembelajaran mendalam di satuan pendidikan.</p>
+            </div>
+            <a href="#" class="text-xs font-bold text-indigo-600 hover:text-indigo-800">Ajukan Layanan &rarr;</a>
+        </div>
+        <div class="${cardStyleClass} rounded-3xl p-6 flex flex-col justify-between">
+            <div>
+                <span class="w-10 h-10 rounded-xl bg-teal-100 text-teal-600 flex items-center justify-center font-bold mb-4">03</span>
+                <h3 class="text-base font-bold text-slate-900 mb-2 builder-editable" contenteditable="true">Pendampingan SPM Pendidikan</h3>
+                <p class="text-xs text-slate-600 mb-4 builder-editable" contenteditable="true">Advokasi terpadu bagi Dinas Pendidikan daerah dalam pengalokasian anggaran prioritas.</p>
+            </div>
+            <a href="#" class="text-xs font-bold text-teal-600 hover:text-teal-800">Ajukan Layanan &rarr;</a>
+        </div>
+        <div class="${cardStyleClass} rounded-3xl p-6 flex flex-col justify-between">
+            <div>
+                <span class="w-10 h-10 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center font-bold mb-4">04</span>
+                <h3 class="text-base font-bold text-slate-900 mb-2 builder-editable" contenteditable="true">Unit Layanan Terpadu (ULT)</h3>
+                <p class="text-xs text-slate-600 mb-4 builder-editable" contenteditable="true">Pelayanan informasi publik, penerimaan tamu kedinasan, dan registrasi konsultasi langsung.</p>
+            </div>
+            <a href="#" class="text-xs font-bold text-purple-600 hover:text-purple-800">Ajukan Layanan &rarr;</a>
+        </div>
+        <div class="${cardStyleClass} rounded-3xl p-6 flex flex-col justify-between">
+            <div>
+                <span class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center font-bold mb-4">05</span>
+                <h3 class="text-base font-bold text-slate-900 mb-2 builder-editable" contenteditable="true">Permohonan Narasumber & Fasilitator</h3>
+                <p class="text-xs text-slate-600 mb-4 builder-editable" contenteditable="true">Layanan penyediaan widyaprada dan tenaga ahli penjaminan mutu untuk kegiatan daerah.</p>
+            </div>
+            <a href="#" class="text-xs font-bold text-amber-600 hover:text-amber-800">Ajukan Layanan &rarr;</a>
+        </div>
+        <div class="${cardStyleClass} rounded-3xl p-6 flex flex-col justify-between">
+            <div>
+                <span class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center font-bold mb-4">06</span>
+                <h3 class="text-base font-bold text-slate-900 mb-2 builder-editable" contenteditable="true">Pengaduan & Aspirasi Masyarakat</h3>
+                <p class="text-xs text-slate-600 mb-4 builder-editable" contenteditable="true">Kanal pelaporan resmi gratifikasi, benturan kepentingan, serta aduan layanan publik.</p>
+            </div>
+            <a href="#" class="text-xs font-bold text-rose-600 hover:text-rose-800">Ajukan Layanan &rarr;</a>
+        </div>
+    </div>
+</div>`;
+                } else if (/tim|pimpinan|organisasi|pejabat/i.test(prompt)) {
+                    generatedHtml = `<!-- SECTION: STRUKTUR PIMPINAN & TIM -->
+<div class="w-full max-w-6xl mx-auto py-12 px-4 sm:px-6">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-widest bg-purple-50 text-purple-700 border border-purple-200/60 mb-3 shadow-xs">
+            Organisasi & Kepemimpinan
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight mb-4 builder-editable" contenteditable="true">
+            Pimpinan & Tim Pengembang Mutu
+        </h2>
+        <p class="text-base text-slate-600 leading-relaxed builder-editable" contenteditable="true">
+            Para penggerak transformasi penjaminan mutu pendidikan di wilayah Provinsi Sulawesi Tenggara.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="${cardStyleClass} rounded-3xl p-8 text-center group">
+            <div class="w-24 h-24 mx-auto rounded-full bg-slate-200 border-4 border-white shadow-md overflow-hidden mb-6">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&fit=crop" class="w-full h-full object-cover">
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-1 builder-editable" contenteditable="true">Kepala Balai</h3>
+            <span class="text-xs font-semibold text-blue-600 uppercase tracking-widest block mb-3 builder-editable" contenteditable="true">BPMP Provinsi Sulawesi Tenggara</span>
+            <p class="text-xs text-slate-500 leading-relaxed builder-editable" contenteditable="true">Memimpin penetapan arah strategis dan kebijakan mutu pendidikan di daerah.</p>
+        </div>
+        <div class="${cardStyleClass} rounded-3xl p-8 text-center group">
+            <div class="w-24 h-24 mx-auto rounded-full bg-slate-200 border-4 border-white shadow-md overflow-hidden mb-6">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&fit=crop" class="w-full h-full object-cover">
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-1 builder-editable" contenteditable="true">Kasubbag Umum</h3>
+            <span class="text-xs font-semibold text-indigo-600 uppercase tracking-widest block mb-3 builder-editable" contenteditable="true">Tata Usaha & Keuangan</span>
+            <p class="text-xs text-slate-500 leading-relaxed builder-editable" contenteditable="true">Mengelola koordinasi ketatausahaan, kepegawaian, keuangan, dan BMN.</p>
+        </div>
+        <div class="${cardStyleClass} rounded-3xl p-8 text-center group">
+            <div class="w-24 h-24 mx-auto rounded-full bg-slate-200 border-4 border-white shadow-md overflow-hidden mb-6">
+                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&fit=crop" class="w-full h-full object-cover">
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-1 builder-editable" contenteditable="true">Koordinator Widyaprada</h3>
+            <span class="text-xs font-semibold text-teal-600 uppercase tracking-widest block mb-3 builder-editable" contenteditable="true">Penjaminan Mutu Pendidikan</span>
+            <p class="text-xs text-slate-500 leading-relaxed builder-editable" contenteditable="true">Memimpin gugus tugas supervisi teknis dan fasilitasi satuan pendidikan.</p>
+        </div>
+    </div>
+</div>`;
+                } else {
+                    const sanitizedTitle = prompt.length > 50 ? prompt.substring(0, 50) + '...' : prompt;
+                    generatedHtml = `<!-- SECTION: ${sanitizedTitle.toUpperCase()} -->
+<div class="w-full max-w-6xl mx-auto py-12 px-4 sm:px-6">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-widest bg-blue-50 text-blue-700 border border-blue-200/60 mb-3 shadow-xs">
+            Komponen Khusus
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight mb-4 builder-editable" contenteditable="true">
+            ${prompt}
+        </h2>
+        <p class="text-base text-slate-600 leading-relaxed builder-editable" contenteditable="true">
+            Struktur konten section dibuat secara cerdas oleh AI Assistant. Anda dapat langsung mengklik teks apa saja untuk menyunting.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="${cardStyleClass} rounded-3xl p-8 flex flex-col justify-between">
+            <div>
+                <div class="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-bold mb-6 shadow-md shadow-blue-500/20">01</div>
+                <h3 class="text-xl font-bold text-slate-900 mb-3 builder-editable" contenteditable="true">Pilar Informasi Utama</h3>
+                <p class="text-sm text-slate-600 leading-relaxed mb-6 builder-editable" contenteditable="true">Ketikkan uraian penjelasan atau detail program kerja pada bagian kartu ini secara leluasa.</p>
+            </div>
+            <a href="#" class="inline-flex items-center text-xs font-bold text-blue-600 hover:text-blue-800">Pelajari Selengkapnya &rarr;</a>
+        </div>
+        <div class="${cardStyleClass} rounded-3xl p-8 flex flex-col justify-between">
+            <div>
+                <div class="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-bold mb-6 shadow-md shadow-indigo-500/20">02</div>
+                <h3 class="text-xl font-bold text-slate-900 mb-3 builder-editable" contenteditable="true">Fasilitasi & Pelayanan</h3>
+                <p class="text-sm text-slate-600 leading-relaxed mb-6 builder-editable" contenteditable="true">Lengkapi poin-poin penting, data pendukung, atau tahapan alur proses yang ingin disampaikan.</p>
+            </div>
+            <a href="#" class="inline-flex items-center text-xs font-bold text-indigo-600 hover:text-indigo-800">Pelajari Selengkapnya &rarr;</a>
+        </div>
+        <div class="${cardStyleClass} rounded-3xl p-8 flex flex-col justify-between">
+            <div>
+                <div class="w-12 h-12 rounded-2xl bg-teal-600 text-white flex items-center justify-center font-bold mb-6 shadow-md shadow-teal-500/20">03</div>
+                <h3 class="text-xl font-bold text-slate-900 mb-3 builder-editable" contenteditable="true">Kemitraan & Evaluasi</h3>
+                <p class="text-sm text-slate-600 leading-relaxed mb-6 builder-editable" contenteditable="true">Tambahkan ringkasan capaian, dokumen regulasi, atau tautan kontak layanan instansi.</p>
+            </div>
+            <a href="#" class="inline-flex items-center text-xs font-bold text-teal-600 hover:text-teal-800">Pelajari Selengkapnya &rarr;</a>
+        </div>
+    </div>
+</div>`;
+                }
+
+                const newBlock = {
+                    id: Date.now(),
+                    type: 'html_custom',
+                    settings: {
+                        bg: 'transparent',
+                        padding: 'none',
+                        align: 'left',
+                        wrapper_class: ''
+                    },
+                    content: {
+                        html: generatedHtml
+                    }
+                };
+
+                if (this.aiPosition === 'top') {
+                    this.blocks.unshift(newBlock);
+                    this.activeBlockIndex = 0;
+                } else if (this.aiPosition === 'replace' && this.activeBlockIndex !== null) {
+                    this.blocks.splice(this.activeBlockIndex, 1, newBlock);
+                } else {
+                    this.blocks.push(newBlock);
+                    this.activeBlockIndex = this.blocks.length - 1;
+                }
+
+                this.syncState();
+                this.updatePreview(true);
+                this.initSortable();
+
+                this.isGeneratingAi = false;
+                this.showAiModal = false;
+
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'success',
+                    title: '✨ Struktur section berhasil dirancang oleh AI Assistant!',
+                    showConfirmButton: false,
+                    timer: 3500,
+                    customClass: {
+                        popup: 'bg-slate-900/90 text-white rounded-2xl shadow-xl border border-slate-700'
+                    }
+                });
+
+                this.$nextTick(() => {
+                    const targetEl = document.querySelector(`[data-block-index="${this.activeBlockIndex}"]`);
+                    if (targetEl) {
+                        targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                });
             },
 
             loadTemplate(type) {
@@ -3798,32 +4611,73 @@
                         blockInnerHtml = `<div class="${block.settings.wrapper_class}">${blockInnerHtml}</div>`;
                     }
 
+                    let isBlockSelected = (this.activeBlockIndex === bIdx);
+                    let selectedClass = isBlockSelected ? 'is-selected' : '';
                     let blockLabel = this.getBlockLabel(block.type);
-                    let blockActionsHtml = `
-                    <div class="absolute top-3 right-4 z-30 opacity-0 group-hover/canvas-block:opacity-100 transition-all duration-200 pointer-events-auto flex items-center">
-                        <div class="flex items-center gap-1 bg-white/95 backdrop-blur-md shadow-md hover:shadow-lg border border-slate-200/90 rounded-xl px-2 py-1 text-slate-700 text-xs">
-                            <span class="font-extrabold text-[10px] text-blue-600 uppercase tracking-wider px-1.5 py-0.5 bg-blue-50 border border-blue-100 rounded-md mr-1 select-none">${blockLabel}</span>
-                            
-                            <button type="button" onclick="window.pageBuilderApp.moveUp(${bIdx})" class="p-1 hover:bg-slate-100 text-slate-400 hover:text-blue-600 rounded-lg transition-colors" title="Naikkan Layer (Ke Atas)">
+
+                    // Canva / Figma 8-Anchor Handles (visible when selected)
+                    let anchorHandlesHtml = isBlockSelected ? `
+                        <span class="canvas-anchor-handle canvas-handle-tl"></span>
+                        <span class="canvas-anchor-handle canvas-handle-tr"></span>
+                        <span class="canvas-anchor-handle canvas-handle-bl"></span>
+                        <span class="canvas-anchor-handle canvas-handle-br"></span>
+                        <span class="canvas-anchor-handle canvas-handle-tc"></span>
+                        <span class="canvas-anchor-handle canvas-handle-bc"></span>
+                        <span class="canvas-anchor-handle canvas-handle-ml"></span>
+                        <span class="canvas-anchor-handle canvas-handle-mr"></span>
+                    ` : '';
+
+                    // Canva / Figma Floating Action Menu
+                    let blockActionsHtml = isBlockSelected ? `
+                    <div class="canvas-action-toolbar absolute -top-5 left-4 z-40 flex items-center gap-1.5 bg-slate-900/95 text-white backdrop-blur-xl px-3 py-1.5 rounded-2xl shadow-2xl border border-slate-700/80 pointer-events-auto select-none" onclick="event.stopPropagation()">
+                        <!-- Block Type Badge -->
+                        <span class="text-[10px] font-extrabold text-blue-300 uppercase tracking-wider px-2 py-0.5 bg-blue-500/20 border border-blue-400/30 rounded-lg flex items-center gap-1 shrink-0">
+                            <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
+                            ${blockLabel}
+                        </span>
+                        
+                        <!-- 1. Edit Teks -->
+                        <button type="button" onclick="window.pageBuilderApp.canvasActionEditText(${bIdx}, event)" class="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold text-slate-100 hover:text-white hover:bg-slate-800 rounded-lg transition-colors" title="Edit teks di kanvas">
+                            <svg class="w-3.5 h-3.5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                            <span>Edit Teks</span>
+                        </button>
+                        
+                        <!-- 2. Ganti Gambar / Upload -->
+                        <button type="button" onclick="window.pageBuilderApp.canvasActionChangeImage(${bIdx}, event)" class="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold text-slate-100 hover:text-white hover:bg-slate-800 rounded-lg transition-colors" title="Upload atau ganti gambar pada section ini">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                            <span>Ganti Gambar</span>
+                        </button>
+
+                        <!-- 3. Pindah Posisi (Naik / Turun) -->
+                        <div class="flex items-center bg-slate-800/90 rounded-lg p-0.5 border border-slate-700/60 mx-0.5">
+                            <button type="button" onclick="window.pageBuilderApp.moveUp(${bIdx}); event.stopPropagation();" class="p-1 text-slate-300 hover:text-blue-400 hover:bg-slate-700 rounded transition-colors" title="Geser ke Atas (Naik)">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
                             </button>
-
-                            <button type="button" onclick="window.pageBuilderApp.moveDown(${bIdx})" class="p-1 hover:bg-slate-100 text-slate-400 hover:text-blue-600 rounded-lg transition-colors" title="Turunkan Layer (Ke Bawah)">
+                            <span class="text-[9px] text-slate-400 font-bold px-1 uppercase tracking-wider">Posisi</span>
+                            <button type="button" onclick="window.pageBuilderApp.moveDown(${bIdx}); event.stopPropagation();" class="p-1 text-slate-300 hover:text-blue-400 hover:bg-slate-700 rounded transition-colors" title="Geser ke Bawah (Turun)">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                             </button>
-
-                            <button type="button" onclick="window.pageBuilderApp.duplicateBlock(${bIdx})" class="p-1 hover:bg-slate-100 text-slate-400 hover:text-emerald-600 rounded-lg transition-colors" title="Duplikat Blok">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                            </button>
-
-                            <button type="button" onclick="window.pageBuilderApp.toggleContextMenu(event, ${bIdx})" class="p-1 hover:bg-slate-100 text-slate-600 hover:text-blue-600 rounded-lg transition-colors ml-0.5" title="Opsi Blok (Menu)">
-                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
-                            </button>
                         </div>
+
+                        <!-- Duplikat -->
+                        <button type="button" onclick="window.pageBuilderApp.duplicateBlock(${bIdx}); event.stopPropagation();" class="p-1.5 text-slate-300 hover:text-emerald-400 hover:bg-slate-800 rounded-lg transition-colors" title="Duplikasi Section">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                        </button>
+
+                        <!-- 4. Hapus Elemen -->
+                        <button type="button" onclick="window.pageBuilderApp.canvasActionDelete(${bIdx}, event)" class="flex items-center gap-1 px-2.5 py-1 text-xs font-semibold text-rose-300 hover:text-white hover:bg-rose-600/80 rounded-lg transition-colors ml-0.5" title="Hapus elemen section ini">
+                            <svg class="w-3.5 h-3.5 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                            <span>Hapus</span>
+                        </button>
+                    </div>` : `
+                    <!-- Subtle Hover Badge when not selected -->
+                    <div class="absolute top-2 right-4 z-20 opacity-0 group-hover/canvas-block:opacity-100 transition-all duration-150 pointer-events-none">
+                        <span class="text-[10px] font-bold text-slate-600 bg-white/90 backdrop-blur-md border border-slate-200 px-2 py-1 rounded-md shadow-xs">${blockLabel}</span>
                     </div>`;
 
                     let innerWrapper = (block.type === 'html_custom' && (!block.settings.padding || block.settings.padding === 'none')) ? blockInnerHtml : `<div class="container mx-auto px-4 max-w-5xl">${blockInnerHtml}</div>`;
-                    html += `<section class="relative group/canvas-block ${bg} ${py} ${align} transition-all duration-200 hover:outline hover:outline-2 hover:outline-blue-400 hover:outline-offset-[-2px]" data-block-index="${bIdx}" data-block-id="${block.id}">
+                    html += `<section class="canvas-block-section relative group/canvas-block ${bg} ${py} ${align} ${selectedClass}" data-block-index="${bIdx}" data-block-id="${block.id}" onclick="window.pageBuilderApp.selectBlockFromCanvas(${bIdx}, event)">
+                        ${anchorHandlesHtml}
                         ${blockActionsHtml}
                         ${innerWrapper}
                     </section>`;

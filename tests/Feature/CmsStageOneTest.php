@@ -44,7 +44,7 @@ class CmsStageOneTest extends TestCase
         $this->actingAs($admin)
             ->get('/admin/dashboard')
             ->assertStatus(200)
-            ->assertSee('Dashboard CMS');
+            ->assertSee('CMS Dashboard');
 
         $this->actingAs($admin)
             ->get('/admin/pages')

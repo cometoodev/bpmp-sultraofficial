@@ -21,8 +21,8 @@ class PageRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
-        $editorMode = $this->editor_mode;
-        $designMethod = $this->design_method;
+        $editorMode = $this->input('editor_mode');
+        $designMethod = $this->input('design_method');
 
         if (empty($editorMode) && ! empty($designMethod)) {
             $editorMode = ($designMethod === 'builder' || $designMethod === 'visual') ? 'visual' : 'html';
@@ -30,8 +30,8 @@ class PageRequest extends FormRequest
             $designMethod = $editorMode === 'visual' ? 'builder' : 'html';
         }
 
-        $content = $this->content ?? $this->html_content;
-        $htmlContent = $this->html_content ?? $this->content;
+        $content = $this->input('content') ?? $this->input('html_content');
+        $htmlContent = $this->input('html_content') ?? $this->input('content');
 
         $mergeData = [
             'editor_mode' => $editorMode ?: 'html',
@@ -40,8 +40,8 @@ class PageRequest extends FormRequest
             'html_content' => $htmlContent,
         ];
 
-        if ($this->has('slug') && is_string($this->slug)) {
-            $mergeData['slug'] = trim($this->slug, '/');
+        if ($this->has('slug') && is_string($this->input('slug'))) {
+            $mergeData['slug'] = trim($this->input('slug'), '/');
         }
 
         $this->merge($mergeData);

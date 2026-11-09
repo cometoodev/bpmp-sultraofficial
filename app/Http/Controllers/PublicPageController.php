@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Page;
+use App\Models\PageAttachment;
 use App\Models\Post;
 use App\Models\StandarPelayanan;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class PublicPageController extends Controller
 {
@@ -29,9 +33,27 @@ class PublicPageController extends Controller
                 ->first();
         }
 
+        if ($slug === 'standar-pelayanan') {
+            $dokumens = StandarPelayanan::where('is_active', true)
+                ->orderBy('order_position', 'asc')
+                ->orderBy('id', 'asc')
+                ->get();
+
+            $otherPages = $page ? Page::published()->where('id', '!=', $page->id)->latest()->take(6)->get() : collect();
+
+            return view('pages.standar-pelayanan', [
+                'page' => $page,
+                'dokumens' => $dokumens,
+                'otherPages' => $otherPages,
+                'isPreview' => $page ? ! $page->isPublished() : false,
+            ]);
+        }
+
         if (! $page) {
             abort(404, 'Halaman tidak ditemukan');
         }
+
+        $page->load(['activeAttachments']);
 
         // If draft, only allow authenticated admin preview
         if (! $page->isPublished()) {
@@ -49,17 +71,6 @@ class PublicPageController extends Controller
         if ($page->slug === 'profil-lembaga') {
             return view('profil.index', [
                 'page' => $page,
-                'otherPages' => $otherPages,
-                'isPreview' => ! $page->isPublished(),
-            ]);
-        }
-
-        if ($page->slug === 'standar-pelayanan') {
-            $dokumens = StandarPelayanan::orderBy('id', 'asc')->get();
-
-            return view('pages.standar-pelayanan', [
-                'page' => $page,
-                'dokumens' => $dokumens,
                 'otherPages' => $otherPages,
                 'isPreview' => ! $page->isPublished(),
             ]);
@@ -98,5 +109,27 @@ class PublicPageController extends Controller
         $page = Page::where('slug', 'profil-lembaga')->where('status', 'published')->firstOrFail();
 
         return view('profil.index', compact('page'));
+    }
+
+    public function downloadAttachment(PageAttachment $attachment): BinaryFileResponse|RedirectResponse
+    {
+        if (! $attachment->is_active && (! Auth::check() || ! Auth::user()->isAdmin())) {
+            abort(404, 'Dokumen tidak ditemukan atau belum dipublikasikan.');
+        }
+
+        $attachment->increment('download_count');
+
+        if ($attachment->isDriveLink()) {
+            return redirect()->away($attachment->file_path);
+        }
+
+        if (! Storage::disk('public')->exists($attachment->file_path)) {
+            abort(404, 'Berkas fisik dokumen tidak ditemukan di server.');
+        }
+
+        $filePath = Storage::disk('public')->path($attachment->file_path);
+        $downloadName = $attachment->file_name ?: basename($attachment->file_path);
+
+        return response()->download($filePath, $downloadName);
     }
 }
